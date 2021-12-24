@@ -9,6 +9,7 @@ import { Carousel, Image } from "grommet";
 import { LogInButton } from "../components/LogInButton";
 import { Ahac } from "../components/AHAC";
 import { StandardButton } from "../components/StandardButton";
+import { isServer } from "../../utils/isServer";
 
 const Index = () => {
   // const [variables, setVariables] = useState({

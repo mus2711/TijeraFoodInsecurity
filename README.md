@@ -28,7 +28,7 @@ Edit `CORS_ORIGIN` and `DOMAIN` as needed, and then run
 ```console
 yarn
 yarn build
-yarn start
+yarn dev
 ```
 
 ### Web

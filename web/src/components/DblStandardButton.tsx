@@ -1,11 +1,6 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { Button, HStack, IconButton, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
-import { TiArrowUpThick } from "react-icons/ti";
-
-import { extendTheme } from "@chakra-ui/react";
-
-// 2. Call `extendTheme` and pass your custom values
 
 interface DblStandardButtonProps {
   title: string;

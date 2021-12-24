@@ -26,7 +26,7 @@ const Register: React.FC<registerProps> = ({}) => {
     <Wrapper variant="small">
       <Formik
         initialValues={{
-          userName: "",
+          username: "",
           email: "",
           password: "",
         }}

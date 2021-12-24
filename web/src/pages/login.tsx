@@ -29,7 +29,7 @@ const Login: React.FC<{}> = ({}) => {
     <Wrapper variant="small">
       <Formik
         initialValues={{
-          userNameOrEmail: "",
+          usernameOrEmail: "",
           password: "",
         }}
         onSubmit={async (values, { setErrors }) => {
@@ -51,7 +51,7 @@ const Login: React.FC<{}> = ({}) => {
         {({ isSubmitting }) => (
           <Form>
             <Inputfield
-              name="userNameOrEmail"
+              name="usernameOrEmail"
               placeholder="Enter Username or Email"
               label="Username/Email"
             ></Inputfield>
