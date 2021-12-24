@@ -26,6 +26,12 @@ class RegisterInput {
 
   @Field()
   password!: string;
+
+  @Field()
+  firstname!: string;
+
+  @Field()
+  lastname!: string;
 }
 
 @InputType()
@@ -80,7 +86,7 @@ export default class UserResolver {
     @Arg("options") options: RegisterInput,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
-    const { username, email, password } = options;
+    const { username, email, password, firstname, lastname } = options;
     const errors: FieldError[] = [];
 
     if (username.length < 2)
@@ -111,16 +117,18 @@ export default class UserResolver {
     const existingUser = await User.findOne({
       username: username.toLowerCase(),
     });
+
     if (existingUser) {
-      errors.push({ field: "username", message: "Username already taken" });
+      errors.push({ field: "username", message: "Username already taken." });
       return { errors };
     }
 
     const existingEmail = await User.findOne({
       email: email.toLowerCase(),
     });
+
     if (existingEmail) {
-      errors.push({ field: "email", message: "Email already in use" });
+      errors.push({ field: "email", message: "Email already in use." });
       return { errors };
     }
 
@@ -129,6 +137,8 @@ export default class UserResolver {
       username: username.toLowerCase(),
       email: email.toLowerCase(),
       password: hashedPassword,
+      firstname: firstname,
+      lastname: lastname,
     }).save();
 
     req.session.userId = newUser.id.toString();

@@ -10,8 +10,8 @@
 #   }
 # }
 
-mutation Login($userNameOrEmail: String!, $password: String!) {
-  login(userNameOrEmail: $userNameOrEmail, password: $password) {
+mutation Login($usernameOrEmail: String!, $password: String!) {
+  login(options: { usernameOrEmail: $usernameOrEmail, password: $password }) {
     ...RegularUserResponse
   }
 }

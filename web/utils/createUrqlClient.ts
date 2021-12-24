@@ -96,48 +96,48 @@ export const createUrqlClient = (ssrExchange: SSRExchange, ctx: any) => {
                 () => ({ me: null })
               );
             },
-            updatePost: (_result, args, cache, _) => {
-              cache.invalidate({
-                __typename: "Post",
-                id: (args as UpdatePostMutationVariables).id,
-              });
-            },
-            deletePost: (_result, args, cache, _) => {
-              cache.invalidate({
-                __typename: "Post",
-                id: (args as DeletePostMutationVariables).id,
-              });
-            },
-            upvote: (_result, args, cache, _) => {
-              cache.invalidate({
-                __typename: "Post",
-                id: (args as UpvoteMutationVariables).postId,
-              });
+            //     updatePost: (_result, args, cache, _) => {
+            //       cache.invalidate({
+            //         __typename: "Post",
+            //         id: (args as UpdatePostMutationVariables).id,
+            //       });
+            //     },
+            //     deletePost: (_result, args, cache, _) => {
+            //       cache.invalidate({
+            //         __typename: "Post",
+            //         id: (args as DeletePostMutationVariables).id,
+            //       });
+            //     },
+            //     upvote: (_result, args, cache, _) => {
+            //       cache.invalidate({
+            //         __typename: "Post",
+            //         id: (args as UpvoteMutationVariables).postId,
+            //       });
 
-              //TODO: uh oh bad code
-              const allFields = cache.inspectFields("Query");
-              const fieldInfos = allFields.filter(
-                (info) => info.fieldName === "upvoteStatus"
-              );
-              fieldInfos.forEach((fi) => {
-                cache.invalidate("Query", "upvoteStatus", fi.arguments || {});
-              });
-            },
-            downvote: (_result, args, cache, _) => {
-              cache.invalidate({
-                __typename: "Post",
-                id: (args as DownvoteMutationVariables).postId,
-              });
+            //       //TODO: uh oh bad code
+            //       const allFields = cache.inspectFields("Query");
+            //       const fieldInfos = allFields.filter(
+            //         (info) => info.fieldName === "upvoteStatus"
+            //       );
+            //       fieldInfos.forEach((fi) => {
+            //         cache.invalidate("Query", "upvoteStatus", fi.arguments || {});
+            //       });
+            //     },
+            //     downvote: (_result, args, cache, _) => {
+            //       cache.invalidate({
+            //         __typename: "Post",
+            //         id: (args as DownvoteMutationVariables).postId,
+            //       });
 
-              //TODO: uh oh bad code
-              const allFields = cache.inspectFields("Query");
-              const fieldInfos = allFields.filter(
-                (info) => info.fieldName === "upvoteStatus"
-              );
-              fieldInfos.forEach((fi) => {
-                cache.invalidate("Query", "upvoteStatus", fi.arguments || {});
-              });
-            },
+            //       //TODO: uh oh bad code
+            //       const allFields = cache.inspectFields("Query");
+            //       const fieldInfos = allFields.filter(
+            //         (info) => info.fieldName === "upvoteStatus"
+            //       );
+            //       fieldInfos.forEach((fi) => {
+            //         cache.invalidate("Query", "upvoteStatus", fi.arguments || {});
+            //       });
+            //     },
           },
         },
       }),

@@ -44,7 +44,7 @@ const Register: React.FC<registerProps> = ({}) => {
         {({ isSubmitting }) => (
           <Form>
             <Inputfield
-              name="userName"
+              name="username"
               placeholder="Username"
               label="Username"
             ></Inputfield>
@@ -61,6 +61,20 @@ const Register: React.FC<registerProps> = ({}) => {
                 placeholder="Password"
                 label="Password"
                 type="password"
+              ></Inputfield>
+            </Box>
+            <Box mt={4}>
+              <Inputfield
+                name="firstname"
+                placeholder="First Name"
+                label="First Name"
+              ></Inputfield>
+            </Box>
+            <Box mt={4}>
+              <Inputfield
+                name="lastname"
+                placeholder="Last Name"
+                label="Last Name"
               ></Inputfield>
             </Box>
             <Box mt={6}>

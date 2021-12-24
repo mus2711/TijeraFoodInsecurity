@@ -25,8 +25,13 @@ import { StandardButton } from "../components/StandardButton";
 import { m } from "framer-motion";
 
 const Register_1 = () => {
+  let body = null;
   const [typevalue, setTypevalue] = React.useState("1");
-
+  if (typevalue == "1") {
+    body = <StandardButton title="Next" route="/register_2" />;
+  } else {
+    body = <StandardButton title="Next" route="/register" />;
+  }
   return (
     <Layout title="SIGN UP">
       <Flex direction="column" justifyContent="center" alignItems="center">
@@ -102,7 +107,7 @@ const Register_1 = () => {
             </Box>
           </Flex>
         </RadioGroup>
-        <StandardButton title="Next" route="/register_2" />
+        {body}
         <Ahac />
         <LogInButton />
       </Flex>

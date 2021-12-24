@@ -33,21 +33,21 @@ export const DblStandardButton: React.FC<DblStandardButtonProps> = ({
           aria-label={"back"}
         />
       </NextLink>
-      <NextLink href={route}>
-        <Button
-          variant={"solid"}
-          textColor="white"
-          // marginTop={"20px"}
-          width={widthforward}
-          maxWidth={"300px"}
-          height="40px"
-          bg="#5998A0"
-          _hover={{ bg: "black" }}
-          rightIcon={<ChevronRightIcon />}
-        >
-          {title}
-        </Button>
-      </NextLink>
+
+      <Button
+        variant={"solid"}
+        textColor="white"
+        // marginTop={"20px"}
+        width={widthforward}
+        maxWidth={"300px"}
+        height="40px"
+        bg="#5998A0"
+        _hover={{ bg: "black" }}
+        type="submit"
+        rightIcon={<ChevronRightIcon />}
+      >
+        {title}
+      </Button>
     </HStack>
   );
 };

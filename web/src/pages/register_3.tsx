@@ -10,8 +10,6 @@ import {
   Avatar,
   AvatarBadge,
   Box,
-  Button,
-  ButtonGroup,
   Flex,
   Heading,
   HStack,
@@ -19,35 +17,19 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-  InputRightElement,
   Select,
   Stack,
   Text,
-  Textarea,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { Layout } from "../components/layout";
 import { useState } from "react";
-import { CheckIcon, HamburgerIcon, PhoneIcon } from "@chakra-ui/icons";
-import {
-  MdOutlineFastfood,
-  MdEmail,
-  MdLocationOn,
-  MdDateRange,
-  MdPhone,
-} from "react-icons/md";
-import { HiUser, HiOutlineUserGroup } from "react-icons/hi";
-import { RiContactsBookLine, RiLockPasswordFill } from "react-icons/ri";
-import { TiSocialTwitter, TiSocialFacebook } from "react-icons/ti";
-import { FaGooglePlusG } from "react-icons/fa";
+import { MdLocationOn, MdDateRange, MdPhone } from "react-icons/md";
+import { HiOutlineUserGroup } from "react-icons/hi";
 import { Formik, Form } from "formik";
-import router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { toErrorMap } from "../../utils/toErrorMap";
-import { Inputfield } from "../components/inputfield";
-import register from "./register";
-import { StandardButton } from "../components/StandardButton";
 import { DblStandardButton } from "../components/DblStandardButton";
-import { FilePicker } from "evergreen-ui";
 import { useFileUpload } from "use-file-upload";
 
 const bl = "#5998A0";
@@ -58,8 +40,6 @@ const Index = () => {
     cursor: null as null | string,
   });
   const [{ data: meData }] = useMeQuery();
-
-  const [{ data, fetching }] = usePostsQuery({ variables });
 
   // console.log("var: ", variables);
   const router = useRouter();
