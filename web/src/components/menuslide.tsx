@@ -19,10 +19,18 @@ import {
   Spacer,
   VStack,
   Stack,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverHeader,
+  PopoverFooter,
+  PopoverBody,
+  PopoverTrigger,
 } from "@chakra-ui/react";
-import { PlusIcon } from "evergreen-ui";
+import { EditIcon, PlusIcon, Popover } from "evergreen-ui";
+import { Form } from "formik";
 import { useRouter } from "next/router";
-import { HiOutlineUserGroup, HiPlus } from "react-icons/hi";
+import { HiOutlineUserGroup, HiPencil, HiPlus } from "react-icons/hi";
 import { MdShoppingBasket } from "react-icons/md";
 
 interface MenuSlideProps {
@@ -41,7 +49,7 @@ interface MenuSlideProps {
     price: number;
   }[];
   avatarlogo?: string;
-  key: number
+  key: number;
 }
 
 export const MenuSlide: React.FC<MenuSlideProps> = ({
@@ -55,7 +63,7 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
   route,
   menulist,
   avatarlogo,
-  key
+  key,
 }) => {
   const bl = "#5998A0";
   const router = useRouter();
@@ -178,6 +186,16 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
                   icon={<HiPlus size={"20px"} />}
                   padding={"5px"}
                 />
+                <IconButton
+                  colorScheme={"teal"}
+                  aria-label="Menu"
+                  icon={<HiPencil size={"20px"} />}
+                  padding={"5px"}
+                  onClick={() => {}}
+                />
+                {/* <Button padding={"20px"} colorScheme={"teal"}>
+                  Review
+                </Button> */}
               </HStack>
             ))}
           </ModalBody>

@@ -12,7 +12,7 @@ import {
 import Wrapper from "../components/wrapper";
 import { Inputfield } from "../components/inputfield";
 import { useMutation } from "urql";
-import { useLoginMutation } from "../generated/graphql";
+import { useLoginmMutation, useLoginMutation } from "../generated/graphql";
 import { toErrorMap } from "../../utils/toErrorMap";
 import { useRouter } from "next/dist/client/router";
 import { withUrqlClient } from "next-urql";
@@ -20,10 +20,11 @@ import { createUrqlClient } from "../../utils/createUrqlClient";
 import NextLink from "next/link";
 import { route } from "next/dist/server/router";
 import { Layout } from "../components/layout";
+import { toMerchErrorMap } from "../../utils/toMerchErrorMap";
 
 const Login: React.FC<{}> = ({}) => {
   const router = useRouter();
-  const [, login] = useLoginMutation();
+  const [, loginm] = useLoginmMutation();
   console.log(router);
 
   return (
@@ -36,12 +37,12 @@ const Login: React.FC<{}> = ({}) => {
           }}
           onSubmit={async (values, { setErrors }) => {
             console.log(values);
-            const response = await login(values);
+            const response = await loginm(values);
             console.log(response);
 
-            if (response.data?.login.errors) {
-              setErrors(toErrorMap(response.data.login.errors));
-            } else if (response.data?.login.user) {
+            if (response.data?.loginm.errors) {
+              setErrors(toMerchErrorMap(response.data.loginm.errors));
+            } else if (response.data?.loginm.merchant) {
               if (typeof router.query.next === "string") {
                 router.push(router.query.next);
               } else {
@@ -70,11 +71,6 @@ const Login: React.FC<{}> = ({}) => {
                 <Box mt={4}>
                   <NextLink href={"/forgot-password"}>
                     <Link>Forgot Password?</Link>
-                  </NextLink>
-                </Box>
-                <Box mt={4}>
-                  <NextLink href={"/loginmerchant"}>
-                    <Link>Are you a merchant?</Link>
                   </NextLink>
                 </Box>
               </>

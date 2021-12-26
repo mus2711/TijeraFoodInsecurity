@@ -1,35 +1,57 @@
 import {
+  Avatar,
   Box,
+  Button,
   Flex,
+  Grid,
+  Heading,
   HStack,
   IconButton,
   Link,
   Menu,
   MenuButton,
+  MenuDivider,
   MenuItem,
   MenuList,
+  Spacer,
+  Stack,
   useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
 import NextLink from "next/link";
-import { useLogoutMutation, useMeQuery } from "../generated/graphql";
-import { useRouter } from "next/router";
-import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
+import {
+  useLogoutmMutation,
+  useLogoutMutation,
+  useMemQuery,
+  useMeQuery,
+} from "../generated/graphql";
+import { isServer } from "../../utils/isServer";
+import router, { useRouter } from "next/router";
+import {
+  AddIcon,
+  ChevronDownIcon,
+  CloseIcon,
+  EditIcon,
+  ExternalLinkIcon,
+  HamburgerIcon,
+  RepeatIcon,
+} from "@chakra-ui/icons";
+import { Image } from "@chakra-ui/react";
 import { HiUser } from "react-icons/hi";
 import { MdFoodBank, MdSettings, MdShoppingBasket } from "react-icons/md";
 import { ReactNode } from "react";
+import login from "../pages/login";
 
 interface NavbarProps {
   title: string;
   icon?: "stack" | "arrow" | null;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ title, icon }) => {
+export const Merchnavbar: React.FC<NavbarProps> = ({ title, icon }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
-  const [{ fetching: LogoutFetching }, logout] = useLogoutMutation();
-
-  const [{ data, fetching }] = useMeQuery();
+  const [{ fetching: LogoutmFetching }, logoutm] = useLogoutmMutation();
+  const [{ data, fetching }] = useMemQuery();
 
   const Links = ["Dashboard", "Projects", "Team"];
 
@@ -49,7 +71,7 @@ export const Navbar: React.FC<NavbarProps> = ({ title, icon }) => {
 
   let body = null;
   if (fetching) {
-  } else if (!data?.me) {
+  } else if (!data?.mem) {
     body = (
       <Box>
         <Flex h={10} alignItems={"center"} justifyContent={"space-between"}>
@@ -86,7 +108,6 @@ export const Navbar: React.FC<NavbarProps> = ({ title, icon }) => {
                   >
                     Basket (1)
                   </MenuItem>
-
                   <MenuItem
                     icon={<HiUser />}
                     command="⌘T"
@@ -94,16 +115,14 @@ export const Navbar: React.FC<NavbarProps> = ({ title, icon }) => {
                   >
                     Account
                   </MenuItem>
-                  <NextLink href={"./settings"}>
-                    <MenuItem
-                      icon={<MdSettings />}
-                      command="⌘N"
-                      onClick={isOpen ? onClose : onOpen}
-                    >
-                      Settings
-                    </MenuItem>
-                  </NextLink>
-                  <NextLink href={"/login"}>
+                  <MenuItem
+                    icon={<MdSettings />}
+                    command="⌘N"
+                    onClick={isOpen ? onClose : onOpen}
+                  >
+                    Settings
+                  </MenuItem>
+                  <NextLink href={"/loginmerchant"}>
                     <MenuItem icon={<HiUser />} command="⌘⇧N">
                       Log in
                     </MenuItem>
@@ -169,25 +188,23 @@ export const Navbar: React.FC<NavbarProps> = ({ title, icon }) => {
                     >
                       Account
                     </MenuItem>
-                    <NextLink href={"./settings"}>
-                      <MenuItem
-                        icon={<MdSettings />}
-                        command="⌘N"
-                        onClick={isOpen ? onClose : onOpen}
-                      >
-                        Settings
-                      </MenuItem>
-                    </NextLink>
+                    <MenuItem
+                      icon={<MdSettings />}
+                      command="⌘N"
+                      onClick={isOpen ? onClose : onOpen}
+                    >
+                      Settings
+                    </MenuItem>
                     <MenuItem
                       icon={<HiUser />}
                       command="⌘⇧N"
                       onClick={async () => {
-                        await logout();
+                        await logoutm();
                         router.reload();
                       }}
                       bg={"red.200"}
                     >
-                      {data.me.username} (Logout)
+                      {data.mem.username} (Logout)
                     </MenuItem>
                   </MenuList>
                 </Menu>

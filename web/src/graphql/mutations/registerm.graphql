@@ -1,0 +1,17 @@
+mutation Registerm(
+  $password: String!
+  $email: String!
+  $cpname: String!
+  $username: String!
+) {
+  registerm(
+    options: {
+      username: $username
+      password: $password
+      email: $email
+      cpname: $cpname
+    }
+  ) {
+    ...RegularMerchantResponse
+  }
+}

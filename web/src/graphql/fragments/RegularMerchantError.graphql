@@ -1,0 +1,4 @@
+fragment RegularMerchantError on FieldMerchantError {
+  field
+  merchantmsg
+}

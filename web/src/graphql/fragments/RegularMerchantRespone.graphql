@@ -1,0 +1,8 @@
+fragment RegularMerchantResponse on MerchantResponse {
+  errors {
+    ...RegularMerchantError
+  }
+  merchant {
+    ...RegularMerchant
+  }
+}

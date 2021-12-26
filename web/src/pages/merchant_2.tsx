@@ -2,7 +2,7 @@ import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import {
   useMeQuery,
-  usePostsQuery,
+  useRegistermMutation,
   useRegisterMutation,
 } from "../generated/graphql";
 import React from "react";
@@ -23,6 +23,7 @@ import {
   Stack,
   Text,
   useColorMode,
+  VStack,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { Layout } from "../components/layout";
@@ -35,7 +36,7 @@ import { StandardButton } from "../components/StandardButton";
 import { Formik, Form } from "formik";
 import router from "next/router";
 import { RiLockPasswordFill } from "react-icons/ri";
-import { toErrorMap } from "../../utils/toErrorMap";
+import { toMerchErrorMap } from "../../utils/toMerchErrorMap";
 import { SignInOptions } from "../components/SignInOptions";
 import register from "./register";
 import { extendTheme } from "@chakra-ui/react";
@@ -46,7 +47,43 @@ import { Inputfield } from "../components/inputfield";
 const Merchant_2 = () => {
   const [{ data: meData }] = useMeQuery();
 
-  const [, register] = useRegisterMutation();
+  const [, registerm] = useRegistermMutation();
+  const initialInputs = {
+    cpname: "",
+    username: "",
+    email: "",
+    password: "",
+  };
+
+  const formikInputs = [
+    {
+      name: "cpname",
+      placeholder: "Comapany Name",
+      label: "Company Name",
+    },
+    {
+      name: "username",
+      placeholder: "john_doe1",
+      label: "Username",
+    },
+    {
+      name: "email",
+      placeholder: "johndoe@email.com",
+      label: "Email",
+    },
+    {
+      name: "password",
+      placeholder: "Password*",
+      label: "Password",
+      type: "password",
+    },
+    // {
+    //   name: "re_password",
+    //   placeholder: "Retype Password",
+    //   label: "Retype Password",
+    //   type: "password",
+    // },
+  ];
 
   return (
     <Layout title="SIGN UP">
@@ -58,133 +95,33 @@ const Merchant_2 = () => {
         </Text>
         <Box paddingTop={"15px"}>
           <Formik
-            initialValues={{
-              firstname: "",
-              lastname: "",
-              username: "",
-              email: "",
-              password: "",
-            }}
+            initialValues={initialInputs}
             onSubmit={async (values, { setErrors }) => {
               console.log(values);
-              const response = await register(values);
+              const response = await registerm(values);
               console.log(response);
-              if (response.data?.register.errors) {
-                setErrors(toErrorMap(response.data.register.errors));
-              } else if (response.data?.register.user) {
+              if (response.data?.registerm.errors) {
+                setErrors(toMerchErrorMap(response.data.registerm.errors));
+              } else if (response.data?.registerm.merchant) {
                 router.push("/");
               }
             }}
           >
             {({ isSubmitting }) => (
               <Form>
-                <Stack
-                  spacing={4}
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                >
-                  <InputGroup>
-                    <InputLeftElement
-                      pointerEvents="none"
-                      color="gray.300"
-                      fontSize="1.2em"
-                      children={<HiUser color="gray.300" />}
-                    />
+                <VStack spacing={4}>
+                  {formikInputs.map((p) => (
                     <Inputfield
-                      name="firstname"
-                      placeholder="First Name*"
-                      label="First Name"
-                      width={"75vw"}
-                      // maxWidth={"350px"}
+                      name={p.name}
+                      label={p.label}
+                      placeholder={p.placeholder}
+                      type={p.type ? p.type : undefined}
                     />
-                  </InputGroup>
-
-                  <InputGroup>
-                    <InputLeftElement
-                      pointerEvents="none"
-                      color="gray.300"
-                      fontSize="1.2em"
-                      children={<HiUser />}
-                    />
-                    <Inputfield
-                      name="lastname"
-                      placeholder="Last Name*"
-                      label="Last Name"
-                      width={"75vw"}
-                      // maxWidth={"350px"}
-                    />
-                  </InputGroup>
-                  <InputGroup>
-                    <InputLeftElement
-                      pointerEvents="none"
-                      color="gray.300"
-                      fontSize="1.2em"
-                      children={<HiUser />}
-                    />
-                    <Inputfield
-                      name="username"
-                      placeholder="Username*"
-                      label="username"
-                      width={"75vw"}
-                      // maxWidth={"350px"}
-                    />
-                  </InputGroup>
-                  <InputGroup>
-                    <InputLeftElement
-                      pointerEvents="none"
-                      color="gray.300"
-                      fontSize="1.2em"
-                      children={<MdEmail color="gray.300" />}
-                    />
-                    <Inputfield
-                      name="email"
-                      placeholder="johndoe@email.com*"
-                      label="Email"
-                      width={"75vw"}
-                      // maxWidth={"350px"}
-                    />
-                  </InputGroup>
-                  <InputGroup>
-                    <InputLeftElement
-                      pointerEvents="none"
-                      color="gray.300"
-                      fontSize="1.2em"
-                      children={<RiLockPasswordFill color="gray.300" />}
-                    />
-                    <Inputfield
-                      name="password"
-                      placeholder="Password*"
-                      label="Password"
-                      width={"75vw"}
-                      // maxWidth={"350px"}
-                      type="password"
-                    />
-                  </InputGroup>
-                  <InputGroup>
-                    <InputLeftElement
-                      pointerEvents="none"
-                      color="gray.300"
-                      fontSize="1.2em"
-                      children={<RiLockPasswordFill color="gray.300" />}
-                    />
-
-                    <Inputfield
-                      name="password_re"
-                      placeholder="Re-type Password*"
-                      label="Password"
-                      width={"75vw"}
-                      // maxWidth={"350px"}
-                      type="password"
-                    />
-
-                    <InputRightElement
-                      children={<CheckIcon color="green.500" />}
-                    />
-                  </InputGroup>
-                </Stack>
+                  ))}
+                </VStack>
 
                 <DblStandardButton
-                  title="Register"
+                  title="Next"
                   route="/register_3"
                   routeback="register_1"
                   widthforward="62vw"
@@ -195,14 +132,14 @@ const Merchant_2 = () => {
                   alignItems={"center"}
                   justifyContent={"center"}
                 >
-                  <Text
+                  {/* <Text
                     textAlign={"center"}
                     fontSize={"15px"}
                     maxWidth={"60vw"}
                   >
                     Or Sign up with your social media account below:
                   </Text>
-                  <SignInOptions />
+                  <SignInOptions /> */}
                 </Flex>
               </Form>
             )}

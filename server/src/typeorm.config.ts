@@ -4,6 +4,7 @@ import { __prod__ } from "./constants";
 // import { Post } from "./entities/Post";
 // import { Upvote } from "./entities/Upvote";
 import { User } from "./entities/User";
+import { Merchant } from "./entities/Merchant";
 
 export const typeormConfig = (
   dbName: string,
@@ -16,6 +17,6 @@ export const typeormConfig = (
   // synchronize: !__prod__,
   synchronize: true,
   dropSchema: reset,
-  entities: [User],
+  entities: [User, Merchant],
   logging: !__prod__,
 });

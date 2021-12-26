@@ -1,7 +1,7 @@
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useRegisterMutation } from "../generated/graphql";
-import React from "react";
+import React, { useState } from "react";
 import { Box, Flex, Heading, InputGroup, Text, VStack } from "@chakra-ui/react";
 import { Layout } from "../components/layout";
 import { Ahac } from "../components/AHAC";
@@ -17,24 +17,60 @@ import { HiUser } from "react-icons/hi";
 const Register_2 = () => {
   const router = useRouter();
   const [, register] = useRegisterMutation();
+  const [slide, setSlide] = useState(2);
+  const initialInputs = {
+    firstname: "",
+    lastname: "",
+    username: "",
+    email: "",
+    password: "",
+  };
+  const formikInputs = [
+    {
+      name: "firstname",
+      placeholder: "First Name",
+      label: "First Name",
+    },
+    {
+      name: "lastname",
+      placeholder: "Last Name",
+      label: "Last Name",
+    },
+    {
+      name: "username",
+      placeholder: "john_doe1",
+      label: "Username",
+    },
+    {
+      name: "email",
+      placeholder: "johndoe@email.com",
+      label: "Email",
+    },
+    {
+      name: "password",
+      placeholder: "Password*",
+      label: "Password",
+      type: "password",
+    },
+    // {
+    //   name: "re_password",
+    //   placeholder: "Retype Password",
+    //   label: "Retype Password",
+    //   type: "password",
+    // },
+  ];
 
   return (
     <Layout title="SIGN UP">
-      <VStack>
-        <Heading>Step 2/3</Heading>
+      <VStack paddingBottom={"40px"}>
+        <Heading>Step {slide}/3</Heading>
         <Text textAlign={"center"} width={"75vw"} maxWidth={"350px"}>
           Please tell us a little about yourself so we can improve your
           experience.
         </Text>
         <Box paddingTop={"15px"}>
           <Formik
-            initialValues={{
-              firstname: "",
-              lastname: "",
-              username: "",
-              email: "",
-              password: "",
-            }}
+            initialValues={initialInputs}
             onSubmit={async (values, { setErrors }) => {
               console.log(values);
               const response = await register(values);
@@ -49,103 +85,14 @@ const Register_2 = () => {
             {({ isSubmitting }) => (
               <Form>
                 <VStack spacing={4}>
-                  <InputGroup>
-                    {/* <InputLeftElement
-                        pointerEvents="none"
-                        color="gray.300"
-                        fontSize="1.2em"
-                        children={<HiUser color="gray.300" />}
-                      /> */}
+                  {formikInputs.map((p) => (
                     <Inputfield
-                      name="firstname"
-                      placeholder="First Name*"
-                      label="First Name"
-                      // left={<HiUser color="gray.300" />}
+                      name={p.name}
+                      label={p.label}
+                      placeholder={p.placeholder}
+                      type={p.type ? p.type : undefined}
                     />
-                  </InputGroup>
-
-                  <InputGroup>
-                    {/* <InputLeftElement
-                      pointerEvents="none"
-                      color="gray.300"
-                      fontSize="1.2em"
-                      children={<HiUser />}
-                    /> */}
-                    <Inputfield
-                      name="lastname"
-                      placeholder="Last Name*"
-                      label="Last Name"
-                      // width={"75vw"}
-                      // maxWidth={"350px"}
-                    />
-                  </InputGroup>
-                  <InputGroup>
-                    {/* <InputLeftElement
-                      pointerEvents="none"
-                      color="gray.300"
-                      fontSize="1.2em"
-                      children={<HiUser />}
-                    /> */}
-                    <Inputfield
-                      name="username"
-                      placeholder="Username*"
-                      label="Username"
-                      // width={"75vw"}
-                      // maxWidth={"350px"}
-                    />
-                  </InputGroup>
-                  <InputGroup>
-                    {/* <InputLeftElement
-                      pointerEvents="none"
-                      color="gray.300"
-                      fontSize="1.2em"
-                      children={<MdEmail color="gray.300" />}
-                    /> */}
-                    <Inputfield
-                      name="email"
-                      placeholder="johndoe@email.com*"
-                      label="Email"
-                      // width={"75vw"}
-                      // maxWidth={"350px"}
-                    />
-                  </InputGroup>
-                  <InputGroup>
-                    {/* <InputLeftElement
-                      pointerEvents="none"
-                      color="gray.300"
-                      fontSize="1.2em"
-                      children={<RiLockPasswordFill color="gray.300" />}
-                    /> */}
-                    <Inputfield
-                      name="password"
-                      placeholder="Password*"
-                      label="Password"
-                      // width={"75vw"}
-                      // maxWidth={"350px"}
-                      type="password"
-                    />
-                  </InputGroup>
-                  <InputGroup>
-                    {/* <InputLeftElement
-                      pointerEvents="none"
-                      color="gray.300"
-                      fontSize="1.2em"
-                      children={<RiLockPasswordFill color="gray.300" />}
-                    /> */}
-
-                    <Inputfield
-                      name="password_re"
-                      placeholder="Re-type Password*"
-                      label="Password"
-                      // width={"75vw"}
-                      // maxWidth={"350px"}
-                      type="password"
-                    />
-
-                    {/* <InputRightElement
-                      children={<CheckIcon color="green.500" />}
-                    /> */}
-                  </InputGroup>
+                  ))}
                 </VStack>
 
                 <DblStandardButton

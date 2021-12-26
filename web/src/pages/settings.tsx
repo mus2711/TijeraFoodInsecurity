@@ -12,8 +12,14 @@ import {
   MdPhone,
 } from "react-icons/md";
 import { HiUser } from "react-icons/hi";
+import { useMeQuery } from "../generated/graphql";
+import { isServer } from "../../utils/isServer";
 
 const Settings = () => {
+  const [{ data, fetching }] = useMeQuery({
+    pause: isServer(),
+  });
+
   return (
     <Layout title="SETTINGS">
       <Flex
@@ -42,7 +48,9 @@ const Settings = () => {
             textAlign={"center"}
           >
             <Flex direction={"column"}>
-              <Text fontSize={"3.5vw"}>John Doe</Text>
+              <Text fontSize={"3.5vw"}>
+                {data?.me?.firstname} {data?.me?.lastname}
+              </Text>
               <Text fontSize={"2.5vw"}>San Francisco, CA</Text>
             </Flex>
           </Button>
@@ -87,7 +95,7 @@ const Settings = () => {
             textAlign={"center"}
           >
             <Flex direction={"column"}>
-              <Text fontSize={"3.5vw"}>john.doe@yellobasket.com</Text>
+              <Text fontSize={"3.5vw"}>{data?.me?.email}</Text>
               <Text fontSize={"2.5vw"}>Home</Text>
             </Flex>
           </Button>
