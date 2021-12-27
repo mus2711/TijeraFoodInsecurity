@@ -30,8 +30,11 @@ import {
 import { EditIcon, PlusIcon, Popover } from "evergreen-ui";
 import { Form } from "formik";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import { HiOutlineUserGroup, HiPencil, HiPlus } from "react-icons/hi";
 import { MdShoppingBasket } from "react-icons/md";
+import { createGlobalState } from "react-hooks-global-state";
+import { setGlobalState, useGlobalState } from "../state/state";
 
 interface MenuSlideProps {
   imageUrl: string;
@@ -51,7 +54,7 @@ interface MenuSlideProps {
   avatarlogo?: string;
   key: number;
 }
-
+let theBasket = [] as string[];
 export const MenuSlide: React.FC<MenuSlideProps> = ({
   imageAlt,
   imageUrl,
@@ -65,6 +68,19 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
   avatarlogo,
   key,
 }) => {
+  const [currentBasket] = useGlobalState("userBasket");
+  let currentLength: number = useGlobalState("userBasket")[0].length;
+  let [basketLength, setBasketLength] = useState(currentLength);
+
+  const addToBasket = (item: [string, string, string, number]) => {
+    theBasket = [...theBasket, item];
+    setGlobalState("userBasket", [...currentBasket, item]);
+    // setGlobalState("userBasket", [...currentBasket, ...theBasket]);
+    // setGlobalState("userBasket", []);
+    setBasketLength(basketLength + 1);
+    // console.log(currentBasket);
+  };
+
   const bl = "#5998A0";
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -185,6 +201,9 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
                   aria-label="Menu"
                   icon={<HiPlus size={"20px"} />}
                   padding={"5px"}
+                  onClick={() => {
+                    addToBasket([p.item, p.description, p.foodpic, p.price]);
+                  }}
                 />
                 <IconButton
                   colorScheme={"teal"}
@@ -208,10 +227,12 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
               width={"100%"}
               colorScheme="blue"
               mr={3}
-              onClick={onClose}
+              onClick={() => {
+                router.push("/checkout");
+              }}
               rightIcon={<MdShoppingBasket />}
             >
-              Basket
+              Basket ({basketLength})
             </Button>
           </ModalFooter>
         </ModalContent>
