@@ -12,6 +12,8 @@
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@mui/material": "^5.2.5",
+    "@stripe/react-stripe-js": "^1.7.0",
+    "@stripe/stripe-js": "^1.22.0",
     "@urql/exchange-graphcache": "4.3.3",
     "evergreen-ui": "^6.6.3",
     "formik": "^2.2.9",

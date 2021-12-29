@@ -1,6 +1,6 @@
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
-import { useMeQuery, usePostsQuery } from "../generated/graphql";
+import { useMeQuery } from "../generated/graphql";
 import React from "react";
 import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
 import { Layout } from "../components/layout";

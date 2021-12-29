@@ -50,11 +50,18 @@ interface MenuSlideProps {
     description: string;
     foodpic: string;
     price: number;
+    itemID: string;
   }[];
   avatarlogo?: string;
   key: number;
 }
-let theBasket = [] as string[];
+let theBasket = [] as {
+  picture: string;
+  title: string;
+  desc: string;
+  price: number;
+  itemID: string;
+}[];
 export const MenuSlide: React.FC<MenuSlideProps> = ({
   imageAlt,
   imageUrl,
@@ -72,13 +79,17 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
   let currentLength: number = useGlobalState("userBasket")[0].length;
   let [basketLength, setBasketLength] = useState(currentLength);
 
-  const addToBasket = (item: [string, string, string, number]) => {
+  const addToBasket = (item: {
+    picture: string;
+    title: string;
+    desc: string;
+    price: number;
+    itemID: string;
+  }) => {
     theBasket = [...theBasket, item];
     setGlobalState("userBasket", [...currentBasket, item]);
-    // setGlobalState("userBasket", [...currentBasket, ...theBasket]);
-    // setGlobalState("userBasket", []);
     setBasketLength(basketLength + 1);
-    // console.log(currentBasket);
+    console.log(currentBasket);
   };
 
   const bl = "#5998A0";
@@ -188,6 +199,7 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
                 <Stack textAlign={"left"}>
                   <Text fontWeight={"bold"} maxWidth={"200px"}>
                     {p.item}
+                    {/* {p.itemID} */}
                   </Text>
                   <Text fontSize={"12px"} maxWidth={"200px"}>
                     {p.description}
@@ -202,7 +214,13 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
                   icon={<HiPlus size={"20px"} />}
                   padding={"5px"}
                   onClick={() => {
-                    addToBasket([p.item, p.description, p.foodpic, p.price]);
+                    addToBasket({
+                      picture: p.foodpic,
+                      title: p.item,
+                      desc: p.description,
+                      price: p.price,
+                      itemID: p.itemID,
+                    });
                   }}
                 />
                 <IconButton

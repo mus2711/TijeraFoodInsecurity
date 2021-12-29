@@ -10,7 +10,7 @@ import {
   MenuList,
   useDisclosure,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 import NextLink from "next/link";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import { useRouter } from "next/router";
@@ -18,6 +18,7 @@ import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import { HiUser } from "react-icons/hi";
 import { MdFoodBank, MdSettings, MdShoppingBasket } from "react-icons/md";
 import { ReactNode } from "react";
+import { useGlobalState } from "../state/state";
 
 interface NavbarProps {
   title: string;
@@ -160,7 +161,7 @@ export const Navbar: React.FC<NavbarProps> = ({ title, icon }) => {
                       command="⌘⇧N"
                       onClick={isOpen ? onClose : onOpen}
                     >
-                      Basket (1)
+                      Basket
                     </MenuItem>
                     <MenuItem
                       icon={<HiUser />}
