@@ -1,46 +1,23 @@
 import {
-  Avatar,
   Box,
-  Button,
   Flex,
-  Grid,
-  Heading,
   HStack,
   IconButton,
   Link,
   Menu,
   MenuButton,
-  MenuDivider,
   MenuItem,
   MenuList,
-  Spacer,
-  Stack,
   useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
 import NextLink from "next/link";
-import {
-  useLogoutmMutation,
-  useLogoutMutation,
-  useMemQuery,
-  useMeQuery,
-} from "../generated/graphql";
-import { isServer } from "../../utils/isServer";
-import router, { useRouter } from "next/router";
-import {
-  AddIcon,
-  ChevronDownIcon,
-  CloseIcon,
-  EditIcon,
-  ExternalLinkIcon,
-  HamburgerIcon,
-  RepeatIcon,
-} from "@chakra-ui/icons";
-import { Image } from "@chakra-ui/react";
+import { useLogoutmMutation, useMemQuery } from "../generated/graphql";
+import { useRouter } from "next/router";
+import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import { HiUser } from "react-icons/hi";
 import { MdFoodBank, MdSettings, MdShoppingBasket } from "react-icons/md";
 import { ReactNode } from "react";
-import login from "../pages/login";
 
 interface NavbarProps {
   title: string;
@@ -91,7 +68,7 @@ export const Merchnavbar: React.FC<NavbarProps> = ({ title, icon }) => {
                   variant="none"
                   onClick={isOpen ? onClose : onOpen}
                 />
-                <MenuList bg={"white"}>
+                <MenuList bg={"black"}>
                   <NextLink href={"./search"}>
                     <MenuItem
                       icon={<MdFoodBank />}
@@ -101,13 +78,13 @@ export const Merchnavbar: React.FC<NavbarProps> = ({ title, icon }) => {
                       Food Search
                     </MenuItem>
                   </NextLink>
-                  <MenuItem
+                  {/* <MenuItem
                     icon={<MdShoppingBasket />}
                     command="⌘⇧N"
                     onClick={isOpen ? onClose : onOpen}
                   >
                     Basket (1)
-                  </MenuItem>
+                  </MenuItem> */}
                   <MenuItem
                     icon={<HiUser />}
                     command="⌘T"
@@ -164,7 +141,7 @@ export const Merchnavbar: React.FC<NavbarProps> = ({ title, icon }) => {
                     variant="none"
                     onClick={isOpen ? onClose : onOpen}
                   />
-                  <MenuList bg={"white"}>
+                  <MenuList bg={"black"}>
                     <NextLink href={"./search"}>
                       <MenuItem
                         icon={<MdFoodBank />}
@@ -174,13 +151,13 @@ export const Merchnavbar: React.FC<NavbarProps> = ({ title, icon }) => {
                         Food Search
                       </MenuItem>
                     </NextLink>
-                    <MenuItem
+                    {/* <MenuItem
                       icon={<MdShoppingBasket />}
                       command="⌘⇧N"
                       onClick={isOpen ? onClose : onOpen}
                     >
                       Basket (1)
-                    </MenuItem>
+                    </MenuItem> */}
                     <MenuItem
                       icon={<HiUser />}
                       command="⌘T"
@@ -240,7 +217,8 @@ export const Merchnavbar: React.FC<NavbarProps> = ({ title, icon }) => {
       zIndex={1}
       position="sticky"
       top={0}
-      bg="#5998A0"
+      bg="black"
+      color={"white"}
       // ml="auto"
       p={4}
       align="center"

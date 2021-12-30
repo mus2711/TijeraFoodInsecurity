@@ -26,6 +26,7 @@ import {
   PopoverFooter,
   PopoverBody,
   PopoverTrigger,
+  DefaultIcon,
 } from "@chakra-ui/react";
 import { EditIcon, PlusIcon, Popover } from "evergreen-ui";
 import { Form } from "formik";
@@ -37,15 +38,15 @@ import { createGlobalState } from "react-hooks-global-state";
 import { setGlobalState, useGlobalState } from "../state/state";
 
 interface MenuSlideProps {
-  imageUrl: string;
-  imageAlt: string;
-  name: string;
-  reviewCount: number;
-  rating: number;
-  cuisine: string[];
-  location: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  name?: string;
+  reviewCount?: number;
+  rating?: number;
+  cuisine?: string[];
+  location?: string;
   route?: Url;
-  menulist: {
+  menulist?: {
     item: string;
     description: string;
     foodpic: string;
@@ -53,7 +54,8 @@ interface MenuSlideProps {
     itemID: string;
   }[];
   avatarlogo?: string;
-  key: number;
+  key?: number;
+  modal?: boolean;
 }
 let theBasket = [] as {
   picture: string;
@@ -63,17 +65,18 @@ let theBasket = [] as {
   itemID: string;
 }[];
 export const MenuSlide: React.FC<MenuSlideProps> = ({
-  imageAlt,
-  imageUrl,
-  name,
-  reviewCount,
-  rating,
-  cuisine,
-  location,
+  imageAlt = "...",
+  imageUrl = "https://i.ibb.co/ZYYqy2x/f0b1b4305b287bf541822022e1883694.jpg",
+  name = "Merchant Name",
+  reviewCount = 0,
+  rating = 0,
+  cuisine = ["Vegetarian, Fast Food, Healthy"],
+  location = "TS Food Security St.",
   route,
   menulist,
   avatarlogo,
   key,
+  modal = true,
 }) => {
   const [currentBasket] = useGlobalState("userBasket");
   let currentLength: number = useGlobalState("userBasket")[0].length;
@@ -95,6 +98,97 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
   const bl = "#5998A0";
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  let menu = null;
+  if (modal == true) {
+    menu = (
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalContent
+          maxW="800px"
+          width={"80vw"}
+          borderWidth="1px"
+          borderRadius="lg"
+          bg={"white"}
+        >
+          <ModalHeader>Food Menu</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {menulist.map((p) => (
+              <HStack spacing={2} p="5px" paddingBottom={"20px"}>
+                <Box
+                  maxW="80px"
+                  borderWidth="1px"
+                  borderRadius="lg"
+                  overflow="hidden"
+                >
+                  <Image
+                    maxHeight={"80px"}
+                    width={"10vw"}
+                    fit={"cover"}
+                    src={p.foodpic}
+                  ></Image>
+                </Box>
+
+                <Stack textAlign={"left"}>
+                  <Text fontWeight={"bold"} maxWidth={"200px"}>
+                    {p.item}
+                    {/* {p.itemID} */}
+                  </Text>
+                  <Text fontSize={"12px"} maxWidth={"200px"}>
+                    {p.description}
+                  </Text>
+                </Stack>
+
+                <Spacer />
+                <Text>${p.price}</Text>
+                <IconButton
+                  colorScheme={"teal"}
+                  aria-label="Menu"
+                  icon={<HiPlus size={"20px"} />}
+                  padding={"5px"}
+                  onClick={() => {
+                    addToBasket({
+                      picture: p.foodpic,
+                      title: p.item,
+                      desc: p.description,
+                      price: p.price,
+                      itemID: p.itemID,
+                    });
+                  }}
+                />
+                <IconButton
+                  colorScheme={"teal"}
+                  aria-label="Menu"
+                  icon={<HiPencil size={"20px"} />}
+                  padding={"5px"}
+                  onClick={() => {}}
+                />
+                {/* <Button padding={"20px"} colorScheme={"teal"}>
+                Review
+              </Button> */}
+              </HStack>
+            ))}
+          </ModalBody>
+
+          <ModalFooter>
+            <Button width={"100%"} colorScheme="teal" mr={3} onClick={onClose}>
+              Checkout
+            </Button>
+            <Button
+              width={"100%"}
+              colorScheme="blue"
+              mr={3}
+              onClick={() => {
+                router.push("/checkout");
+              }}
+              rightIcon={<MdShoppingBasket />}
+            >
+              Basket ({basketLength})
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    );
+  }
   return (
     <>
       <Box
@@ -169,7 +263,8 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
           </Box>
         </Box>
       </Box>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      {menu}
+      {/* <Modal isOpen={isOpen} onClose={onClose}>
         <ModalContent
           maxW="800px"
           width={"80vw"}
@@ -199,7 +294,6 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
                 <Stack textAlign={"left"}>
                   <Text fontWeight={"bold"} maxWidth={"200px"}>
                     {p.item}
-                    {/* {p.itemID} */}
                   </Text>
                   <Text fontSize={"12px"} maxWidth={"200px"}>
                     {p.description}
@@ -230,9 +324,6 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
                   padding={"5px"}
                   onClick={() => {}}
                 />
-                {/* <Button padding={"20px"} colorScheme={"teal"}>
-                  Review
-                </Button> */}
               </HStack>
             ))}
           </ModalBody>
@@ -254,7 +345,7 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
             </Button>
           </ModalFooter>
         </ModalContent>
-      </Modal>
+      </Modal> */}
     </>
   );
 };

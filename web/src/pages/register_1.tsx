@@ -30,7 +30,7 @@ const Register_1 = () => {
   if (typevalue == "1") {
     body = <StandardButton title="Next" route="/register_2" />;
   } else {
-    body = <StandardButton title="Next" route="/register" />;
+    body = <StandardButton title="Next" route="/merchant_2" />;
   }
   return (
     <Layout title="SIGN UP">

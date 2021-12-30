@@ -21,6 +21,8 @@ import NextLink from "next/link";
 import { route } from "next/dist/server/router";
 import { Layout } from "../components/layout";
 import { toMerchErrorMap } from "../../utils/toMerchErrorMap";
+import { MerchLayout } from "../components/merchLayout";
+import { query } from "@urql/exchange-graphcache";
 
 const Login: React.FC<{}> = ({}) => {
   const router = useRouter();
@@ -28,7 +30,7 @@ const Login: React.FC<{}> = ({}) => {
   console.log(router);
 
   return (
-    <Layout title="Log In">
+    <MerchLayout title="Log In">
       <Wrapper variant="small">
         <Formik
           initialValues={{
@@ -39,14 +41,14 @@ const Login: React.FC<{}> = ({}) => {
             console.log(values);
             const response = await loginm(values);
             console.log(response);
-
+            console.log(router.query.next);
             if (response.data?.loginm.errors) {
               setErrors(toMerchErrorMap(response.data.loginm.errors));
             } else if (response.data?.loginm.merchant) {
               if (typeof router.query.next === "string") {
                 router.push(router.query.next);
               } else {
-                router.push("/");
+                router.push("/merchantaccount");
               }
             }
           }}
@@ -88,7 +90,7 @@ const Login: React.FC<{}> = ({}) => {
           )}
         </Formik>
       </Wrapper>
-    </Layout>
+    </MerchLayout>
   );
 };
 

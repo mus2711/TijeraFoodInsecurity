@@ -43,6 +43,7 @@ import { extendTheme } from "@chakra-ui/react";
 import { CheckIcon } from "@chakra-ui/icons";
 import { DblStandardButton } from "../components/DblStandardButton";
 import { Inputfield } from "../components/inputfield";
+import { MerchLayout } from "../components/merchLayout";
 
 const Merchant_2 = () => {
   const [{ data: meData }] = useMeQuery();
@@ -58,7 +59,7 @@ const Merchant_2 = () => {
   const formikInputs = [
     {
       name: "cpname",
-      placeholder: "Comapany Name",
+      placeholder: "Company Name",
       label: "Company Name",
     },
     {
@@ -86,7 +87,7 @@ const Merchant_2 = () => {
   ];
 
   return (
-    <Layout title="SIGN UP">
+    <MerchLayout title="SIGN UP">
       <Flex direction="column" justifyContent="center" alignItems="center">
         <Heading>Step 2/3</Heading>
         <Text textAlign={"center"} width={"75vw"} maxWidth={"350px"}>
@@ -103,7 +104,7 @@ const Merchant_2 = () => {
               if (response.data?.registerm.errors) {
                 setErrors(toMerchErrorMap(response.data.registerm.errors));
               } else if (response.data?.registerm.merchant) {
-                router.push("/");
+                router.push("/merchant_3");
               }
             }}
           >
@@ -148,7 +149,7 @@ const Merchant_2 = () => {
         <Ahac />
         <LogInButton />
       </Flex>
-    </Layout>
+    </MerchLayout>
   );
 };
 

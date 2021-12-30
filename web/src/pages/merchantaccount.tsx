@@ -50,6 +50,7 @@ import { Inputfield } from "../components/inputfield";
 import { SignInOptions } from "../components/SignInOptions";
 import register from "./register";
 import { useRegistermMutation } from "../generated/graphql";
+import { MerchLayout } from "../components/merchLayout";
 
 const bl = "#5998A0";
 
@@ -71,6 +72,7 @@ const datalist = [
           "https://i.ibb.co/ZYYqy2x/f0b1b4305b287bf541822022e1883694.jpg",
         price: 8,
         description: "Delicious Hamburger with Cheese",
+        itemID: "hk5jh45",
       },
       {
         item: "Fries",
@@ -79,6 +81,7 @@ const datalist = [
         price: 3,
         description:
           "Fried potatoes with choice of 2 sauces: Ketchup, Mayo, BBQ, Ranch.",
+        itemID: "hk5jh45",
       },
       {
         item: "Chocolate Milkshake",
@@ -86,6 +89,7 @@ const datalist = [
           "https://i.ibb.co/ZYYqy2x/f0b1b4305b287bf541822022e1883694.jpg",
         price: 6,
         description: "Made with Whole Milk, and Chocolate Ice Cream.",
+        itemID: "hk5jh45",
       },
     ],
     avatarlogo: "https://bit.ly/dan-abramov",
@@ -100,27 +104,32 @@ const MerchAccount = () => {
     item: "",
     foodpic: "",
     name: "",
+    itemID: "",
   };
   const formikInputs = [
     {
       name: "item",
       placeholder: "Prawn Curry",
       label: "Dish Name",
+      itemID: "984375",
     },
     {
       name: "description",
       placeholder: "Ingredients:...",
       label: "Description",
+      itemID: "fg84375",
     },
     {
       name: "foodpic",
       placeholder: "...",
       label: "Upload Image",
+      itemID: "984575",
     },
     {
       name: "price",
       placeholder: "£10.00",
       label: "Price",
+      itemID: "4375",
     },
   ];
   let body = (
@@ -137,6 +146,7 @@ const MerchAccount = () => {
           location={p.location}
           avatarlogo={p.avatarlogo}
           key={p.key}
+          modal={false}
         />
       ))}
     </VStack>
@@ -151,7 +161,7 @@ const MerchAccount = () => {
   );
 
   return (
-    <Layout title="Explore">
+    <MerchLayout title="Explore">
       <Heading textAlign={"center"}>Your Account</Heading>
 
       <VStack justifyContent={"center"} alignContent={"center"} spacing={6}>
@@ -194,42 +204,12 @@ const MerchAccount = () => {
                         />
                       ))}
                     </VStack>
-
-                    {/* <DblStandardButton
-                        title="Next"
-                        route="/register_3"
-                        routeback="register_1"
-                        widthforward="62vw"
-                      /> */}
-                    {/* <Flex
-                      direction={"column"}
-                      mt={6}
-                      alignItems={"center"}
-                      justifyContent={"center"}
-                    >
-                      <Text
-                        textAlign={"center"}
-                        fontSize={"15px"}
-                        maxWidth={"60vw"}
-                      >
-                        Or Sign up with your social media account below:
-                      </Text>
-                      <SignInOptions />
-                    </Flex> */}
                   </Form>
                 )}
               </Formik>
             </ModalBody>
 
             <ModalFooter>
-              {/* <Button
-                width={"100%"}
-                colorScheme="teal"
-                mr={3}
-                onClick={onClose}
-              >
-                Checkout
-              </Button> */}
               <Button
                 width={"100%"}
                 colorScheme="blue"
@@ -245,9 +225,17 @@ const MerchAccount = () => {
         <Button colorScheme={"teal"} onClick={onOpen}>
           Add Item
         </Button>
+        <Button
+          colorScheme="green"
+          mr={3}
+          onClick={onClose}
+          rightIcon={<MdPlusOne />}
+        >
+          Save
+        </Button>
         <>{menu}</>
       </VStack>
-    </Layout>
+    </MerchLayout>
   );
 };
 
