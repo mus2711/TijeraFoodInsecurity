@@ -5,6 +5,7 @@ import {
   Avatar,
   Box,
   Button,
+  Divider,
   Flex,
   IconButton,
   Input,
@@ -27,6 +28,7 @@ import {
   MdOutlineLocationSearching,
 } from "react-icons/md";
 import { MenuSlide } from "../components/menuslide";
+import { Combobox } from "evergreen-ui";
 
 const bl = "#5998A0";
 
@@ -41,6 +43,7 @@ const datalist = [
     location: "Harrow Road 10, London, E1 4ZJ",
     route: "/",
     key: 1,
+    merchantID: "df3d332",
     menulist: [
       {
         item: "Cheese Burger",
@@ -80,6 +83,7 @@ const datalist = [
     location: "Deleware St. 10, New York, N78999",
     route: "/",
     key: 2,
+    merchantID: "dfjhkdsd332",
     menulist: [
       {
         item: "bg",
@@ -150,18 +154,22 @@ const Search = () => {
     body = (
       <Stack spacing={6}>
         {datalist.map((p) => (
-          <MenuSlide
-            imageUrl={p.imageUrl}
-            imageAlt={p.imageAlt}
-            name={p.name}
-            reviewCount={p.reviewCount}
-            rating={p.rating}
-            cuisine={p.cuisine}
-            menulist={p.menulist}
-            location={p.location}
-            avatarlogo={p.avatarlogo}
-            key={p.key}
-          />
+          <>
+            <MenuSlide
+              imageUrl={p.imageUrl}
+              imageAlt={p.imageAlt}
+              name={p.name}
+              reviewCount={p.reviewCount}
+              rating={p.rating}
+              cuisine={p.cuisine}
+              menulist={p.menulist}
+              location={p.location}
+              avatarlogo={p.avatarlogo}
+              key={p.key}
+              merchantID={p.merchantID}
+            />
+            <Divider />
+          </>
         ))}
       </Stack>
     );
@@ -178,21 +186,14 @@ const Search = () => {
   return (
     <Layout title="Explore">
       <Flex direction="column" justifyContent="center" alignItems="center">
-        <InputGroup maxWidth={"85vw"}>
-          <InputLeftElement
-            pointerEvents="none"
-            color="gray.300"
-            fontSize="1.2em"
-            children={<MdSearch color="gray.300" />}
-          />
-          <Input name="searchBar" placeholder="Search" />
-          <InputRightElement
-            pointerEvents="none"
-            color="gray.300"
-            fontSize="1.2em"
-            children={<MdKeyboardVoice color="gray.300" />}
-          />
-        </InputGroup>
+        <Combobox
+          openOnFocus
+          width="100%"
+          height={40}
+          items={["Banana", "Orange", "Apple", "Mango"]}
+          onChange={(selected) => console.log(selected)}
+          placeholder="Fruit"
+        />
 
         <Flex
           direction={"row"}
@@ -212,7 +213,7 @@ const Search = () => {
               <MdMenu size={"20px"} color="#5998A0" />
             </IconButton>
           </Box>
-          <Box padding={"1vw"}>
+          {/* <Box padding={"1vw"}>
             <IconButton
               borderColor={"#5998A0"}
               variant="outline"
@@ -222,7 +223,7 @@ const Search = () => {
             >
               <MdCamera size={"20px"} color="#5998A0" />
             </IconButton>
-          </Box>
+          </Box> */}
           <Box padding={"1vw"}>
             <IconButton
               borderColor={"#5998A0"}

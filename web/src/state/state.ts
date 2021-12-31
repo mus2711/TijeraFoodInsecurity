@@ -8,6 +8,19 @@ const { setGlobalState, useGlobalState } = createGlobalState({
     price: number;
     itemID: string;
   }[],
+  reviewRes: {} as {
+    imageUrl: string;
+    imageAlt: string;
+    name: string;
+    reviewCount: number;
+    rating: number;
+    cuisine?: string[];
+    location?: string;
+    merchantID?: string;
+    avatarlogo?: string;
+    key?: number;
+    modal?: boolean;
+  },
 });
 
 export { setGlobalState, useGlobalState };

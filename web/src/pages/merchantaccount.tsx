@@ -153,7 +153,7 @@ const MerchAccount = () => {
   );
 
   let menu = (
-    <VStack spacing={6}>
+    <VStack spacing={6} paddingBottom={"50px"}>
       {datalist.map((p) => (
         <Foodslide menulist={p.menulist}></Foodslide>
       ))}
@@ -222,17 +222,19 @@ const MerchAccount = () => {
             </ModalFooter>
           </ModalContent>
         </Modal>
-        <Button colorScheme={"teal"} onClick={onOpen}>
-          Add Item
-        </Button>
-        <Button
-          colorScheme="green"
-          mr={3}
-          onClick={onClose}
-          rightIcon={<MdPlusOne />}
-        >
-          Save
-        </Button>
+        <HStack>
+          <Button colorScheme={"teal"} onClick={onOpen}>
+            Add Item
+          </Button>
+          <Button
+            colorScheme="green"
+            mr={3}
+            onClick={onClose}
+            rightIcon={<MdPlusOne />}
+          >
+            Save
+          </Button>
+        </HStack>
         <>{menu}</>
       </VStack>
     </MerchLayout>

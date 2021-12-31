@@ -1,8 +1,0 @@
-# query Posts($cursor: String, $limit: Int!) {
-#   posts(cursor: $cursor, limit: $limit) {
-#     hasMore
-#     posts {
-    
-#     }
-#   }
-# }

@@ -57,6 +57,7 @@ const Merchant_3 = () => {
             modal={false}
             avatarlogo={files?.source || undefined}
             imageUrl={files2?.source || undefined}
+            cuisine={tags}
           ></MenuSlide>
           <HStack paddingTop={"20px"}>
             <Button
@@ -119,7 +120,6 @@ const Merchant_3 = () => {
                       name={p.name}
                       label={p.label}
                       placeholder={p.placeholder}
-                      type={p.type ? p.type : undefined}
                     />
                   ))}
                 </VStack>

@@ -85,13 +85,15 @@ export const Merchnavbar: React.FC<NavbarProps> = ({ title, icon }) => {
                   >
                     Basket (1)
                   </MenuItem> */}
-                  <MenuItem
-                    icon={<HiUser />}
-                    command="⌘T"
-                    onClick={isOpen ? onClose : onOpen}
-                  >
-                    Account
-                  </MenuItem>
+                  <NextLink href={"./merchantaccount"}>
+                    <MenuItem
+                      icon={<HiUser />}
+                      command="⌘T"
+                      onClick={isOpen ? onClose : onOpen}
+                    >
+                      Account
+                    </MenuItem>
+                  </NextLink>
                   <MenuItem
                     icon={<MdSettings />}
                     command="⌘N"
