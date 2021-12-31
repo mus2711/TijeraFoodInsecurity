@@ -50,7 +50,7 @@ const main = async () => {
         domain: __prod__ ? process.env.DOMAIN : undefined,
       },
       saveUninitialized: false,
-      secret: "c56800cfj2qm46890v42qmy8qv0-*9)N$MYT&*#%VM5v789wt30",
+      secret: process.env.SECRET as string,
       resave: false,
     })
   );

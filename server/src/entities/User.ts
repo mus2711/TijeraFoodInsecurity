@@ -4,13 +4,10 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
+  // OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-// import { Post } from "./Post";
-// import { Upvote } from "./Upvote";
-// import { Comment } from "./Comment";
 
 @Entity()
 @ObjectType()
@@ -37,16 +34,6 @@ export class User extends BaseEntity {
 
   @Column()
   password!: string;
-
-  // @OneToMany(() => Post, (post) => post.creator)
-  // @Field(() => Post)
-  // posts!: Post[];
-
-  // @OneToMany(() => Upvote, (upvote) => upvote.user)
-  // upvotes!: Upvote[];
-
-  // @OneToMany(() => Upvote, (upvote) => upvote.user)
-  // comments!: Comment[];
 
   @CreateDateColumn()
   @Field(() => String)

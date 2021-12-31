@@ -4,7 +4,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
+  // OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
@@ -20,6 +20,14 @@ export class Merchant extends BaseEntity {
   @Field()
   cpname!: string;
 
+  @Column()
+  @Field()
+  cplogo!: string;
+
+  @Column()
+  @Field()
+  location!: string;
+
   @Column({ unique: true })
   @Field()
   username!: string;
@@ -30,17 +38,23 @@ export class Merchant extends BaseEntity {
 
   @Column()
   password!: string;
+  
+  @Column()
+  @Field()
+  imageUrl!: string;
 
-  // @OneToMany(() => Post, (post) => post.creator)
-  // @Field(() => Post)
-  // posts!: Post[];
+  @Column()
+  @Field()
+  imageAlt!: string;
 
-  // @OneToMany(() => Upvote, (upvote) => upvote.user)
-  // upvotes!: Upvote[];
+  // @OneToMany(() => Review, (review) => review.user)
+  // reviews!: Review[];
 
-  // @OneToMany(() => Upvote, (upvote) => upvote.user)
-  // comments!: Comment[];
+  // @OneToMany(() => FoodItem, (fooditem) => fooditem.merchant)
+  // menulist!: FoodItem[];
 
+  // tags, route
+  
   @CreateDateColumn()
   @Field(() => String)
   createdAt!: Date;
