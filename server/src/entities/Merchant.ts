@@ -20,14 +20,6 @@ export class Merchant extends BaseEntity {
   @Field()
   cpname!: string;
 
-  @Column()
-  @Field()
-  cplogo!: string;
-
-  @Column()
-  @Field()
-  location!: string;
-
   @Column({ unique: true })
   @Field()
   username!: string;
@@ -38,14 +30,22 @@ export class Merchant extends BaseEntity {
 
   @Column()
   password!: string;
-  
-  @Column()
-  @Field()
-  imageUrl!: string;
 
-  @Column()
-  @Field()
-  imageAlt!: string;
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  cplogo?: string;
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  location?: string;
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  imageUrl?: string;
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  imageAlt?: string;
 
   // @OneToMany(() => Review, (review) => review.user)
   // reviews!: Review[];
@@ -54,7 +54,7 @@ export class Merchant extends BaseEntity {
   // menulist!: FoodItem[];
 
   // tags, route
-  
+
   @CreateDateColumn()
   @Field(() => String)
   createdAt!: Date;

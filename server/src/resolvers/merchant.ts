@@ -16,6 +16,7 @@ import { MyContext } from "../types";
 
 const EMAIL_REGEX = /^[\w\.]+@[\w\.]+$/;
 const USERNAME_REGEX = /^[\w\.]+$/;
+
 @InputType()
 class RegisterMerchantInput {
   @Field()
@@ -149,7 +150,7 @@ export default class MerchantResolver {
       cpname: cpname,
     }).save();
 
-    req.session.mercahntId = newMerchant.id.toString();
+    req.session.merchantId = newMerchant.id.toString();
 
     return {
       merchant: newMerchant,
@@ -221,7 +222,7 @@ export default class MerchantResolver {
         ],
       };
 
-    req.session.userId = merchant.id.toString();
+    req.session.merchantId = merchant.id.toString();
 
     return {
       merchant,
@@ -238,5 +239,46 @@ export default class MerchantResolver {
         resolve(true);
       })
     );
+  }
+
+  @Mutation(() => Merchant)
+  async addImage(
+    @Ctx() { req }: MyContext,
+    @Arg("imageUrl", () => String) imageUrl: string,
+    @Arg("imageAlt", () => String, { nullable: true }) imageAlt?: string
+  ): Promise<Merchant> {
+    if (!req.session.merchantId) throw new Error("Merchant not Logged in");
+    const merchant = await Merchant.findOne(req.session.merchantId);
+    if (!merchant) throw new Error("Merchant not found");
+
+    merchant.imageUrl = imageUrl;
+    if (imageAlt) merchant.imageAlt = imageAlt;
+    return await merchant.save();
+  }
+
+  @Mutation(() => Merchant)
+  async addLogo(
+    @Ctx() { req }: MyContext,
+    @Arg("cplogo", () => String) cplogo: string
+  ): Promise<Merchant> {
+    if (!req.session.merchantId) throw new Error("Merchant not Logged in");
+    const merchant = await Merchant.findOne(req.session.merchantId);
+    if (!merchant) throw new Error("Merchant not found");
+
+    merchant.cplogo = cplogo;
+    return await merchant.save();
+  }
+
+  @Mutation(() => Merchant)
+  async addLocation(
+    @Ctx() { req }: MyContext,
+    @Arg("location", () => String) location: string
+  ): Promise<Merchant> {
+    if (!req.session.merchantId) throw new Error("Merchant not Logged in");
+    const merchant = await Merchant.findOne(req.session.merchantId);
+    if (!merchant) throw new Error("Merchant not found");
+
+    merchant.location = location;
+    return await merchant.save();
   }
 }
