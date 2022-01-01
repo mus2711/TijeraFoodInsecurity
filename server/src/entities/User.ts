@@ -4,10 +4,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  // OneToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Review } from "./Review";
 
 @Entity()
 @ObjectType()
@@ -34,6 +35,9 @@ export class User extends BaseEntity {
 
   @Column()
   password!: string;
+
+  @OneToMany(() => Review, (review) => review.user)
+  reviews!: Review[];
 
   @CreateDateColumn()
   @Field(() => String)

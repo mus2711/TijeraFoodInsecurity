@@ -1,21 +1,23 @@
 import argon2 from "argon2";
+import { Review } from "../entities/Review";
+import { User } from "../entities/User";
 import {
   Arg,
   Ctx,
   Field,
+  FieldResolver,
+  Float,
   InputType,
   Int,
   Mutation,
   ObjectType,
   Query,
   Resolver,
+  Root,
 } from "type-graphql";
-import { COOKIE_NAME } from "../constants";
+import { COOKIE_NAME, EMAIL_REGEX, USERNAME_REGEX } from "../constants";
 import { Merchant } from "../entities/Merchant";
 import { MyContext } from "../types";
-
-const EMAIL_REGEX = /^[\w\.]+@[\w\.]+$/;
-const USERNAME_REGEX = /^[\w\.]+$/;
 
 @InputType()
 class RegisterMerchantInput {
@@ -61,6 +63,19 @@ class FieldMerchantError {
 
 @Resolver(Merchant)
 export default class MerchantResolver {
+  @FieldResolver(() => Int)
+  async reviewCount(@Root() merchant: Merchant): Promise<number> {
+    const reviews = await Review.find({ merchantId: merchant.id });
+    return reviews.length;
+  }
+
+  @FieldResolver(() => Float)
+  async averageRating(@Root() merchant: Merchant): Promise<number | null> {
+    const reviews = await Review.find({ merchantId: merchant.id });
+    const ratingSum = reviews.reduce((acc, review) => acc + review.rating, 0);
+    return reviews.length ? ratingSum / reviews.length : null;
+  }
+
   @Query(() => [Merchant])
   merchants(): Promise<Merchant[]> {
     return Merchant.find();
@@ -77,6 +92,13 @@ export default class MerchantResolver {
       return Merchant.findOne(req.session.merchantId);
     }
     return undefined;
+  }
+
+  @Query(() => [Review])
+  async reviews(
+    @Arg("merchantId", () => Int) merchantId: number
+  ): Promise<Review[]> {
+    return await Review.find({ merchantId: merchantId });
   }
 
   @Mutation(() => MerchantResponse)
@@ -280,5 +302,50 @@ export default class MerchantResolver {
 
     merchant.location = location;
     return await merchant.save();
+  }
+
+  @Mutation(() => Review)
+  async addReview(
+    @Arg("merchantId", () => Int) merchantId: number,
+    @Arg("comment", () => String) comment: string,
+    @Arg("rating", () => Int) rating: number,
+    @Ctx() { req }: MyContext
+  ): Promise<Review> {
+    const userId = req.session.userId;
+    if (!userId) throw new Error("User not logged in.");
+
+    const merchant = await Merchant.findOne(merchantId);
+    if (!merchant) throw new Error("Merchant does not exist.");
+
+    const user = await User.findOne(userId);
+    if (!user) throw new Error("User not found.");
+
+    return await Review.create({
+      userId: parseInt(userId),
+      merchantId: merchantId,
+      comment: comment,
+      rating: rating,
+    }).save();
+  }
+
+  @Mutation(() => Boolean)
+  async deleteReview(
+    @Arg("userId", () => Int) userId: number,
+    @Arg("merchantId", () => Int) merchantId: number,
+    @Ctx() { req }: MyContext
+  ) {
+    const currentUserId = req.session.userId;
+    if (!currentUserId) throw new Error("User not logged in");
+
+    if (parseInt(currentUserId) != userId) throw new Error("Incorrect user");
+
+    const review = await Review.findOne({
+      userId: userId,
+      merchantId: merchantId,
+    });
+    if (!review) return false;
+
+    await review!.remove();
+    return true;
   }
 }

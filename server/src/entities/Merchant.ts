@@ -4,10 +4,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  // OneToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Review } from "./Review";
 
 @Entity()
 @ObjectType()
@@ -47,8 +48,16 @@ export class Merchant extends BaseEntity {
   @Field({ nullable: true })
   imageAlt?: string;
 
-  // @OneToMany(() => Review, (review) => review.user)
-  // reviews!: Review[];
+  @OneToMany(() => Review, (review) => review.user)
+  reviews!: Review[];
+
+  @Column({ type: "int", default: 0 })
+  @Field()
+  reviewCount!: number;
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  averageRating?: number;
 
   // @OneToMany(() => FoodItem, (fooditem) => fooditem.merchant)
   // menulist!: FoodItem[];

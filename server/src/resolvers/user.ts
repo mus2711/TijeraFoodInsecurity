@@ -10,12 +10,10 @@ import {
   Query,
   Resolver,
 } from "type-graphql";
-import { COOKIE_NAME } from "../constants";
+import { COOKIE_NAME, EMAIL_REGEX, USERNAME_REGEX } from "../constants";
 import { User } from "../entities/User";
 import { MyContext } from "../types";
 
-const EMAIL_REGEX = /^[\w\.]+@[\w\.]+$/;
-const USERNAME_REGEX = /^[\w\.]+$/;
 @InputType()
 class RegisterInput {
   @Field()
