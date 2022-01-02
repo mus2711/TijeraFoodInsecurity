@@ -2,15 +2,12 @@ import { Cache, cacheExchange, QueryInput } from "@urql/exchange-graphcache";
 import { SSRExchange } from "next-urql";
 import { dedupExchange, fetchExchange } from "urql";
 import {
-  DeletePostMutationVariables,
-  DownvoteMutationVariables,
+  LoginmMutation,
   LoginMutation,
   LogoutMutation,
   MeDocument,
   MeQuery,
   RegisterMutation,
-  UpdatePostMutationVariables,
-  UpvoteMutationVariables,
 } from "../src/generated/graphql";
 import { isServer } from "./isServer";
 
@@ -55,15 +52,27 @@ export const createUrqlClient = (ssrExchange: SSRExchange, ctx: any) => {
                   }
                 }
               );
-              //TODO: uh oh bad code
-              const allFields = cache.inspectFields("Query");
-              const fieldInfos = allFields.filter(
-                (info) => info.fieldName === "upvoteStatus"
-              );
-              fieldInfos.forEach((fi) => {
-                cache.invalidate("Query", "upvoteStatus", fi.arguments || {});
-              });
             },
+
+            loginm: (_result, _, cache, __) => {
+              betterUpdateQuery<LoginmMutation, MeQuery>(
+                cache,
+                { query: MeDocument },
+                _result,
+                (result, query) => {
+                  console.log("result", result);
+                  if (result.loginm.errors) {
+                    return query;
+                  } else {
+                    return {
+                      me: result.loginm.merchant,
+                    };
+                  }
+                }
+              );
+              //TODO: uh oh bad code
+            },
+
             register: (_result, _, cache, __) => {
               betterUpdateQuery<RegisterMutation, MeQuery>(
                 cache,
@@ -79,14 +88,6 @@ export const createUrqlClient = (ssrExchange: SSRExchange, ctx: any) => {
                   }
                 }
               );
-              //TODO: uh oh bad code
-              const allFields = cache.inspectFields("Query");
-              const fieldInfos = allFields.filter(
-                (info) => info.fieldName === "upvoteStatus"
-              );
-              fieldInfos.forEach((fi) => {
-                cache.invalidate("Query", "upvoteStatus", fi.arguments || {});
-              });
             },
             logout: (_result, _, cache, __) => {
               betterUpdateQuery<LogoutMutation, MeQuery>(

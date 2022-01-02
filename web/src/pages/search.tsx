@@ -186,6 +186,7 @@ const Search = () => {
               location={p.location}
               avatarlogo={p.cplogo}
               merchantID={p.id}
+              key={p.id}
             />
             <Divider />
           </>

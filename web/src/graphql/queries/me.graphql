@@ -1,5 +1,21 @@
 query Me {
   me {
-    ...RegularUser
+    merchant {
+      id
+      cpname
+      cplogo
+      imageUrl
+      imageUrl
+      location
+      reviewCount
+      averageRating
+      username
+    }
+    user {
+      id
+      firstname
+      lastname
+      username
+    }
   }
 }

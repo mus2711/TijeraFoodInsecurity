@@ -1,5 +1,0 @@
-query Mem {
-  mem {
-    ...RegularMerchant
-  }
-}

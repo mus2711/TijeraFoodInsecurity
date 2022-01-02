@@ -36,6 +36,12 @@ export type LoginMerchantInput = {
   usernameOrEmail: Scalars['String'];
 };
 
+export type MeResponse = {
+  __typename?: 'MeResponse';
+  merchant?: Maybe<Merchant>;
+  user?: Maybe<User>;
+};
+
 export type Merchant = {
   __typename?: 'Merchant';
   averageRating?: Maybe<Scalars['Float']>;
@@ -124,8 +130,7 @@ export type MutationRegistermArgs = {
 
 export type Query = {
   __typename?: 'Query';
-  me?: Maybe<User>;
-  mem?: Maybe<Merchant>;
+  me: MeResponse;
   merchant?: Maybe<Merchant>;
   merchants: Array<Merchant>;
   reviews: Array<Review>;
@@ -266,12 +271,7 @@ export type RegistermMutation = { __typename?: 'Mutation', registerm: { __typena
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: number, username: string, firstname: string, lastname: string, email: string }> };
-
-export type MemQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type MemQuery = { __typename?: 'Query', mem?: Maybe<{ __typename?: 'Merchant', id: number, cpname: string, imageUrl?: Maybe<string>, imageAlt?: Maybe<string>, cplogo?: Maybe<string>, username: string, location?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number> }> };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'MeResponse', merchant?: Maybe<{ __typename?: 'Merchant', id: number, cpname: string, cplogo?: Maybe<string>, imageUrl?: Maybe<string>, location?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number>, username: string }>, user?: Maybe<{ __typename?: 'User', id: number, firstname: string, lastname: string, username: string }> } };
 
 export type MerchantsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -432,24 +432,29 @@ export function useRegistermMutation() {
 export const MeDocument = gql`
     query Me {
   me {
-    ...RegularUser
+    merchant {
+      id
+      cpname
+      cplogo
+      imageUrl
+      imageUrl
+      location
+      reviewCount
+      averageRating
+      username
+    }
+    user {
+      id
+      firstname
+      lastname
+      username
+    }
   }
 }
-    ${RegularUserFragmentDoc}`;
+    `;
 
 export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
-};
-export const MemDocument = gql`
-    query Mem {
-  mem {
-    ...RegularMerchant
-  }
-}
-    ${RegularMerchantFragmentDoc}`;
-
-export function useMemQuery(options: Omit<Urql.UseQueryArgs<MemQueryVariables>, 'query'> = {}) {
-  return Urql.useQuery<MemQuery>({ query: MemDocument, ...options });
 };
 export const MerchantsDocument = gql`
     query Merchants {

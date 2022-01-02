@@ -1,21 +1,24 @@
+import { Box, Button, Flex, IconButton, Link } from "@chakra-ui/react";
 import React from "react";
-import { Form, Formik } from "formik";
-import { Box, Button, Link } from "@chakra-ui/react";
-import Wrapper from "../components/wrapper";
-import { Inputfield } from "../components/inputfield";
-import { useLoginmMutation, useLoginMutation } from "../generated/graphql";
-import { toErrorMap } from "../../utils/toErrorMap";
-import { useRouter } from "next/dist/client/router";
-import { withUrqlClient } from "next-urql";
-import { createUrqlClient } from "../../utils/createUrqlClient";
-import NextLink from "next/link";
-import { Layout } from "../components/layout";
-import { toMerchErrorMap } from "../../utils/toMerchErrorMap";
 
-const LoginMerchant: React.FC<{}> = ({}) => {
+import NextLink from "next/link";
+import { Formik, Form } from "formik";
+import router, { useRouter } from "next/router";
+import { toErrorMap } from "../../utils/toErrorMap";
+import login from "../pages/login";
+import { Inputfield } from "./inputfield";
+import { Layout } from "./layout";
+import Wrapper from "./wrapper";
+import { useLoginMutation, useLoginmMutation } from "../generated/graphql";
+
+interface loginProp {
+  ay: string;
+}
+
+export const LoginPage: React.FC<loginProp> = ({ id }) => {
   const router = useRouter();
+  const [, login] = useLoginMutation();
   const [, loginm] = useLoginmMutation();
-  console.log(router);
 
   return (
     <Layout title="Log In">
@@ -27,12 +30,12 @@ const LoginMerchant: React.FC<{}> = ({}) => {
           }}
           onSubmit={async (values, { setErrors }) => {
             console.log(values);
-            const response = await loginm(values);
+            const response = await login(values);
             console.log(response);
 
-            if (response.data?.loginm.errors) {
-              setErrors(toMerchErrorMap(response.data.loginm.errors));
-            } else if (response.data?.loginm.merchant) {
+            if (response.data?.login.errors) {
+              setErrors(toErrorMap(response.data.login.errors));
+            } else if (response.data?.login.user) {
               if (typeof router.query.next === "string") {
                 router.push(router.query.next);
               } else {
@@ -64,8 +67,8 @@ const LoginMerchant: React.FC<{}> = ({}) => {
                   </NextLink>
                 </Box>
                 <Box mt={4}>
-                  <NextLink href={"/login"}>
-                    <Link>Are you a User?</Link>
+                  <NextLink href={"/loginmerchant"}>
+                    <Link>Are you a merchant?</Link>
                   </NextLink>
                 </Box>
               </>
@@ -86,5 +89,3 @@ const LoginMerchant: React.FC<{}> = ({}) => {
     </Layout>
   );
 };
-
-export default withUrqlClient(createUrqlClient)(LoginMerchant);

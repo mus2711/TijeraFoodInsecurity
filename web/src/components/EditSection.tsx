@@ -6,11 +6,7 @@ import {
 } from "@chakra-ui/icons";
 import { Button, Flex, IconButton } from "@chakra-ui/react";
 import React from "react";
-import {
-  PostSnippetFragment,
-  useDeletePostMutation,
-  useUpdatePostMutation,
-} from "../generated/graphql";
+import { PostSnippetFragment } from "../generated/graphql";
 import NextLink from "next/link";
 
 interface editProp {
