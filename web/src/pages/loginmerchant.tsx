@@ -27,7 +27,6 @@ import { query } from "@urql/exchange-graphcache";
 const Login: React.FC<{}> = ({}) => {
   const router = useRouter();
   const [, loginm] = useLoginmMutation();
-  console.log(router);
 
   return (
     <MerchLayout title="Log In">
@@ -73,6 +72,11 @@ const Login: React.FC<{}> = ({}) => {
                 <Box mt={4}>
                   <NextLink href={"/forgot-password"}>
                     <Link>Forgot Password?</Link>
+                  </NextLink>
+                </Box>
+                <Box mt={4}>
+                  <NextLink href={"/login"}>
+                    <Link>Are you a regular User?</Link>
                   </NextLink>
                 </Box>
               </>

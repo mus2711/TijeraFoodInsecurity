@@ -1,6 +1,9 @@
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
-import { useRegisterMutation } from "../generated/graphql";
+import {
+  useAddReviewMutation,
+  useRegisterMutation,
+} from "../generated/graphql";
 import React, { useState } from "react";
 import {
   Box,
@@ -27,15 +30,20 @@ import { HiUser } from "react-icons/hi";
 import { useGlobalState } from "../state/state";
 import { MenuSlide } from "../components/menuslide";
 import { AddIcon, StarIcon } from "evergreen-ui";
+import { useIsAuth } from "../../utils/useIsAuth";
 
 interface reviewProps {}
 
 const review = ({}) => {
   const router = useRouter();
+  useIsAuth();
   let [star, setStar] = useState(1);
   const [menuProps] = useGlobalState("reviewRes");
+  const [, addReview] = useAddReviewMutation();
   const initialInputs = {
     comment: "",
+    merchantId: 1,
+    // rating: star,
   };
   const formikInputs = [
     {
@@ -61,18 +69,22 @@ const review = ({}) => {
           />
           <Formik
             initialValues={initialInputs}
-            // onSubmit={async (values, { setErrors }) => {
-            //   console.log(values);
-            //   const response = await register(values);
-            //   console.log(response);
-            //   if (response.data?.register.errors) {
-            //     setErrors(toErrorMap(response.data.register.errors));
-            //   } else if (response.data?.register.user) {
-            //     router.push("/search");
-            //   }
-            // }}
-            onSubmit={() => {
-              console.log("ys");
+            onSubmit={async (values, { setErrors }) => {
+              console.log(values);
+              const response = await addReview({
+                comment: values.comment,
+                merchantId: values.merchantId,
+                rating: star,
+              });
+              console.log(response);
+              // if (response.data?.addReview.errors) {
+              //   setErrors(toErrorMap(response.data.addReview.errors));
+              // } else if (response.data?.addReview.user) {
+              //   router.push("/search");
+              // }
+              if (response.data?.addReview.comment) {
+                router.push("/search");
+              }
             }}
           >
             {({ isSubmitting }) => (
@@ -99,6 +111,7 @@ const review = ({}) => {
                           size={30}
                           onClick={() => {
                             setStar((star = i + 1));
+                            console.log(star);
                           }}
                         />
                       ))}

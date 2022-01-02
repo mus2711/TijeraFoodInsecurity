@@ -32,7 +32,8 @@ interface MenuSlideProps {
   rating?: number;
   cuisine?: string[];
   location?: string;
-  merchantID?: string;
+  // merchantID?: string;
+  merchantID?: number;
   route?: Url;
   menulist?: {
     item: string;
@@ -44,6 +45,7 @@ interface MenuSlideProps {
   avatarlogo?: string;
   key?: number;
   modal?: boolean;
+  badge?: string;
 }
 let theBasket = [] as {
   picture: string;
@@ -66,6 +68,7 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
   key,
   merchantID,
   modal = true,
+  badge = "New",
 }) => {
   const [currentBasket] = useGlobalState("userBasket");
   let currentLength: number = useGlobalState("userBasket")[0].length;
@@ -264,7 +267,7 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
         <Box p="6">
           <Box display="flex" alignItems="baseline">
             <Badge borderRadius="full" px="2" colorScheme="teal">
-              New
+              {badge}
             </Badge>
             {/* <Box
               color="gray.500"

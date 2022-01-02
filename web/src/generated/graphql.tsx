@@ -38,10 +38,16 @@ export type LoginMerchantInput = {
 
 export type Merchant = {
   __typename?: 'Merchant';
+  averageRating?: Maybe<Scalars['Float']>;
+  cplogo?: Maybe<Scalars['String']>;
   cpname: Scalars['String'];
   createdAt: Scalars['String'];
   email: Scalars['String'];
   id: Scalars['Int'];
+  imageAlt?: Maybe<Scalars['String']>;
+  imageUrl?: Maybe<Scalars['String']>;
+  location?: Maybe<Scalars['String']>;
+  reviewCount: Scalars['Float'];
   updatedAt: Scalars['String'];
   username: Scalars['String'];
 };
@@ -54,12 +60,46 @@ export type MerchantResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addImage: Merchant;
+  addLocation: Merchant;
+  addLogo: Merchant;
+  addReview: Review;
+  deleteReview: Scalars['Boolean'];
   login: UserResponse;
   loginm: MerchantResponse;
   logout: Scalars['Boolean'];
   logoutm: Scalars['Boolean'];
   register: UserResponse;
   registerm: MerchantResponse;
+};
+
+
+export type MutationAddImageArgs = {
+  imageAlt?: Maybe<Scalars['String']>;
+  imageUrl: Scalars['String'];
+};
+
+
+export type MutationAddLocationArgs = {
+  location: Scalars['String'];
+};
+
+
+export type MutationAddLogoArgs = {
+  cplogo: Scalars['String'];
+};
+
+
+export type MutationAddReviewArgs = {
+  comment: Scalars['String'];
+  merchantId: Scalars['Int'];
+  rating: Scalars['Int'];
+};
+
+
+export type MutationDeleteReviewArgs = {
+  merchantId: Scalars['Int'];
+  userId: Scalars['Int'];
 };
 
 
@@ -88,6 +128,7 @@ export type Query = {
   mem?: Maybe<Merchant>;
   merchant?: Maybe<Merchant>;
   merchants: Array<Merchant>;
+  reviews: Array<Review>;
   user?: Maybe<User>;
   users: Array<User>;
 };
@@ -95,6 +136,11 @@ export type Query = {
 
 export type QueryMerchantArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryReviewsArgs = {
+  merchantId: Scalars['Int'];
 };
 
 
@@ -115,6 +161,14 @@ export type RegisterMerchantInput = {
   email: Scalars['String'];
   password: Scalars['String'];
   username: Scalars['String'];
+};
+
+export type Review = {
+  __typename?: 'Review';
+  comment: Scalars['String'];
+  merchant: Merchant;
+  rating: Scalars['Float'];
+  user: User;
 };
 
 export type User = {
@@ -145,6 +199,22 @@ export type RegularMerchantResponseFragment = { __typename?: 'MerchantResponse',
 export type RegularUserFragment = { __typename?: 'User', id: number, username: string, firstname: string, lastname: string, email: string };
 
 export type RegularUserResponseFragment = { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: number, username: string, firstname: string, lastname: string, email: string }> };
+
+export type AddLocationMutationVariables = Exact<{
+  location: Scalars['String'];
+}>;
+
+
+export type AddLocationMutation = { __typename?: 'Mutation', addLocation: { __typename?: 'Merchant', id: number } };
+
+export type AddReviewMutationVariables = Exact<{
+  rating: Scalars['Int'];
+  merchantId: Scalars['Int'];
+  comment: Scalars['String'];
+}>;
+
+
+export type AddReviewMutation = { __typename?: 'Mutation', addReview: { __typename?: 'Review', comment: string, rating: number, user: { __typename?: 'User', username: string }, merchant: { __typename?: 'Merchant', cpname: string } } };
 
 export type LoginMutationVariables = Exact<{
   usernameOrEmail: Scalars['String'];
@@ -203,6 +273,11 @@ export type MemQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MemQuery = { __typename?: 'Query', mem?: Maybe<{ __typename?: 'Merchant', id: number, username: string, cpname: string, email: string }> };
 
+export type MerchantsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MerchantsQuery = { __typename?: 'Query', merchants: Array<{ __typename?: 'Merchant', id: number, cpname: string, imageUrl?: Maybe<string>, imageAlt?: Maybe<string>, cplogo?: Maybe<string>, location?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number> }> };
+
 export const RegularMerchantErrorFragmentDoc = gql`
     fragment RegularMerchantError on FieldMerchantError {
   field
@@ -254,6 +329,35 @@ export const RegularUserResponseFragmentDoc = gql`
 }
     ${RegularErrorFragmentDoc}
 ${RegularUserFragmentDoc}`;
+export const AddLocationDocument = gql`
+    mutation AddLocation($location: String!) {
+  addLocation(location: $location) {
+    id
+  }
+}
+    `;
+
+export function useAddLocationMutation() {
+  return Urql.useMutation<AddLocationMutation, AddLocationMutationVariables>(AddLocationDocument);
+};
+export const AddReviewDocument = gql`
+    mutation AddReview($rating: Int!, $merchantId: Int!, $comment: String!) {
+  addReview(rating: $rating, merchantId: $merchantId, comment: $comment) {
+    user {
+      username
+    }
+    merchant {
+      cpname
+    }
+    comment
+    rating
+  }
+}
+    `;
+
+export function useAddReviewMutation() {
+  return Urql.useMutation<AddReviewMutation, AddReviewMutationVariables>(AddReviewDocument);
+};
 export const LoginDocument = gql`
     mutation Login($usernameOrEmail: String!, $password: String!) {
   login(options: {usernameOrEmail: $usernameOrEmail, password: $password}) {
@@ -341,4 +445,22 @@ export const MemDocument = gql`
 
 export function useMemQuery(options: Omit<Urql.UseQueryArgs<MemQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MemQuery>({ query: MemDocument, ...options });
+};
+export const MerchantsDocument = gql`
+    query Merchants {
+  merchants {
+    id
+    cpname
+    imageUrl
+    imageAlt
+    cplogo
+    location
+    reviewCount
+    averageRating
+  }
+}
+    `;
+
+export function useMerchantsQuery(options: Omit<Urql.UseQueryArgs<MerchantsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<MerchantsQuery>({ query: MerchantsDocument, ...options });
 };

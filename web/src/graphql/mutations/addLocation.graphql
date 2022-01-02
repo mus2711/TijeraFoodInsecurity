@@ -1,0 +1,5 @@
+mutation AddLocation($location: String!) {
+  addLocation(location: $location) {
+    id
+  }
+}

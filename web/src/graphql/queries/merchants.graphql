@@ -1,0 +1,12 @@
+query Merchants {
+  merchants {
+    id
+    cpname
+    imageUrl
+    imageAlt
+    cplogo
+    location
+    reviewCount
+    averageRating
+  }
+}

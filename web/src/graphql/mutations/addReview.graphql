@@ -1,0 +1,12 @@
+mutation AddReview($rating: Int!, $merchantId: Int!, $comment: String!) {
+  addReview(rating: $rating, merchantId: $merchantId, comment: $comment) {
+    user {
+      username
+    }
+    merchant {
+      cpname
+    }
+    comment
+    rating
+  }
+}

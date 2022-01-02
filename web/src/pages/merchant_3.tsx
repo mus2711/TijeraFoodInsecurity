@@ -1,6 +1,10 @@
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
-import { useMemQuery, useRegistermMutation } from "../generated/graphql";
+import {
+  useAddLocationMutation,
+  useMemQuery,
+  useRegistermMutation,
+} from "../generated/graphql";
 import React, { useState } from "react";
 import {
   Box,
@@ -33,15 +37,16 @@ const Merchant_3 = () => {
   const router = useRouter();
 
   const [, registerm] = useRegistermMutation();
+  const [, addLocation] = useAddLocationMutation();
   const initialInputs = {
     location: "",
   };
 
   const formikInputs = [
     {
-      name: "Location",
+      name: "location",
       placeholder: "TS Food Security St.",
-      label: "Location",
+      label: "location",
     },
   ];
 
@@ -58,6 +63,7 @@ const Merchant_3 = () => {
             avatarlogo={files?.source || undefined}
             imageUrl={files2?.source || undefined}
             cuisine={tags}
+            badge="Top"
           ></MenuSlide>
           <HStack paddingTop={"20px"}>
             <Button
@@ -98,19 +104,22 @@ const Merchant_3 = () => {
         <Box paddingTop={"15px"}>
           <Formik
             initialValues={initialInputs}
-            // onSubmit={async (values, { setErrors }) => {
-            //   console.log(values);
-            //   const response = await registerm(values);
-            //   console.log(response);
-            //   if (response.data?.registerm.errors) {
-            //     setErrors(toMerchErrorMap(response.data.registerm.errors));
-            //   } else if (response.data?.registerm.merchant) {
-            //     router.push("/");
-            //   }
-            // }}
-            onSubmit={() => {
-              router.push("/merchantaccount");
+            onSubmit={async (values, { setErrors }) => {
+              console.log(values);
+              const response = await addLocation(values);
+              console.log(response);
+              // if (response.data?.registerm.errors) {
+              //   setErrors(toMerchErrorMap(response.data.registerm.errors));
+              // } else if (response.data?.registerm.merchant) {
+              //   router.push("/");
+              // }
+              if (response.data?.addLocation.id) {
+                router.push("/");
+              }
             }}
+            // onSubmit={() => {
+            //   router.push("/merchantaccount");
+            // }}
           >
             {({ isSubmitting }) => (
               <Form>

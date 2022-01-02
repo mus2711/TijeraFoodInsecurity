@@ -29,6 +29,7 @@ import {
 } from "react-icons/md";
 import { MenuSlide } from "../components/menuslide";
 import { Combobox } from "evergreen-ui";
+import { useMerchantsQuery } from "../generated/graphql";
 
 const bl = "#5998A0";
 
@@ -117,6 +118,7 @@ const datalist = [
 ];
 
 const Search = () => {
+  const [{ data, fetching }] = useMerchantsQuery();
   let [menu, setMenu] = useState(true);
   let [photos, setPhotos] = useState(false);
   let [videos, setVideos] = useState(false);
@@ -153,7 +155,7 @@ const Search = () => {
   if (menu == true) {
     body = (
       <Stack spacing={6}>
-        {datalist.map((p) => (
+        {/* {datalist.map((p) => (
           <>
             <MenuSlide
               imageUrl={p.imageUrl}
@@ -167,6 +169,23 @@ const Search = () => {
               avatarlogo={p.avatarlogo}
               key={p.key}
               merchantID={p.merchantID}
+            />
+            <Divider />
+          </>
+        ))} */}
+        {data?.merchants.map((p) => (
+          <>
+            <MenuSlide
+              imageUrl={p.imageUrl}
+              imageAlt={p.imageAlt}
+              name={p.cpname}
+              reviewCount={p.reviewCount}
+              rating={p.averageRating}
+              // cuisine={p.cuisine}
+              // menulist={p.menulist}
+              location={p.location}
+              avatarlogo={p.cplogo}
+              merchantID={p.id}
             />
             <Divider />
           </>
