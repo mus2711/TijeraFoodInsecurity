@@ -1,4 +1,5 @@
 import argon2 from "argon2";
+import { Merchant } from "../entities/Merchant";
 import {
   Arg,
   Ctx,
@@ -51,6 +52,15 @@ class UserResponse {
 }
 
 @ObjectType()
+class MeResponse {
+  @Field(() => User, { nullable: true })
+  user?: User;
+
+  @Field(() => Merchant, { nullable: true })
+  merchant?: Merchant;
+}
+
+@ObjectType()
 class FieldError {
   @Field(() => String)
   field!: keyof RegisterInput | keyof LoginInput;
@@ -71,12 +81,24 @@ export default class UserResolver {
     return User.findOne(id);
   }
 
-  @Query(() => User, { nullable: true })
-  async me(@Ctx() { req }: MyContext): Promise<User | undefined> {
+  // @Query(() => User, { nullable: true })
+  // async me(@Ctx() { req }: MyContext): Promise<User | undefined> {
+  //   if (req.session.userId) {
+  //     return User.findOne(req.session.userId);
+  //   }
+  //   return undefined;
+  // }
+
+  @Query(() => MeResponse)
+  async me(@Ctx() { req }: MyContext): Promise<MeResponse> {
+    const response = new MeResponse();
     if (req.session.userId) {
-      return User.findOne(req.session.userId);
+      response.user = await User.findOne(req.session.userId);
     }
-    return undefined;
+    if (req.session.merchantId) {
+      response.merchant = await Merchant.findOne(req.session.merchantId);
+    }
+    return response;
   }
 
   @Mutation(() => UserResponse)
@@ -140,6 +162,7 @@ export default class UserResolver {
     }).save();
 
     req.session.userId = newUser.id.toString();
+    delete req.session.merchantId;
 
     return {
       user: newUser,
@@ -212,6 +235,7 @@ export default class UserResolver {
       };
 
     req.session.userId = user.id.toString();
+    delete req.session.merchantId;
 
     return {
       user,

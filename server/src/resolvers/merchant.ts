@@ -86,13 +86,13 @@ export default class MerchantResolver {
     return Merchant.findOne(id);
   }
 
-  @Query(() => Merchant, { nullable: true })
-  async mem(@Ctx() { req }: MyContext): Promise<Merchant | undefined> {
-    if (req.session.merchantId) {
-      return Merchant.findOne(req.session.merchantId);
-    }
-    return undefined;
-  }
+  // @Query(() => Merchant, { nullable: true })
+  // async mem(@Ctx() { req }: MyContext): Promise<Merchant | undefined> {
+  //   if (req.session.merchantId) {
+  //     return Merchant.findOne(req.session.merchantId);
+  //   }
+  //   return undefined;
+  // }
 
   @Query(() => [Review])
   async reviews(
@@ -173,6 +173,7 @@ export default class MerchantResolver {
     }).save();
 
     req.session.merchantId = newMerchant.id.toString();
+    delete req.session.userId;
 
     return {
       merchant: newMerchant,
@@ -245,6 +246,7 @@ export default class MerchantResolver {
       };
 
     req.session.merchantId = merchant.id.toString();
+    delete req.session.userId;
 
     return {
       merchant,
