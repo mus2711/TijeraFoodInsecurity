@@ -190,11 +190,11 @@ export type UserResponse = {
 
 export type RegularErrorFragment = { __typename?: 'FieldError', field: string, message: string };
 
-export type RegularMerchantFragment = { __typename?: 'Merchant', id: number, username: string, cpname: string, email: string };
+export type RegularMerchantFragment = { __typename?: 'Merchant', id: number, cpname: string, imageUrl?: Maybe<string>, imageAlt?: Maybe<string>, cplogo?: Maybe<string>, username: string, location?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number> };
 
 export type RegularMerchantErrorFragment = { __typename?: 'FieldMerchantError', field: string, merchantmsg: string };
 
-export type RegularMerchantResponseFragment = { __typename?: 'MerchantResponse', errors?: Maybe<Array<{ __typename?: 'FieldMerchantError', field: string, merchantmsg: string }>>, merchant?: Maybe<{ __typename?: 'Merchant', id: number, username: string, cpname: string, email: string }> };
+export type RegularMerchantResponseFragment = { __typename?: 'MerchantResponse', errors?: Maybe<Array<{ __typename?: 'FieldMerchantError', field: string, merchantmsg: string }>>, merchant?: Maybe<{ __typename?: 'Merchant', id: number, cpname: string, imageUrl?: Maybe<string>, imageAlt?: Maybe<string>, cplogo?: Maybe<string>, username: string, location?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number> }> };
 
 export type RegularUserFragment = { __typename?: 'User', id: number, username: string, firstname: string, lastname: string, email: string };
 
@@ -230,7 +230,7 @@ export type LoginmMutationVariables = Exact<{
 }>;
 
 
-export type LoginmMutation = { __typename?: 'Mutation', loginm: { __typename?: 'MerchantResponse', errors?: Maybe<Array<{ __typename?: 'FieldMerchantError', field: string, merchantmsg: string }>>, merchant?: Maybe<{ __typename?: 'Merchant', id: number, username: string, cpname: string, email: string }> } };
+export type LoginmMutation = { __typename?: 'Mutation', loginm: { __typename?: 'MerchantResponse', errors?: Maybe<Array<{ __typename?: 'FieldMerchantError', field: string, merchantmsg: string }>>, merchant?: Maybe<{ __typename?: 'Merchant', id: number, cpname: string, imageUrl?: Maybe<string>, imageAlt?: Maybe<string>, cplogo?: Maybe<string>, username: string, location?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number> }> } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -261,7 +261,7 @@ export type RegistermMutationVariables = Exact<{
 }>;
 
 
-export type RegistermMutation = { __typename?: 'Mutation', registerm: { __typename?: 'MerchantResponse', errors?: Maybe<Array<{ __typename?: 'FieldMerchantError', field: string, merchantmsg: string }>>, merchant?: Maybe<{ __typename?: 'Merchant', id: number, username: string, cpname: string, email: string }> } };
+export type RegistermMutation = { __typename?: 'Mutation', registerm: { __typename?: 'MerchantResponse', errors?: Maybe<Array<{ __typename?: 'FieldMerchantError', field: string, merchantmsg: string }>>, merchant?: Maybe<{ __typename?: 'Merchant', id: number, cpname: string, imageUrl?: Maybe<string>, imageAlt?: Maybe<string>, cplogo?: Maybe<string>, username: string, location?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number> }> } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -271,7 +271,7 @@ export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', 
 export type MemQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MemQuery = { __typename?: 'Query', mem?: Maybe<{ __typename?: 'Merchant', id: number, username: string, cpname: string, email: string }> };
+export type MemQuery = { __typename?: 'Query', mem?: Maybe<{ __typename?: 'Merchant', id: number, cpname: string, imageUrl?: Maybe<string>, imageAlt?: Maybe<string>, cplogo?: Maybe<string>, username: string, location?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number> }> };
 
 export type MerchantsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -287,9 +287,14 @@ export const RegularMerchantErrorFragmentDoc = gql`
 export const RegularMerchantFragmentDoc = gql`
     fragment RegularMerchant on Merchant {
   id
-  username
   cpname
-  email
+  imageUrl
+  imageAlt
+  cplogo
+  username
+  location
+  reviewCount
+  averageRating
 }
     `;
 export const RegularMerchantResponseFragmentDoc = gql`

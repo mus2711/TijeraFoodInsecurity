@@ -12,7 +12,11 @@ import {
 import Wrapper from "../components/wrapper";
 import { Inputfield } from "../components/inputfield";
 import { useMutation } from "urql";
-import { useLoginmMutation, useLoginMutation } from "../generated/graphql";
+import {
+  useLoginmMutation,
+  useLoginMutation,
+  useMemQuery,
+} from "../generated/graphql";
 import { toErrorMap } from "../../utils/toErrorMap";
 import { useRouter } from "next/dist/client/router";
 import { withUrqlClient } from "next-urql";
@@ -24,7 +28,7 @@ import { toMerchErrorMap } from "../../utils/toMerchErrorMap";
 import { MerchLayout } from "../components/merchLayout";
 import { query } from "@urql/exchange-graphcache";
 
-const Login: React.FC<{}> = ({}) => {
+const LoginMerchant: React.FC<{}> = ({}) => {
   const router = useRouter();
   const [, loginm] = useLoginmMutation();
 
@@ -37,17 +41,17 @@ const Login: React.FC<{}> = ({}) => {
             password: "",
           }}
           onSubmit={async (values, { setErrors }) => {
-            console.log(values);
+            console.log("values", values);
             const response = await loginm(values);
-            console.log(response);
-            console.log(router.query.next);
+            console.log("response", response);
+            console.log("router.query.next", router.query.next);
             if (response.data?.loginm.errors) {
               setErrors(toMerchErrorMap(response.data.loginm.errors));
             } else if (response.data?.loginm.merchant) {
               if (typeof router.query.next === "string") {
                 router.push(router.query.next);
               } else {
-                router.push("/merchantaccount");
+                router.push("/mburner");
               }
             }
           }}
@@ -98,4 +102,4 @@ const Login: React.FC<{}> = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(Login);
+export default withUrqlClient(createUrqlClient)(LoginMerchant);

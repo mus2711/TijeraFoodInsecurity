@@ -31,7 +31,7 @@ export const Merchnavbar: React.FC<NavbarProps> = ({ title, icon }) => {
   const [{ data, fetching }] = useMemQuery();
 
   const Links = ["Dashboard", "Projects", "Team"];
-  console.log(data?.mem);
+  // console.log(data?.mem);
   const NavLink = ({ children }: { children: ReactNode }) => (
     <Link
       px={2}

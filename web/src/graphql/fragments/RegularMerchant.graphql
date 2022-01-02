@@ -1,6 +1,11 @@
 fragment RegularMerchant on Merchant {
   id
-  username
   cpname
-  email
+  imageUrl
+  imageAlt
+  cplogo
+  username
+  location
+  reviewCount
+  averageRating
 }

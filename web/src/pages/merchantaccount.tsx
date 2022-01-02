@@ -1,56 +1,30 @@
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
-import React, { useState } from "react";
+import React from "react";
 import {
-  Avatar,
   Box,
   Button,
-  Flex,
   Heading,
   HStack,
-  IconButton,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  InputRightElement,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
-  SimpleGrid,
-  Spacer,
-  Stack,
-  Text,
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
-import NextLink from "next/link";
-import { Layout } from "../components/layout";
-import {
-  MdLocationOn,
-  MdSearch,
-  MdKeyboardVoice,
-  MdMenu,
-  MdCamera,
-  MdVideocam,
-  MdOutlineLocationSearching,
-  MdShoppingBasket,
-  MdPlusOne,
-} from "react-icons/md";
+import { MdPlusOne } from "react-icons/md";
 import { MenuSlide } from "../components/menuslide";
 import { Foodslide } from "../components/foodslide";
-import { HiPlus } from "react-icons/hi";
 import { Formik, Form } from "formik";
-import router from "next/router";
+import router, { useRouter } from "next/router";
 import { toErrorMap } from "../../utils/toErrorMap";
-import { DblStandardButton } from "../components/DblStandardButton";
 import { Inputfield } from "../components/inputfield";
-import { SignInOptions } from "../components/SignInOptions";
-import register from "./register";
-import { useRegistermMutation } from "../generated/graphql";
+import { useMemQuery } from "../generated/graphql";
 import { MerchLayout } from "../components/merchLayout";
+import { useIsAuthMerchant } from "../../utils/useIsAuthMerchant";
 
 const bl = "#5998A0";
 
@@ -97,8 +71,11 @@ const datalist = [
 ];
 
 const MerchAccount = () => {
+  console.log("we here.");
+  const router = useRouter();
+  useIsAuthMerchant();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [, registerm] = useRegistermMutation();
+  let [{ data, fetching }] = useMemQuery();
   const initialInputs = {
     description: "",
     item: "",
@@ -133,22 +110,35 @@ const MerchAccount = () => {
     },
   ];
   let body = (
+    // <VStack spacing={6}>
+    //   {datalist.map((p) => (
+    //     <MenuSlide
+    //       imageUrl={p.imageUrl}
+    //       imageAlt={p.imageAlt}
+    //       name={p.name}
+    //       reviewCount={p.reviewCount}
+    //       rating={p.rating}
+    //       cuisine={p.cuisine}
+    //       menulist={p.menulist}
+    //       location={p.location}
+    //       avatarlogo={p.avatarlogo}
+    //       key={p.key}
+    //       modal={false}
+    //     />
+    //   ))}
+    // </VStack>
     <VStack spacing={6}>
-      {datalist.map((p) => (
-        <MenuSlide
-          imageUrl={p.imageUrl}
-          imageAlt={p.imageAlt}
-          name={p.name}
-          reviewCount={p.reviewCount}
-          rating={p.rating}
-          cuisine={p.cuisine}
-          menulist={p.menulist}
-          location={p.location}
-          avatarlogo={p.avatarlogo}
-          key={p.key}
-          modal={false}
-        />
-      ))}
+      (
+      <MenuSlide
+        imageAlt={data?.mem?.imageAlt}
+        imageUrl={data?.mem?.imageUrl}
+        location={data?.mem?.location}
+        reviewCount={data?.mem?.reviewCount}
+        rating={data?.mem?.averageRating}
+        merchantId={data?.mem?.id}
+        avatarlogo={data?.mem?.cplogo}
+        name={data?.mem?.cpname}
+      />
     </VStack>
   );
 
