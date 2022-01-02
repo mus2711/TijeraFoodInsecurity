@@ -28,10 +28,10 @@ export const Merchnavbar: React.FC<NavbarProps> = ({ title, icon }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
   const [{ fetching: LogoutmFetching }, logoutm] = useLogoutmMutation();
+
   const [{ data, fetching }] = useMemQuery();
 
   const Links = ["Dashboard", "Projects", "Team"];
-  // console.log(data?.mem);
   const NavLink = ({ children }: { children: ReactNode }) => (
     <Link
       px={2}

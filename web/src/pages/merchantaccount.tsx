@@ -74,8 +74,8 @@ const MerchAccount = () => {
   console.log("we here.");
   const router = useRouter();
   useIsAuthMerchant();
+  const [{ data, fetching }] = useMemQuery();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  let [{ data, fetching }] = useMemQuery();
   const initialInputs = {
     description: "",
     item: "",

@@ -1,32 +1,15 @@
 import React from "react";
-import { Field, Form, Formik } from "formik";
-import {
-  Box,
-  Button,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Input,
-  Link,
-} from "@chakra-ui/react";
+import { Form, Formik } from "formik";
+import { Box, Button, Link } from "@chakra-ui/react";
 import Wrapper from "../components/wrapper";
 import { Inputfield } from "../components/inputfield";
-import { useMutation } from "urql";
-import {
-  useLoginmMutation,
-  useLoginMutation,
-  useMemQuery,
-} from "../generated/graphql";
-import { toErrorMap } from "../../utils/toErrorMap";
+import { useLoginmMutation, useMemQuery } from "../generated/graphql";
 import { useRouter } from "next/dist/client/router";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import NextLink from "next/link";
-import { route } from "next/dist/server/router";
-import { Layout } from "../components/layout";
 import { toMerchErrorMap } from "../../utils/toMerchErrorMap";
 import { MerchLayout } from "../components/merchLayout";
-import { query } from "@urql/exchange-graphcache";
 
 const LoginMerchant: React.FC<{}> = ({}) => {
   const router = useRouter();

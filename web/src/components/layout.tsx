@@ -1,6 +1,6 @@
 import React, { Children } from "react";
-import { Merchnavbar } from "./merchNavbar";
 import { Navbar } from "./navbar";
+
 import Wrapper, { WrapperVariant } from "./wrapper";
 
 interface LayoutProps {

@@ -1,4 +1,5 @@
 import React, { Children } from "react";
+import { useMemQuery } from "../generated/graphql";
 import { Merchnavbar } from "./merchNavbar";
 
 import Wrapper, { WrapperVariant } from "./wrapper";

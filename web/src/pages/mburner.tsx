@@ -31,7 +31,18 @@ import { Router, useRouter } from "next/router";
 const Mburner = () => {
   const [{ data, fetching }] = useMemQuery();
   console.log("burner mem", data?.mem);
-  return <MerchLayout title="burn UP"></MerchLayout>;
+  return (
+    <MerchLayout title="burn UP">
+      <Button
+        colorScheme={"blue"}
+        onClick={() => {
+          useMemQuery();
+        }}
+      >
+        mem
+      </Button>
+    </MerchLayout>
+  );
 };
 
 export default withUrqlClient(createUrqlClient, { ssr: true })(Mburner);
