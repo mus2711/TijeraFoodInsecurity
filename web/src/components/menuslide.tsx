@@ -33,7 +33,7 @@ interface MenuSlideProps {
   cuisine?: string[];
   location?: string;
   // merchantID?: string;
-  merchantID?: number;
+  merchantID: number;
   route?: Url;
   menulist?: {
     item: string;

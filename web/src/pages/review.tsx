@@ -42,7 +42,7 @@ const review = ({}) => {
   const [, addReview] = useAddReviewMutation();
   const initialInputs = {
     comment: "",
-    merchantId: 1,
+    // merchantId: 1,
     // rating: star,
   };
   const formikInputs = [
@@ -52,7 +52,7 @@ const review = ({}) => {
       label: "Comment",
     },
   ];
-
+  console.log(menuProps.merchantID);
   return (
     <Layout title="Leave a Review">
       <VStack spacing={12} paddingBottom={"40px"}>
@@ -66,6 +66,7 @@ const review = ({}) => {
             location={menuProps.location}
             reviewCount={menuProps.reviewCount}
             cuisine={menuProps.cuisine}
+            merchantID={menuProps.merchantID}
           />
           <Formik
             initialValues={initialInputs}
@@ -73,7 +74,7 @@ const review = ({}) => {
               console.log(values);
               const response = await addReview({
                 comment: values.comment,
-                merchantId: values.merchantId,
+                merchantId: menuProps.merchantID,
                 rating: star,
               });
               console.log(response);

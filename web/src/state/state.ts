@@ -16,7 +16,7 @@ const { setGlobalState, useGlobalState } = createGlobalState({
     rating: number;
     cuisine?: string[];
     location?: string;
-    merchantID?: string;
+    merchantID: number;
     avatarlogo?: string;
     key?: number;
     modal?: boolean;
