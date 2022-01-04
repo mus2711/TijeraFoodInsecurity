@@ -1,0 +1,15 @@
+query Reviews($merchantId: Int!) {
+  reviews(merchantId: $merchantId) {
+    user {
+      username
+      firstname
+      lastname
+    }
+    merchant {
+      cpname
+      id
+    }
+    comment
+    rating
+  }
+}

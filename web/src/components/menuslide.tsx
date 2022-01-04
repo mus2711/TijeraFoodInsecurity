@@ -24,6 +24,13 @@ import { HiPencil, HiPlus } from "react-icons/hi";
 import { MdShoppingBasket } from "react-icons/md";
 import { setGlobalState, useGlobalState } from "../state/state";
 
+enum Nothing {
+  Nothing = "Nothing",
+}
+enum Url {
+  Url = "Url",
+}
+
 interface MenuSlideProps {
   imageUrl?: string;
   imageAlt?: string;
@@ -33,7 +40,7 @@ interface MenuSlideProps {
   cuisine?: string[];
   location?: string;
   // merchantID?: string;
-  merchantID: number;
+  merchantID?: number;
   route?: Url;
   menulist?: {
     item: string;

@@ -271,12 +271,19 @@ export type RegistermMutation = { __typename?: 'Mutation', registerm: { __typena
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'MeResponse', merchant?: Maybe<{ __typename?: 'Merchant', id: number, cpname: string, cplogo?: Maybe<string>, imageUrl?: Maybe<string>, location?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number>, username: string }>, user?: Maybe<{ __typename?: 'User', id: number, firstname: string, lastname: string, username: string }> } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'MeResponse', merchant?: Maybe<{ __typename?: 'Merchant', id: number, cpname: string, cplogo?: Maybe<string>, imageUrl?: Maybe<string>, location?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number>, username: string }>, user?: Maybe<{ __typename?: 'User', id: number, firstname: string, lastname: string, username: string, email: string }> } };
 
 export type MerchantsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MerchantsQuery = { __typename?: 'Query', merchants: Array<{ __typename?: 'Merchant', id: number, cpname: string, imageUrl?: Maybe<string>, imageAlt?: Maybe<string>, cplogo?: Maybe<string>, location?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number> }> };
+
+export type ReviewsQueryVariables = Exact<{
+  merchantId: Scalars['Int'];
+}>;
+
+
+export type ReviewsQuery = { __typename?: 'Query', reviews: Array<{ __typename?: 'Review', comment: string, rating: number, user: { __typename?: 'User', username: string, firstname: string, lastname: string }, merchant: { __typename?: 'Merchant', cpname: string, id: number } }> };
 
 export const RegularMerchantErrorFragmentDoc = gql`
     fragment RegularMerchantError on FieldMerchantError {
@@ -448,6 +455,7 @@ export const MeDocument = gql`
       firstname
       lastname
       username
+      email
     }
   }
 }
@@ -473,4 +481,25 @@ export const MerchantsDocument = gql`
 
 export function useMerchantsQuery(options: Omit<Urql.UseQueryArgs<MerchantsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MerchantsQuery>({ query: MerchantsDocument, ...options });
+};
+export const ReviewsDocument = gql`
+    query Reviews($merchantId: Int!) {
+  reviews(merchantId: $merchantId) {
+    user {
+      username
+      firstname
+      lastname
+    }
+    merchant {
+      cpname
+      id
+    }
+    comment
+    rating
+  }
+}
+    `;
+
+export function useReviewsQuery(options: Omit<Urql.UseQueryArgs<ReviewsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<ReviewsQuery>({ query: ReviewsDocument, ...options });
 };

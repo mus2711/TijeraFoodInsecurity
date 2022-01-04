@@ -1,6 +1,6 @@
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -19,12 +19,12 @@ import { MdPlusOne } from "react-icons/md";
 import { MenuSlide } from "../components/menuslide";
 import { Foodslide } from "../components/foodslide";
 import { Formik, Form } from "formik";
-import router, { useRouter } from "next/router";
-import { toErrorMap } from "../../utils/toErrorMap";
+import { useRouter } from "next/router";
 import { Inputfield } from "../components/inputfield";
-import { useMemQuery } from "../generated/graphql";
-import { MerchLayout } from "../components/merchLayout";
+import { useMeQuery } from "../generated/graphql";
 import { useIsAuthMerchant } from "../../utils/useIsAuthMerchant";
+import { Layout } from "../components/layout";
+import { useFileUpload } from "use-file-upload";
 
 const bl = "#5998A0";
 
@@ -71,11 +71,13 @@ const datalist = [
 ];
 
 const MerchAccount = () => {
-  console.log("we here.");
   const router = useRouter();
   useIsAuthMerchant();
-  const [{ data, fetching }] = useMemQuery();
+  const [{ data, fetching }] = useMeQuery();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  let [avLogo, setavLogo] = useState("");
+  const [files, selectFiles] = useFileUpload();
+  const [files2, selectFiles2] = useFileUpload();
   const initialInputs = {
     description: "",
     item: "",
@@ -130,14 +132,13 @@ const MerchAccount = () => {
     <VStack spacing={6}>
       (
       <MenuSlide
-        imageAlt={data?.mem?.imageAlt}
-        imageUrl={data?.mem?.imageUrl}
-        location={data?.mem?.location}
-        reviewCount={data?.mem?.reviewCount}
-        rating={data?.mem?.averageRating}
-        merchantId={data?.mem?.id}
-        avatarlogo={data?.mem?.cplogo}
-        name={data?.mem?.cpname}
+        imageUrl={files2?.source || data?.me?.merchant?.imageUrl}
+        location={data?.me?.merchant?.location}
+        reviewCount={data?.me?.merchant?.reviewCount}
+        rating={data?.me?.merchant?.averageRating}
+        merchantId={data?.me?.merchant?.id}
+        avatarlogo={files?.source || data?.me?.merchant?.cplogo}
+        name={data?.me?.merchant?.cpname}
       />
     </VStack>
   );
@@ -151,13 +152,42 @@ const MerchAccount = () => {
   );
 
   return (
-    <MerchLayout title="Explore">
+    <Layout title="Explore">
       <Heading textAlign={"center"}>Your Account</Heading>
 
       <VStack justifyContent={"center"} alignContent={"center"} spacing={6}>
         <Box spacing={8} marginTop={"25px"} gridColumn={"auto"} p="20px">
           {body}
         </Box>
+        <HStack paddingBottom={"20px"}>
+          <Button
+            onClick={() => {
+              selectFiles(
+                { accept: "image/*", multiple: false },
+                ({ name, size, source, file }) => {
+                  console.log("Files Selected", { name, size, source, file });
+                }
+              );
+            }}
+            colorScheme={"blue"}
+          >
+            Change Logo
+          </Button>
+
+          <Button
+            onClick={() => {
+              selectFiles2(
+                { accept: "image/*", multiple: false },
+                ({ name, size, source, file }) => {
+                  console.log("Files Selected", { name, size, source, file });
+                }
+              );
+            }}
+            colorScheme={"red"}
+          >
+            Change Backdrop
+          </Button>
+        </HStack>
         <Heading>Your Items</Heading>
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalContent
@@ -172,16 +202,17 @@ const MerchAccount = () => {
             <ModalBody>
               <Formik
                 initialValues={initialInputs}
-                onSubmit={async (values, { setErrors }) => {
-                  console.log(values);
-                  const response = await registerm(values);
-                  console.log(response);
-                  if (response.data?.registerm.errors) {
-                    setErrors(toErrorMap(response.data.registerm.errors));
-                  } else if (response.data?.registerm.merchant) {
-                    router.push("/");
-                  }
-                }}
+                // onSubmit={async (values, { setErrors }) => {
+                //   console.log(values);
+                //   const response = await registerm(values);
+                //   console.log(response);
+                //   if (response.data?.registerm.errors) {
+                //     setErrors(toErrorMap(response.data.registerm.errors));
+                //   } else if (response.data?.registerm.merchant) {
+                //     router.push("/");
+                //   }
+                // }}
+                onSubmit={() => {}}
               >
                 {({ isSubmitting }) => (
                   <Form>
@@ -227,7 +258,7 @@ const MerchAccount = () => {
         </HStack>
         <>{menu}</>
       </VStack>
-    </MerchLayout>
+    </Layout>
   );
 };
 

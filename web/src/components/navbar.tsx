@@ -20,7 +20,12 @@ import {
 import { useRouter } from "next/router";
 import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import { HiUser } from "react-icons/hi";
-import { MdFoodBank, MdSettings, MdShoppingBasket } from "react-icons/md";
+import {
+  MdFoodBank,
+  MdMonetizationOn,
+  MdSettings,
+  MdShoppingBasket,
+} from "react-icons/md";
 import { ReactNode } from "react";
 import { useGlobalState } from "../state/state";
 
@@ -89,25 +94,8 @@ export const Navbar: React.FC<NavbarProps> = ({ title, icon }) => {
                     command="⌘⇧N"
                     onClick={isOpen ? onClose : onOpen}
                   >
-                    Basket (1)
+                    Basket
                   </MenuItem>
-
-                  <MenuItem
-                    icon={<HiUser />}
-                    command="⌘T"
-                    onClick={isOpen ? onClose : onOpen}
-                  >
-                    Account
-                  </MenuItem>
-                  <NextLink href={"./settings"}>
-                    <MenuItem
-                      icon={<MdSettings />}
-                      command="⌘N"
-                      onClick={isOpen ? onClose : onOpen}
-                    >
-                      Settings
-                    </MenuItem>
-                  </NextLink>
                   <NextLink href={"/login"}>
                     <MenuItem icon={<HiUser />} command="⌘⇧N">
                       Log in
@@ -159,21 +147,33 @@ export const Navbar: React.FC<NavbarProps> = ({ title, icon }) => {
                       Food Search
                     </MenuItem>
                   </NextLink>
-                  <MenuItem
-                    icon={<MdShoppingBasket />}
-                    command="⌘⇧N"
-                    onClick={isOpen ? onClose : onOpen}
-                  >
-                    Basket (1)
-                  </MenuItem>
-
-                  <MenuItem
-                    icon={<HiUser />}
-                    command="⌘T"
-                    onClick={isOpen ? onClose : onOpen}
-                  >
-                    Account
-                  </MenuItem>
+                  <NextLink href={"./"}>
+                    <MenuItem
+                      icon={<MdMonetizationOn />}
+                      command="⌘T"
+                      onClick={isOpen ? onClose : onOpen}
+                    >
+                      Orders
+                    </MenuItem>
+                  </NextLink>
+                  <NextLink href={"./merchantreviews"}>
+                    <MenuItem
+                      icon={<MdMonetizationOn />}
+                      command="⌘T"
+                      onClick={isOpen ? onClose : onOpen}
+                    >
+                      Your Reviews
+                    </MenuItem>
+                  </NextLink>
+                  <NextLink href={"./merchantaccount"}>
+                    <MenuItem
+                      icon={<HiUser />}
+                      command="⌘T"
+                      onClick={isOpen ? onClose : onOpen}
+                    >
+                      Account
+                    </MenuItem>
+                  </NextLink>
                   <NextLink href={"./settings"}>
                     <MenuItem
                       icon={<MdSettings />}
@@ -242,20 +242,15 @@ export const Navbar: React.FC<NavbarProps> = ({ title, icon }) => {
                         Food Search
                       </MenuItem>
                     </NextLink>
-                    <MenuItem
-                      icon={<MdShoppingBasket />}
-                      command="⌘⇧N"
-                      onClick={isOpen ? onClose : onOpen}
-                    >
-                      Basket
-                    </MenuItem>
-                    <MenuItem
-                      icon={<HiUser />}
-                      command="⌘T"
-                      onClick={isOpen ? onClose : onOpen}
-                    >
-                      Account
-                    </MenuItem>
+                    <NextLink href={"/checkout"}>
+                      <MenuItem
+                        icon={<MdShoppingBasket />}
+                        command="⌘⇧N"
+                        onClick={isOpen ? onClose : onOpen}
+                      >
+                        Basket
+                      </MenuItem>
+                    </NextLink>
                     <NextLink href={"./settings"}>
                       <MenuItem
                         icon={<MdSettings />}
@@ -272,7 +267,8 @@ export const Navbar: React.FC<NavbarProps> = ({ title, icon }) => {
                         await logout();
                         router.reload();
                       }}
-                      bg={"red.200"}
+                      bgColor={"black"}
+                      color={"white"}
                     >
                       {data.me.user?.username} (Logout)
                     </MenuItem>

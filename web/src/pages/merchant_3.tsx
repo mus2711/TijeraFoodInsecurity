@@ -2,7 +2,7 @@ import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import {
   useAddLocationMutation,
-  useMemQuery,
+  useMeQuery,
   useRegistermMutation,
 } from "../generated/graphql";
 import React, { useState } from "react";
@@ -27,9 +27,10 @@ import { MenuSlide } from "../components/menuslide";
 import { FilePicker, RemoveIcon } from "evergreen-ui";
 import { useFileUpload } from "use-file-upload";
 import { Router, useRouter } from "next/router";
+import { Layout } from "../components/layout";
 
-const Merchant_3 = () => {
-  const [{ data: meData }] = useMemQuery();
+const Merchant3 = () => {
+  const [{ data, fetching }] = useMeQuery();
   let [tags, setTags] = useState([] as string[]);
   let [avLogo, setavLogo] = useState("");
   const [files, selectFiles] = useFileUpload();
@@ -46,12 +47,12 @@ const Merchant_3 = () => {
     {
       name: "location",
       placeholder: "TS Food Security St.",
-      label: "location",
+      label: "Location",
     },
   ];
 
   return (
-    <MerchLayout title="SIGN UP">
+    <Layout title="SIGN UP">
       <Flex direction="column" justifyContent="center" alignItems="center">
         <Heading>Step 3/3</Heading>
         <Text textAlign={"center"} width={"75vw"} maxWidth={"350px"}>
@@ -64,6 +65,7 @@ const Merchant_3 = () => {
             imageUrl={files2?.source || undefined}
             cuisine={tags}
             badge="Top"
+            name={data?.me.merchant ? data?.me.merchant.cpname : undefined}
           ></MenuSlide>
           <HStack paddingTop={"20px"}>
             <Button
@@ -117,9 +119,6 @@ const Merchant_3 = () => {
                 router.push("/");
               }
             }}
-            // onSubmit={() => {
-            //   router.push("/merchantaccount");
-            // }}
           >
             {({ isSubmitting }) => (
               <Form>
@@ -193,8 +192,8 @@ const Merchant_3 = () => {
           </Formik>
         </Box>
       </Flex>
-    </MerchLayout>
+    </Layout>
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: true })(Merchant_3);
+export default withUrqlClient(createUrqlClient, { ssr: true })(Merchant3);

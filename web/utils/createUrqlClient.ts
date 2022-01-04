@@ -2,6 +2,7 @@ import { Cache, cacheExchange, QueryInput } from "@urql/exchange-graphcache";
 import { SSRExchange } from "next-urql";
 import { dedupExchange, fetchExchange } from "urql";
 import {
+  AddLocationMutation,
   LoginmMutation,
   LoginMutation,
   LogoutMutation,
@@ -71,6 +72,20 @@ export const createUrqlClient = (ssrExchange: SSRExchange, ctx: any) => {
                 }
               );
               //TODO: uh oh bad code
+            },
+
+            addLocation: (_result, _, cache, __) => {
+              betterUpdateQuery<AddLocationMutation, MeQuery>(
+                cache,
+                { query: MeDocument },
+                _result,
+                (result, query) => {
+                  if (result.addLocation) {
+                    console.log("cache trig!");
+                    return { me: result.addLocation };
+                  }
+                }
+              );
             },
 
             register: (_result, _, cache, __) => {

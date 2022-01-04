@@ -1,6 +1,7 @@
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import {
+  useLoginmMutation,
   useMeQuery,
   useRegistermMutation,
   useRegisterMutation,
@@ -45,10 +46,9 @@ import { DblStandardButton } from "../components/DblStandardButton";
 import { Inputfield } from "../components/inputfield";
 import { MerchLayout } from "../components/merchLayout";
 
-const Merchant_2 = () => {
-  const [{ data: meData }] = useMeQuery();
-
+const Merchant2 = () => {
   const [, registerm] = useRegistermMutation();
+  const [, loginm] = useLoginmMutation();
   const initialInputs = {
     cpname: "",
     username: "",
@@ -78,16 +78,10 @@ const Merchant_2 = () => {
       label: "Password",
       type: "password",
     },
-    // {
-    //   name: "re_password",
-    //   placeholder: "Retype Password",
-    //   label: "Retype Password",
-    //   type: "password",
-    // },
   ];
 
   return (
-    <MerchLayout title="SIGN UP">
+    <Layout title="SIGN UP">
       <Flex direction="column" justifyContent="center" alignItems="center">
         <Heading>Step 2/3</Heading>
         <Text textAlign={"center"} width={"75vw"} maxWidth={"350px"}>
@@ -104,6 +98,10 @@ const Merchant_2 = () => {
               if (response.data?.registerm.errors) {
                 setErrors(toMerchErrorMap(response.data.registerm.errors));
               } else if (response.data?.registerm.merchant) {
+                await loginm({
+                  usernameOrEmail: values.email,
+                  password: values.password,
+                });
                 router.push("/merchant_3");
               }
             }}
@@ -132,16 +130,7 @@ const Merchant_2 = () => {
                   mt={6}
                   alignItems={"center"}
                   justifyContent={"center"}
-                >
-                  {/* <Text
-                    textAlign={"center"}
-                    fontSize={"15px"}
-                    maxWidth={"60vw"}
-                  >
-                    Or Sign up with your social media account below:
-                  </Text>
-                  <SignInOptions /> */}
-                </Flex>
+                ></Flex>
               </Form>
             )}
           </Formik>
@@ -149,8 +138,8 @@ const Merchant_2 = () => {
         <Ahac />
         <LogInButton />
       </Flex>
-    </MerchLayout>
+    </Layout>
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: true })(Merchant_2);
+export default withUrqlClient(createUrqlClient, { ssr: true })(Merchant2);

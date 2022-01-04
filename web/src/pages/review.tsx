@@ -1,16 +1,10 @@
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
-import {
-  useAddReviewMutation,
-  useRegisterMutation,
-} from "../generated/graphql";
-import React, { useState } from "react";
+import { useAddReviewMutation, useMeQuery } from "../generated/graphql";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
-  Flex,
-  Heading,
-  InputGroup,
   Tag,
   TagLabel,
   TagLeftIcon,
@@ -18,15 +12,9 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Layout } from "../components/layout";
-import { Ahac } from "../components/AHAC";
-import { LogInButton } from "../components/LogInButton";
 import { Formik, Form } from "formik";
 import { useRouter } from "next/router";
-import { toErrorMap } from "../../utils/toErrorMap";
-import { SignInOptions } from "../components/SignInOptions";
-import { DblStandardButton } from "../components/DblStandardButton";
 import { Inputfield } from "../components/inputfield";
-import { HiUser } from "react-icons/hi";
 import { useGlobalState } from "../state/state";
 import { MenuSlide } from "../components/menuslide";
 import { AddIcon, StarIcon } from "evergreen-ui";
@@ -36,7 +24,7 @@ interface reviewProps {}
 
 const review = ({}) => {
   const router = useRouter();
-  useIsAuth();
+  // useIsAuth();
   let [star, setStar] = useState(1);
   const [menuProps] = useGlobalState("reviewRes");
   const [, addReview] = useAddReviewMutation();
@@ -52,7 +40,7 @@ const review = ({}) => {
       label: "Comment",
     },
   ];
-  console.log(menuProps.merchantID);
+
   return (
     <Layout title="Leave a Review">
       <VStack spacing={12} paddingBottom={"40px"}>
