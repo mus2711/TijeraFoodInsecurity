@@ -267,8 +267,6 @@ export const Navbar: React.FC<NavbarProps> = ({ title, icon }) => {
                         await logout();
                         router.reload();
                       }}
-                      bgColor={"black"}
-                      color={"white"}
                     >
                       {data.me.user?.username} (Logout)
                     </MenuItem>

@@ -3,11 +3,15 @@ import { SSRExchange } from "next-urql";
 import { dedupExchange, fetchExchange } from "urql";
 import {
   AddLocationMutation,
+  AddReviewMutation,
   LoginmMutation,
   LoginMutation,
+  LogoutmMutation,
   LogoutMutation,
   MeDocument,
   MeQuery,
+  MerchantsDocument,
+  MerchantsQuery,
   RegisterMutation,
 } from "../src/generated/graphql";
 import { isServer } from "./isServer";
@@ -88,6 +92,20 @@ export const createUrqlClient = (ssrExchange: SSRExchange, ctx: any) => {
               );
             },
 
+            addReview: (_result, _, cache, __) => {
+              betterUpdateQuery<AddReviewMutation, MerchantsQuery>(
+                cache,
+                { query: MerchantsDocument },
+                _result,
+                (result, query) => {
+                  if (result.addReview) {
+                    console.log("cache trig!");
+                    return { merchants: result.addReview };
+                  }
+                }
+              );
+            },
+
             register: (_result, _, cache, __) => {
               betterUpdateQuery<RegisterMutation, MeQuery>(
                 cache,
@@ -106,6 +124,14 @@ export const createUrqlClient = (ssrExchange: SSRExchange, ctx: any) => {
             },
             logout: (_result, _, cache, __) => {
               betterUpdateQuery<LogoutMutation, MeQuery>(
+                cache,
+                { query: MeDocument },
+                _result,
+                () => ({ me: null })
+              );
+            },
+            logoutm: (_result, _, cache, __) => {
+              betterUpdateQuery<LogoutmMutation, MeQuery>(
                 cache,
                 { query: MeDocument },
                 _result,

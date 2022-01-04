@@ -187,6 +187,7 @@ const Search = () => {
               avatarlogo={p.cplogo}
               merchantID={p.id}
               key={p.id}
+              scrt={true}
             />
             <Divider />
           </>

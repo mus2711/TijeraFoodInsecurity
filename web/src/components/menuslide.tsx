@@ -53,6 +53,7 @@ interface MenuSlideProps {
   key?: number;
   modal?: boolean;
   badge?: string;
+  scrt: boolean;
 }
 let theBasket = [] as {
   picture: string;
@@ -76,6 +77,7 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
   merchantID,
   modal = true,
   badge = "New",
+  scrt = false,
 }) => {
   const [currentBasket] = useGlobalState("userBasket");
   let currentLength: number = useGlobalState("userBasket")[0].length;
@@ -127,7 +129,132 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
       {cuisine[0]}
     </Box>
   );
-  if (modal == true) {
+  if (scrt == true) {
+    const dummyMenu = [
+      {
+        item: "Cheese Burger",
+        foodpic:
+          "https://i.ibb.co/ZYYqy2x/f0b1b4305b287bf541822022e1883694.jpg",
+        price: 8,
+        description: "Delicious Hamburger with Cheese",
+        itemID: "039043",
+      },
+      {
+        item: "Fries",
+        foodpic:
+          "https://i.ibb.co/ZYYqy2x/f0b1b4305b287bf541822022e1883694.jpg",
+        price: 3,
+        description:
+          "Fried potatoes with choice of 2 sauces: Ketchup, Mayo, BBQ, Ranch.",
+        itemID: "654043",
+      },
+      {
+        item: "Chocolate Milkshake",
+        foodpic:
+          "https://i.ibb.co/ZYYqy2x/f0b1b4305b287bf541822022e1883694.jpg",
+        price: 6,
+        description: "Made with Whole Milk, and Chocolate Ice Cream.",
+        itemID: "12343",
+      },
+    ];
+    menu = (
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalContent
+          maxW="800px"
+          width={"80vw"}
+          borderWidth="1px"
+          borderRadius="lg"
+          bg={"white"}
+        >
+          <ModalHeader>Food Menu</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {dummyMenu?.map((p) => (
+              <HStack spacing={2} p="5px" paddingBottom={"20px"}>
+                <Box
+                  maxW="80px"
+                  borderWidth="1px"
+                  borderRadius="lg"
+                  overflow="hidden"
+                >
+                  <Image
+                    maxHeight={"80px"}
+                    width={"10vw"}
+                    fit={"cover"}
+                    src={p.foodpic}
+                  ></Image>
+                </Box>
+
+                <Stack textAlign={"left"}>
+                  <Text fontWeight={"bold"} maxWidth={"200px"}>
+                    {p.item}
+                    {/* {p.itemID} */}
+                  </Text>
+                  <Text fontSize={"12px"} maxWidth={"200px"}>
+                    {p.description}
+                  </Text>
+                </Stack>
+
+                <Spacer />
+                <Text>${p.price}</Text>
+                <IconButton
+                  colorScheme={"teal"}
+                  aria-label="Menu"
+                  icon={<HiPlus size={"20px"} />}
+                  padding={"5px"}
+                  onClick={() => {
+                    addToBasket({
+                      picture: p.foodpic,
+                      title: p.item,
+                      desc: p.description,
+                      price: p.price,
+                      itemID: p.itemID,
+                    });
+                  }}
+                />
+                {/* <IconButton
+                  colorScheme={"teal"}
+                  aria-label="Menu"
+                  icon={<HiPencil size={"20px"} />}
+                  padding={"5px"}
+                  onClick={() => {}}
+                /> */}
+                {/* <Button padding={"20px"} colorScheme={"teal"}>
+                Review
+              </Button> */}
+              </HStack>
+            ))}
+          </ModalBody>
+
+          <ModalFooter>
+            <Button
+              width={"100%"}
+              colorScheme="teal"
+              mr={3}
+              onClick={() => {
+                pushToReview();
+              }}
+              leftIcon={<HiPencil />}
+            >
+              Leave a Review
+            </Button>
+            <Button
+              width={"100%"}
+              colorScheme="blue"
+              mr={3}
+              onClick={() => {
+                router.push("/checkout");
+              }}
+              rightIcon={<MdShoppingBasket />}
+            >
+              Basket ({basketLength})
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    );
+  }
+  if (modal == true && scrt == false) {
     menu = (
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalContent
@@ -225,6 +352,7 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
       </Modal>
     );
   }
+
   if (cuisine.length > 1) {
     tagline = (
       <Box
