@@ -29,7 +29,7 @@ const Search = () => {
     });
     return totalPr;
   }
-  const [currentPrice, setCurrentPrice] = useState(totalPrice());
+  let [currentPrice, setCurrentPrice] = useState(totalPrice());
   let currentLength: number = useGlobalState("userBasket").length;
 
   const removeFromBasket = (
@@ -114,6 +114,7 @@ const Search = () => {
             colorScheme={"red"}
             onClick={() => {
               setGlobalState("userBasket", []);
+              setCurrentPrice((currentPrice = 0));
             }}
           >
             Delete All

@@ -7,6 +7,7 @@ import {
   Button,
   Divider,
   Flex,
+  HStack,
   IconButton,
   Input,
   InputGroup,
@@ -14,7 +15,11 @@ import {
   InputRightElement,
   SimpleGrid,
   Stack,
+  Tag,
+  TagLabel,
+  TagLeftIcon,
   Text,
+  VStack,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { Layout } from "../components/layout";
@@ -28,8 +33,9 @@ import {
   MdOutlineLocationSearching,
 } from "react-icons/md";
 import { MenuSlide } from "../components/menuslide";
-import { Combobox } from "evergreen-ui";
+import { Combobox, RemoveIcon } from "evergreen-ui";
 import { useMerchantsQuery } from "../generated/graphql";
+import { AddIcon } from "@chakra-ui/icons";
 
 const bl = "#5998A0";
 
@@ -150,49 +156,123 @@ const Search = () => {
     setLoc((loc = true));
     setMenu((photos = false));
   };
-  let body = null;
+  const found = (arr1: string[], arr2: string[]) => {
+    return arr1.some((r) => arr2.indexOf(r) >= 0);
+  };
 
+  let body = null;
+  let [tags, setTags] = useState([] as string[]);
+  console.log(tags);
+  let rmbutton = null;
+  if (tags.length >= 1) {
+    rmbutton = (
+      <IconButton
+        aria-label="remove"
+        children={<RemoveIcon />}
+        onClick={() => setTags((tags = []))}
+        colorScheme={"red"}
+        height={"30px"}
+      />
+    );
+  }
   if (menu == true) {
     body = (
-      <Stack spacing={6}>
-        {/* {datalist.map((p) => (
-          <>
-            <MenuSlide
-              imageUrl={p.imageUrl}
-              imageAlt={p.imageAlt}
-              name={p.name}
-              reviewCount={p.reviewCount}
-              rating={p.rating}
-              cuisine={p.cuisine}
-              menulist={p.menulist}
-              location={p.location}
-              avatarlogo={p.avatarlogo}
-              key={p.key}
-              merchantID={p.merchantID}
-            />
-            <Divider />
-          </>
-        ))} */}
-        {data?.merchants.map((p) => (
-          <>
-            <MenuSlide
-              imageUrl={p.imageUrl}
-              imageAlt={p.imageAlt}
-              name={p.cpname}
-              reviewCount={p.reviewCount}
-              rating={p.averageRating}
-              // cuisine={p.cuisine}
-              // menulist={p.menulist}
-              location={p.location}
-              avatarlogo={p.cplogo}
-              merchantID={p.id}
-              key={p.id}
-              scrt={true}
-            />
-            <Divider />
-          </>
-        ))}
-      </Stack>
+      <>
+        <VStack>
+          <Combobox
+            padding={20}
+            openOnFocus
+            width={"400px"}
+            height={40}
+            items={["Vegetarian", "Fast Food", "Healthy", "Diner"]}
+            onChange={(selected) => {
+              if (selected !== null) {
+                setTags([...tags, selected]);
+                console.log(tags.length);
+              }
+            }}
+            placeholder="Search what you're looking for..."
+            justifyContent="center"
+          />
+        </VStack>
+        <HStack p={"20px"}>
+          {tags.map((tagName) => (
+            <Tag
+              size={"md"}
+              variant="subtle"
+              colorScheme="green"
+              // onClick={setTags([""])}
+            >
+              <TagLeftIcon boxSize="12px" as={AddIcon} />
+              <TagLabel>{tagName}</TagLabel>
+            </Tag>
+          ))}
+          {rmbutton}
+        </HStack>
+        <VStack spacing={6}>
+          {datalist.map(function (p) {
+            if (found(p.cuisine, tags)) {
+              return (
+                <>
+                  <MenuSlide
+                    imageUrl={p.imageUrl}
+                    imageAlt={p.imageAlt}
+                    name={p.name}
+                    reviewCount={p.reviewCount}
+                    rating={p.rating}
+                    cuisine={p.cuisine}
+                    menulist={p.menulist}
+                    location={p.location}
+                    avatarlogo={p.avatarlogo}
+                    key={p.key}
+                    merchantID={p.merchantID}
+                  />
+                  <Divider />
+                </>
+              );
+            } else if (!tags[0]) {
+              return (
+                <>
+                  <MenuSlide
+                    imageUrl={p.imageUrl}
+                    imageAlt={p.imageAlt}
+                    name={p.name}
+                    reviewCount={p.reviewCount}
+                    rating={p.rating}
+                    cuisine={p.cuisine}
+                    menulist={p.menulist}
+                    location={p.location}
+                    avatarlogo={p.avatarlogo}
+                    key={p.key}
+                    merchantID={p.merchantID}
+                  />
+                  <Divider />
+                </>
+              );
+            }
+          })}
+
+          {/* {data?.merchants.map((p) => (
+            <>
+              <MenuSlide
+                imageUrl={p.imageUrl}
+                imageAlt={p.imageAlt}
+                name={p.cpname}
+                reviewCount={p.reviewCount}
+                rating={p.averageRating}
+                // cuisine={p.cuisine}
+                // menulist={p.menulist}
+                location={p.location}
+                avatarlogo={p.cplogo}
+                merchantID={p.id}
+                key={p.id}
+                scrt={true}
+              />
+              <Divider />
+            </>
+          ))} */}
+        </VStack>
+      </>
     );
   }
   if (photos == true) {
@@ -204,18 +284,10 @@ const Search = () => {
   if (loc == true) {
     body = <Button>Loc</Button>;
   }
+
   return (
     <Layout title="Explore">
       <Flex direction="column" justifyContent="center" alignItems="center">
-        <Combobox
-          openOnFocus
-          width="100%"
-          height={40}
-          items={["Banana", "Orange", "Apple", "Mango"]}
-          onChange={(selected) => console.log(selected)}
-          placeholder="Fruit"
-        />
-
         <Flex
           direction={"row"}
           mt={6}
@@ -223,7 +295,7 @@ const Search = () => {
           justifyContent={"center"}
           maxWidth={"85vw"}
         >
-          <Box padding={"1vw"}>
+          <Box padding={"3vw"}>
             <IconButton
               borderColor={"#5998A0"}
               variant="outline"
@@ -245,7 +317,7 @@ const Search = () => {
               <MdCamera size={"20px"} color="#5998A0" />
             </IconButton>
           </Box> */}
-          <Box padding={"1vw"}>
+          <Box padding={"3vw"}>
             <IconButton
               borderColor={"#5998A0"}
               variant="outline"
@@ -256,7 +328,7 @@ const Search = () => {
               <MdVideocam size={"20px"} color="#5998A0" />
             </IconButton>
           </Box>
-          <Box padding={"1vw"}>
+          {/* <Box padding={"3vw"}>
             <IconButton
               borderColor={"#5998A0"}
               variant="outline"
@@ -268,12 +340,12 @@ const Search = () => {
             >
               <MdLocationOn size={"20px"} color="#5998A0" />
             </IconButton>
-          </Box>
+          </Box> */}
         </Flex>
         {/* <SimpleGrid columns={[1, null, 3]} spacing="40px"> */}
         <Box
           spacing={8}
-          marginTop={"25px"}
+          marginTop={"5px"}
           gridColumn={"auto"}
           p="20px"
           paddingBottom={"80px"}
