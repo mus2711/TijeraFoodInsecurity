@@ -62,7 +62,7 @@ export class Merchant extends BaseEntity {
   // @OneToMany(() => FoodItem, (fooditem) => fooditem.merchant)
   // menulist!: FoodItem[];
 
-  // tags, route
+  // tags
 
   @CreateDateColumn()
   @Field(() => String)

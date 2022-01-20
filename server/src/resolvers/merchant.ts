@@ -86,14 +86,6 @@ export default class MerchantResolver {
     return Merchant.findOne(id);
   }
 
-  // @Query(() => Merchant, { nullable: true })
-  // async mem(@Ctx() { req }: MyContext): Promise<Merchant | undefined> {
-  //   if (req.session.merchantId) {
-  //     return Merchant.findOne(req.session.merchantId);
-  //   }
-  //   return undefined;
-  // }
-
   @Query(() => [Review])
   async reviews(
     @Arg("merchantId", () => Int) merchantId: number
@@ -303,6 +295,19 @@ export default class MerchantResolver {
     if (!merchant) throw new Error("Merchant not found");
 
     merchant.location = location;
+    return await merchant.save();
+  }
+
+  @Mutation(() => Merchant)
+  async changeCpname(
+    @Ctx() { req }: MyContext,
+    @Arg("cpname", () => String) cpname: string
+  ): Promise<Merchant> {
+    if (!req.session.merchantId) throw new Error("Merchant not Logged in");
+    const merchant = await Merchant.findOne(req.session.merchantId);
+    if (!merchant) throw new Error("Merchant not found");
+
+    merchant.cpname = cpname;
     return await merchant.save();
   }
 

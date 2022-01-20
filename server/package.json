@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "watch": "tsc --watch",
-    "redis": "redis-server",
+    "redis": "redis-server --daemonize yes",
     "dev": "nodemon ./dist",
     "build": "tsc",
     "start": "NODE_ENV='production' node ./dist",

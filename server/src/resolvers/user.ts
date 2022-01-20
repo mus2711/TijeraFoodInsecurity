@@ -81,14 +81,6 @@ export default class UserResolver {
     return User.findOne(id);
   }
 
-  // @Query(() => User, { nullable: true })
-  // async me(@Ctx() { req }: MyContext): Promise<User | undefined> {
-  //   if (req.session.userId) {
-  //     return User.findOne(req.session.userId);
-  //   }
-  //   return undefined;
-  // }
-
   @Query(() => MeResponse)
   async me(@Ctx() { req }: MyContext): Promise<MeResponse> {
     const response = new MeResponse();
@@ -252,5 +244,33 @@ export default class UserResolver {
         resolve(true);
       })
     );
+  }
+
+  // Functions to change user's properties:
+
+  @Mutation(() => User)
+  async changeFirstname(
+    @Arg("firstname", () => String) firstname: string,
+    @Ctx() { req }: MyContext
+  ): Promise<User> {
+    if (!req.session.userId) throw new Error("User not logged in");
+    const user = await User.findOne(req.session.userId);
+    if (!user) throw new Error("User not found");
+
+    user.firstname = firstname;
+    return await user.save();
+  }
+
+  @Mutation(() => User)
+  async changeLastName(
+    @Arg("lastname", () => String) lastname: string,
+    @Ctx() { req }: MyContext
+  ): Promise<User> {
+    if (!req.session.userId) throw new Error("User not logged in");
+    const user = await User.findOne(req.session.userId);
+    if (!user) throw new Error("User not found");
+
+    user.lastname = lastname;
+    return await user.save();
   }
 }
