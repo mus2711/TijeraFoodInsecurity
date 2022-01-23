@@ -10,10 +10,10 @@
 
 Setup postgresql
 
-Create a database called `lireddit`:
+Create a database called `tijera`:
 
 ```console
-createdb -U postgres lireddit
+createdb -U postgres tijera
 ```
 
 Then, in the root project directory, run the following:
@@ -28,6 +28,8 @@ Edit `CORS_ORIGIN` and `DOMAIN` as needed, and then run
 ```console
 yarn
 yarn build
+yarn watch
+redis-server
 yarn dev
 ```
 
@@ -54,11 +56,11 @@ yarn start
 
 Setup postgresql: here's guides for [Ubuntu][2] and [Manjaro/Arch][3].
 
-Create a database called `lireddit`, and another called `lireddit-test`:
+Create a database called `tijera`, and another called `tijera-test`:
 
 ```console
-createdb -U postgres lireddit
-createdb -U postgres lireddit-test
+createdb -U postgres tijera
+createdb -U postgres tijera-test
 ```
 
 Run `yarn watch` in one terminal window, and `yarn dev` in the other.
