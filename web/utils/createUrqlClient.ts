@@ -4,6 +4,8 @@ import { dedupExchange, fetchExchange } from "urql";
 import {
   AddLocationMutation,
   AddReviewMutation,
+  ChangeFirstnameMutation,
+  ChangeLastNameMutation,
   LoginmMutation,
   LoginMutation,
   LogoutmMutation,
@@ -138,48 +140,34 @@ export const createUrqlClient = (ssrExchange: SSRExchange, ctx: any) => {
                 () => ({ me: null })
               );
             },
-            //     updatePost: (_result, args, cache, _) => {
-            //       cache.invalidate({
-            //         __typename: "Post",
-            //         id: (args as UpdatePostMutationVariables).id,
-            //       });
-            //     },
-            //     deletePost: (_result, args, cache, _) => {
-            //       cache.invalidate({
-            //         __typename: "Post",
-            //         id: (args as DeletePostMutationVariables).id,
-            //       });
-            //     },
-            //     upvote: (_result, args, cache, _) => {
-            //       cache.invalidate({
-            //         __typename: "Post",
-            //         id: (args as UpvoteMutationVariables).postId,
-            //       });
-
-            //       //TODO: uh oh bad code
-            //       const allFields = cache.inspectFields("Query");
-            //       const fieldInfos = allFields.filter(
-            //         (info) => info.fieldName === "upvoteStatus"
-            //       );
-            //       fieldInfos.forEach((fi) => {
-            //         cache.invalidate("Query", "upvoteStatus", fi.arguments || {});
-            //       });
-            //     },
-            //     downvote: (_result, args, cache, _) => {
-            //       cache.invalidate({
-            //         __typename: "Post",
-            //         id: (args as DownvoteMutationVariables).postId,
-            //       });
-
-            //       //TODO: uh oh bad code
-            //       const allFields = cache.inspectFields("Query");
-            //       const fieldInfos = allFields.filter(
-            //         (info) => info.fieldName === "upvoteStatus"
-            //       );
-            //       fieldInfos.forEach((fi) => {
-            //         cache.invalidate("Query", "upvoteStatus", fi.arguments || {});
-            //       });
-            //     },
+            changeFirstname: (_result, _, cache, __) => {
+              betterUpdateQuery<ChangeFirstnameMutation, MeQuery>(
+                cache,
+                { query: MeDocument },
+                _result,
+                (result, query) => {
+                  if (result.changeFirstname) {
+                    return {
+                      me: result.changeFirstname.firstname,
+                    };
+                  }
+                }
+              );
+            },
+            changeLastName: (_result, _, cache, __) => {
+              betterUpdateQuery<ChangeLastNameMutation, MeQuery>(
+                cache,
+                { query: MeDocument },
+                _result,
+                (result, query) => {
+                  if (result.changeLastName) {
+                    return {
+                      me: result.changeLastName.lastname,
+                    };
+                  }
+                }
+              );
+            },
           },
         },
       }),

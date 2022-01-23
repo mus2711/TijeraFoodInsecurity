@@ -21,6 +21,7 @@ import Nextlink from "next/link";
 import {
   useAddLocationMutation,
   useChangeFirstnameMutation,
+  useChangeLastNameMutation,
   useMeQuery,
   useRegistermMutation,
 } from "../generated/graphql";
@@ -38,6 +39,7 @@ const Settings = () => {
   const [, addLocation] = useAddLocationMutation();
   const [, registerm] = useRegistermMutation();
   const [, changeFirstname] = useChangeFirstnameMutation();
+  const [, changeLastName] = useChangeLastNameMutation();
   let [buttonL, setbuttonL] = useState(false);
   const initialInputs = {
     location: "",
@@ -50,6 +52,10 @@ const Settings = () => {
 
   const initialInputsfirstname = {
     firstname: "",
+  };
+
+  const initialInputslastname = {
+    lastname: "",
   };
 
   const formikInputs = [
@@ -65,8 +71,14 @@ const Settings = () => {
       placeholder: `${data?.me?.user?.firstname}`,
       label: "Enter New Name",
     },
-    // { name: "email", placeholder: "", label: "Enter Email" },
-    // { name: "password", placeholder: "", label: "Enter Password" },
+  ];
+
+  const formikInputslastname = [
+    {
+      name: "lastname",
+      placeholder: `${data?.me?.user?.lastname}`,
+      label: "Enter New Last Name",
+    },
   ];
 
   const formikInputscpname = [
@@ -432,9 +444,9 @@ const Settings = () => {
                           <Box paddingTop={"20px"}>
                             <Button
                               type="submit"
-                              // onClick={() => {
-                              //   setbuttonL((buttonL = true));
-                              // }}
+                              onClick={() => {
+                                setbuttonL((buttonL = true));
+                              }}
                             >
                               {buttonL ? "Done!" : "Submit"}
                             </Button>
@@ -484,26 +496,19 @@ const Settings = () => {
                 <PopoverBody>
                   <VStack>
                     <Formik
-                      initialValues={initialInputscpname}
+                      initialValues={initialInputslastname}
                       onSubmit={async (values, { setErrors }) => {
                         console.log(values);
-                        if (values.cpname !== "" && data.me.merchant) {
-                          const response = await registerm({
+                        if (values.lastname !== "" && data.me.user) {
+                          const response = await changeLastName({
                             ...values,
-                            username: data?.me?.merchant?.username,
                           });
 
                           console.log(response);
-                          if (response.data?.registerm.errors) {
-                            setErrors(
-                              toMerchErrorMap(response.data.registerm.errors)
-                            );
-                          } else if (response.data?.registerm.merchant) {
-                            router.push("/");
-                          }
-                          if (response.data?.registerm) {
+
+                          if (response.data?.changeLastName) {
                             () => {
-                              // setbuttonL((buttonL = "Done!"));
+                              setbuttonL((buttonL = true));
                             };
                           }
                         }
@@ -512,7 +517,7 @@ const Settings = () => {
                       {({ isSubmitting }) => (
                         <Form>
                           <VStack spacing={4}>
-                            {formikInputscpname.map((p) => (
+                            {formikInputslastname.map((p) => (
                               <Inputfield
                                 name={p.name}
                                 label={p.label}
