@@ -162,7 +162,6 @@ const Search = () => {
 
   let body = null;
   let [tags, setTags] = useState([] as string[]);
-  console.log(tags);
   let rmbutton = null;
   if (tags.length >= 1) {
     rmbutton = (
@@ -180,15 +179,14 @@ const Search = () => {
       <>
         <VStack>
           <Combobox
-            padding={20}
+            padding={10}
             openOnFocus
             width={"400px"}
             height={40}
-            items={["Vegetarian", "Fast Food", "Healthy", "Diner"]}
+            items={["Vegetarian", "Fast Food", "Healthy", "Diner", "Halal"]}
             onChange={(selected) => {
               if (selected !== null) {
                 setTags([...tags, selected]);
-                console.log(tags.length);
               }
             }}
             placeholder="Search what you're looking for..."
@@ -287,7 +285,12 @@ const Search = () => {
 
   return (
     <Layout title="Explore">
-      <Flex direction="column" justifyContent="center" alignItems="center">
+      <Flex
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        overflowX={"hidden"}
+      >
         <Flex
           direction={"row"}
           mt={6}

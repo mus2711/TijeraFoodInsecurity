@@ -1,0 +1,6 @@
+mutation changeFirstname($firstname: String!) {
+  changeFirstname(firstname: $firstname) {
+    firstname
+    lastname
+  }
+}

@@ -4,47 +4,29 @@ import React, { useState } from "react";
 import {
   Box,
   Button,
-  Flex,
   HStack,
   Spacer,
-  Stack,
   Text,
   VStack,
   Popover,
   PopoverTrigger,
   PopoverBody,
   PopoverContent,
-  Tag,
-  TagLabel,
-  TagLeftIcon,
   IconButton,
 } from "@chakra-ui/react";
 import { Layout } from "../components/layout";
-import {
-  AddIcon,
-  ArrowRightIcon,
-  ChevronRightIcon,
-  SettingsIcon,
-} from "@chakra-ui/icons";
-import {
-  MdEmail,
-  MdLocationOn,
-  MdMessage,
-  MdMoney,
-  MdPhone,
-} from "react-icons/md";
+import { ArrowRightIcon } from "@chakra-ui/icons";
 import { HiLocationMarker, HiUser } from "react-icons/hi";
 import Nextlink from "next/link";
 import {
   useAddLocationMutation,
+  useChangeFirstnameMutation,
   useMeQuery,
   useRegistermMutation,
 } from "../generated/graphql";
 import { isServer } from "../../utils/isServer";
-import { RemoveIcon } from "evergreen-ui";
 import { Formik, Form } from "formik";
 import router from "next/router";
-import { DblStandardButton } from "../components/DblStandardButton";
 import { Inputfield } from "../components/inputfield";
 import { toMerchErrorMap } from "../../utils/toMerchErrorMap";
 import { LogInButton } from "../components/LogInButton";
@@ -55,6 +37,7 @@ const Settings = () => {
   });
   const [, addLocation] = useAddLocationMutation();
   const [, registerm] = useRegistermMutation();
+  const [, changeFirstname] = useChangeFirstnameMutation();
   let [buttonL, setbuttonL] = useState(false);
   const initialInputs = {
     location: "",
@@ -64,6 +47,11 @@ const Settings = () => {
     password: "",
     email: "",
   };
+
+  const initialInputsfirstname = {
+    firstname: "",
+  };
+
   const formikInputs = [
     {
       name: "location",
@@ -71,6 +59,16 @@ const Settings = () => {
       label: "Location",
     },
   ];
+  const formikInputsfirstname = [
+    {
+      name: "firstname",
+      placeholder: `${data?.me?.user?.firstname}`,
+      label: "Enter New Name",
+    },
+    // { name: "email", placeholder: "", label: "Enter Email" },
+    // { name: "password", placeholder: "", label: "Enter Password" },
+  ];
+
   const formikInputscpname = [
     {
       name: "cpname",
@@ -402,26 +400,19 @@ const Settings = () => {
                 <PopoverBody>
                   <VStack>
                     <Formik
-                      initialValues={initialInputscpname}
+                      initialValues={initialInputsfirstname}
                       onSubmit={async (values, { setErrors }) => {
                         console.log(values);
-                        if (values.cpname !== "" && data.me.merchant) {
-                          const response = await registerm({
+                        if (values.firstname !== "" && data.me.user) {
+                          const response = await changeFirstname({
                             ...values,
-                            username: data?.me?.merchant?.username,
                           });
 
                           console.log(response);
-                          if (response.data?.registerm.errors) {
-                            setErrors(
-                              toMerchErrorMap(response.data.registerm.errors)
-                            );
-                          } else if (response.data?.registerm.merchant) {
-                            router.push("/");
-                          }
-                          if (response.data?.registerm) {
+
+                          if (response.data?.changeFirstname) {
                             () => {
-                              // setbuttonL((buttonL = "Done!"));
+                              setbuttonL((buttonL = true));
                             };
                           }
                         }
@@ -430,7 +421,7 @@ const Settings = () => {
                       {({ isSubmitting }) => (
                         <Form>
                           <VStack spacing={4}>
-                            {formikInputscpname.map((p) => (
+                            {formikInputsfirstname.map((p) => (
                               <Inputfield
                                 name={p.name}
                                 label={p.label}
@@ -441,9 +432,9 @@ const Settings = () => {
                           <Box paddingTop={"20px"}>
                             <Button
                               type="submit"
-                              onClick={() => {
-                                setbuttonL((buttonL = true));
-                              }}
+                              // onClick={() => {
+                              //   setbuttonL((buttonL = true));
+                              // }}
                             >
                               {buttonL ? "Done!" : "Submit"}
                             </Button>
