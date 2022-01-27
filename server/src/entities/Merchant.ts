@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { MerchantTag } from "./MerchantTag";
 import { Review } from "./Review";
 
 @Entity()
@@ -62,7 +63,8 @@ export class Merchant extends BaseEntity {
   // @OneToMany(() => FoodItem, (fooditem) => fooditem.merchant)
   // menulist!: FoodItem[];
 
-  // tags
+  @OneToMany(() => MerchantTag, (mt) => mt.merchant)
+  merchantConnection!: Promise<MerchantTag[]>;
 
   @CreateDateColumn()
   @Field(() => String)

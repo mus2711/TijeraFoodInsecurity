@@ -18,6 +18,8 @@ import {
 import { COOKIE_NAME, EMAIL_REGEX, USERNAME_REGEX } from "../constants";
 import { Merchant } from "../entities/Merchant";
 import { MyContext } from "../types";
+import { Tag } from "../entities/Tag";
+import { MerchantTag } from "../entities/MerchantTag";
 
 @InputType()
 class RegisterMerchantInput {
@@ -354,5 +356,74 @@ export default class MerchantResolver {
 
     await review!.remove();
     return true;
+  }
+
+  // Returns all MerchantTag entries in db
+  @Query(() => [MerchantTag])
+  async allMerchantTags() {
+    return await MerchantTag.find();
+  }
+
+  // Adds tag to merchant
+  @Mutation(() => Boolean)
+  async addMerchantTag(
+    @Arg("tagId", () => Int) tagId: number,
+    @Ctx() { req }: MyContext
+  ) {
+    const currentMerchantId = req.session.merchantId;
+    if (!currentMerchantId) throw new Error("Merchant not logged in.");
+
+    const tag = await Tag.findOne(tagId);
+    if (!tag) throw new Error("Tag not found.");
+
+    await MerchantTag.create({
+      merchantId: parseInt(currentMerchantId),
+      tagId: tagId,
+    }).save();
+    return true;
+  }
+
+  // Removes tag from merchant
+  @Mutation(() => Boolean)
+  async removeMerchantTag(
+    @Arg("tagId", () => Int) tagId: number,
+    @Ctx() { req }: MyContext
+  ) {
+    const currentMerchantId = req.session.merchantId;
+    if (!currentMerchantId) throw new Error("Merchant not logged in.");
+
+    const tag = await Tag.findOne(tagId);
+    if (!tag) throw new Error("Tag not found.");
+
+    const merchantTag = await MerchantTag.findOne({
+      merchantId: parseInt(currentMerchantId),
+      tagId: tagId,
+    });
+
+    if (!merchantTag) throw new Error("Merchant does not have this tag.");
+
+    await MerchantTag.delete(merchantTag);
+    return true;
+  }
+
+  // Returns tags for merchant currently logged in.
+  @Query(() => [Tag])
+  async merchantTags(@Ctx() { req }: MyContext) {
+    const currentMerchantId = req.session.merchantId;
+    if (!currentMerchantId) throw new Error("Merchant not logged in.");
+
+    const merchantTags = await MerchantTag.find({
+      merchantId: parseInt(currentMerchantId),
+    });
+
+    let tags: Tag[] = [];
+    for (const mt of merchantTags) {
+      const tag = await Tag.findOne({ id: mt.tagId });
+      if (tag) {
+        tags.push(tag);
+      }
+    }
+
+    return tags;
   }
 }
