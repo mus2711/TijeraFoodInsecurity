@@ -23,4 +23,9 @@ query TagsandMe {
       email
     }
   }
+
+  merchantTags {
+    tagName
+    id
+  }
 }

@@ -21,7 +21,7 @@ import { Foodslide } from "../components/foodslide";
 import { Formik, Form } from "formik";
 import { useRouter } from "next/router";
 import { Inputfield } from "../components/inputfield";
-import { useMeQuery } from "../generated/graphql";
+import { TagsandMeQuery, useTagsandMeQuery } from "../generated/graphql";
 import { useIsAuthMerchant } from "../../utils/useIsAuthMerchant";
 import { Layout } from "../components/layout";
 import { useFileUpload } from "use-file-upload";
@@ -73,8 +73,9 @@ const datalist = [
 const MerchAccount = () => {
   const router = useRouter();
   useIsAuthMerchant();
-  const [{ data, fetching }] = useMeQuery();
+  const [{ data, fetching }] = useTagsandMeQuery();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   let [avLogo, setavLogo] = useState("");
   const [files, selectFiles] = useFileUpload();
   const [files2, selectFiles2] = useFileUpload();
@@ -111,6 +112,11 @@ const MerchAccount = () => {
       itemID: "4375",
     },
   ];
+
+  let merchantTagSet: string[] = [];
+  data?.merchantTags.forEach((e) => merchantTagSet.push(e.tagName));
+  console.log(merchantTagSet);
+
   let body = (
     // <VStack spacing={6}>
     //   {datalist.map((p) => (
@@ -132,12 +138,21 @@ const MerchAccount = () => {
     <VStack spacing={6}>
       (
       <MenuSlide
-        imageUrl={files2?.source || data?.me?.merchant?.imageUrl}
-        location={data?.me?.merchant?.location}
+        // imageUrl={files2?.source || data?.me?.merchant?.imageUrl}
+        cuisine={merchantTagSet}
+        location={
+          data?.me?.merchant?.location
+            ? data?.me?.merchant?.location
+            : undefined
+        }
         reviewCount={data?.me?.merchant?.reviewCount}
-        rating={data?.me?.merchant?.averageRating}
-        merchantId={data?.me?.merchant?.id}
-        avatarlogo={files?.source || data?.me?.merchant?.cplogo}
+        rating={
+          data?.me?.merchant?.averageRating
+            ? data?.me?.merchant?.averageRating
+            : undefined
+        }
+        // merchantId={data?.me?.merchant?.id ? data?.me?.merchant?.id : undefined}
+        // avatarlogo={files?.source || data?.me?.merchant?.cplogo}
         name={data?.me?.merchant?.cpname}
       />
     </VStack>
@@ -150,7 +165,6 @@ const MerchAccount = () => {
       ))}
     </VStack>
   );
-
   return (
     <Layout title="Explore">
       <Heading textAlign={"center"}>Your Account</Heading>
@@ -161,28 +175,28 @@ const MerchAccount = () => {
         </Box>
         <HStack paddingBottom={"20px"}>
           <Button
-            onClick={() => {
-              selectFiles(
-                { accept: "image/*", multiple: false },
-                ({ name, size, source, file }) => {
-                  console.log("Files Selected", { name, size, source, file });
-                }
-              );
-            }}
+            // onClick={() => {
+            //   selectFiles(
+            //     { accept: "image/*", multiple: false },
+            //     ({ name, size, source, file }) => {
+            //       console.log("Files Selected", { name, size, source, file });
+            //     }
+            //   );
+            // }}
             colorScheme={"blue"}
           >
             Change Logo
           </Button>
 
           <Button
-            onClick={() => {
-              selectFiles2(
-                { accept: "image/*", multiple: false },
-                ({ name, size, source, file }) => {
-                  console.log("Files Selected", { name, size, source, file });
-                }
-              );
-            }}
+            // onClick={() => {
+            //   selectFiles2(
+            //     { accept: "image/*", multiple: false },
+            //     ({ name, size, source, file }) => {
+            //       console.log("Files Selected", { name, size, source, file });
+            //     }
+            //   );
+            // }}
             colorScheme={"red"}
           >
             Change Backdrop

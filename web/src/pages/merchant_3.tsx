@@ -4,7 +4,6 @@ import {
   TagsandMeQuery,
   useAddLocationMutation,
   useAddMerchantTagMutation,
-  useRegistermMutation,
   useTagsandMeQuery,
 } from "../generated/graphql";
 import React, { useState } from "react";
@@ -37,16 +36,13 @@ const Merchant3 = () => {
   const [files, selectFiles] = useFileUpload();
   const [files2, selectFiles2] = useFileUpload();
   const router = useRouter();
-  // const [, registerm] = useRegistermMutation();
   const [, addLocation] = useAddLocationMutation();
   const [, addMerchantTag] = useAddMerchantTagMutation();
   const initialInputs = {
     location: "",
   };
 
-  let pickTags: string[] = [];
-
-  let testTags: Map<string, number> = new Map();
+  let mapTags: Map<string, number> = new Map();
   let populateTags = (
     newSet: Map<string, number>,
     data: TagsandMeQuery | undefined
@@ -55,14 +51,14 @@ const Merchant3 = () => {
     return newSet;
   };
 
-  console.log(populateTags(testTags, data));
+  populateTags(mapTags, data);
 
-  // let pickTags: string[] | undefined = data?.tags.map((e) => e.tagName);
   let tagSet: string[] = [];
-  testTags.forEach((ind, tag) => {
+  mapTags.forEach((ind, tag) => {
     tagSet.push(tag);
     console.log(ind);
   });
+
   const formikInputs = [
     {
       name: "location",
@@ -73,7 +69,10 @@ const Merchant3 = () => {
 
   const pushTags = () => {
     tags.forEach((tag) => {
-      addMerchantTag({ tagId: testTags.get(tag) });
+      const call = mapTags.get(tag);
+      if (call !== undefined) {
+        addMerchantTag({ tagId: call });
+      }
     });
   };
 
@@ -85,38 +84,38 @@ const Merchant3 = () => {
           Here we set your menu and your merchant account.
         </Text>
         <VStack paddingTop={"20px"}>
-          <MenuSlide
+          {/* <MenuSlide
             modal={false}
             avatarlogo={files?.source || undefined}
             imageUrl={files2?.source || undefined}
             cuisine={tags}
             badge="Top"
             name={data?.me.merchant ? data?.me.merchant.cpname : undefined}
-          ></MenuSlide>
+          ></MenuSlide> */}
           <HStack paddingTop={"20px"}>
             <Button
-              onClick={() => {
-                selectFiles(
-                  { accept: "image/*", multiple: false },
-                  ({ name, size, source, file }) => {
-                    console.log("Files Selected", { name, size, source, file });
-                  }
-                );
-              }}
+              // onClick={() => {
+              //   selectFiles(
+              //     { accept: "image/*", multiple: false },
+              //     ({ name, size, source, file }) => {
+              //       console.log("Files Selected", { name, size, source, file });
+              //     }
+              //   );
+              // }}
               colorScheme={"blue"}
             >
               Pick Logo
             </Button>
 
             <Button
-              onClick={() => {
-                selectFiles2(
-                  { accept: "image/*", multiple: false },
-                  ({ name, size, source, file }) => {
-                    console.log("Files Selected", { name, size, source, file });
-                  }
-                );
-              }}
+              // onClick={() => {
+              //   selectFiles2(
+              //     { accept: "image/*", multiple: false },
+              //     ({ name, size, source, file }) => {
+              //       console.log("Files Selected", { name, size, source, file });
+              //     }
+              //   );
+              // }}
               colorScheme={"red"}
             >
               Pick Backdrop

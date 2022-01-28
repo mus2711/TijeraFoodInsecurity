@@ -53,7 +53,7 @@ interface MenuSlideProps {
   key?: number;
   modal?: boolean;
   badge?: string;
-  scrt: boolean;
+  scrt?: boolean;
 }
 let theBasket = [] as {
   picture: string;
@@ -68,7 +68,7 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
   name = "Merchant Name",
   reviewCount = 0,
   rating = 0,
-  cuisine = ["Vegetarian, Fast Food, Healthy"],
+  cuisine = [],
   location = "TS Food Security St.",
   route,
   menulist,

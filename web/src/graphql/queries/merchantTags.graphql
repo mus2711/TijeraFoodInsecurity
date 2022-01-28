@@ -1,0 +1,6 @@
+query MerchantTags {
+  merchantTags {
+    tagName
+    id
+  }
+}
