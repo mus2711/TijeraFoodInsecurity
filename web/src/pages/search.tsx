@@ -2,36 +2,19 @@ import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import React, { useState } from "react";
 import {
-  Avatar,
   Box,
   Button,
   Divider,
   Flex,
   HStack,
   IconButton,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  InputRightElement,
-  SimpleGrid,
-  Stack,
   Tag,
   TagLabel,
   TagLeftIcon,
-  Text,
   VStack,
 } from "@chakra-ui/react";
-import NextLink from "next/link";
 import { Layout } from "../components/layout";
-import {
-  MdLocationOn,
-  MdSearch,
-  MdKeyboardVoice,
-  MdMenu,
-  MdCamera,
-  MdVideocam,
-  MdOutlineLocationSearching,
-} from "react-icons/md";
+import { MdMenu, MdVideocam } from "react-icons/md";
 import { MenuSlide } from "../components/menuslide";
 import { Combobox, RemoveIcon } from "evergreen-ui";
 import { useMerchantsQuery } from "../generated/graphql";
