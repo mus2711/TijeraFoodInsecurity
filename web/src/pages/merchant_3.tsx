@@ -1,9 +1,11 @@
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import {
+  TagsandMeQuery,
   useAddLocationMutation,
-  useMeQuery,
+  useAddMerchantTagMutation,
   useRegistermMutation,
+  useTagsandMeQuery,
 } from "../generated/graphql";
 import React, { useState } from "react";
 import {
@@ -22,27 +24,45 @@ import { Formik, Form } from "formik";
 import { AddIcon } from "@chakra-ui/icons";
 import { DblStandardButton } from "../components/DblStandardButton";
 import { Inputfield } from "../components/inputfield";
-import { MerchLayout } from "../components/merchLayout";
 import { MenuSlide } from "../components/menuslide";
-import { FilePicker, RemoveIcon } from "evergreen-ui";
+import { RemoveIcon } from "evergreen-ui";
 import { useFileUpload } from "use-file-upload";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { Layout } from "../components/layout";
 
 const Merchant3 = () => {
-  const [{ data, fetching }] = useMeQuery();
+  const [{ data, fetching }] = useTagsandMeQuery();
   let [tags, setTags] = useState([] as string[]);
-  let [avLogo, setavLogo] = useState("");
+  // let [avLogo, setavLogo] = useState("");
   const [files, selectFiles] = useFileUpload();
   const [files2, selectFiles2] = useFileUpload();
   const router = useRouter();
-
-  const [, registerm] = useRegistermMutation();
+  // const [, registerm] = useRegistermMutation();
   const [, addLocation] = useAddLocationMutation();
+  const [, addMerchantTag] = useAddMerchantTagMutation();
   const initialInputs = {
     location: "",
   };
 
+  let pickTags: string[] = [];
+
+  let testTags: Map<string, number> = new Map();
+  let populateTags = (
+    newSet: Map<string, number>,
+    data: TagsandMeQuery | undefined
+  ) => {
+    data?.tags.map((e) => newSet.set(e.tagName, e.id));
+    return newSet;
+  };
+
+  console.log(populateTags(testTags, data));
+
+  // let pickTags: string[] | undefined = data?.tags.map((e) => e.tagName);
+  let tagSet: string[] = [];
+  testTags.forEach((ind, tag) => {
+    tagSet.push(tag);
+    console.log(ind);
+  });
   const formikInputs = [
     {
       name: "location",
@@ -50,6 +70,12 @@ const Merchant3 = () => {
       label: "Location",
     },
   ];
+
+  const pushTags = () => {
+    tags.forEach((tag) => {
+      addMerchantTag({ tagId: testTags.get(tag) });
+    });
+  };
 
   return (
     <Layout title="SIGN UP">
@@ -96,12 +122,6 @@ const Merchant3 = () => {
               Pick Backdrop
             </Button>
           </HStack>
-          {/* <FilePicker
-            multiple={false}
-            width={250}
-            onChange={(files) => console.log(files)}
-            placeholder="Select the file here!"
-          /> */}
         </VStack>
         <Box paddingTop={"15px"}>
           <Formik
@@ -110,11 +130,7 @@ const Merchant3 = () => {
               console.log(values);
               const response = await addLocation(values);
               console.log(response);
-              // if (response.data?.registerm.errors) {
-              //   setErrors(toMerchErrorMap(response.data.registerm.errors));
-              // } else if (response.data?.registerm.merchant) {
-              //   router.push("/");
-              // }
+
               if (response.data?.addLocation.id) {
                 router.push("/");
               }
@@ -135,8 +151,8 @@ const Merchant3 = () => {
                   <Text fontWeight={"bold"} paddingBottom={"20px"}>
                     Pick your tags
                   </Text>
-                  <HStack spacing={4}>
-                    {["Vegatarian", "Healthy", "Fast Food"].map((tagName) => (
+                  <Box>
+                    {tagSet?.map((tagName) => (
                       <Tag
                         size={"md"}
                         variant="subtle"
@@ -149,7 +165,7 @@ const Merchant3 = () => {
                         <TagLabel>{tagName}</TagLabel>
                       </Tag>
                     ))}
-                  </HStack>
+                  </Box>
                 </Box>
                 <Box paddingTop={"20px"}>
                   <Text fontWeight={"bold"} paddingBottom={"20px"}>
@@ -180,6 +196,7 @@ const Merchant3 = () => {
                   route="/merchantaccount"
                   routeback="register_1"
                   widthforward="62vw"
+                  onClick={() => pushTags()}
                 />
                 <Flex
                   direction={"column"}

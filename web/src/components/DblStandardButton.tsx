@@ -8,6 +8,7 @@ interface DblStandardButtonProps {
   routeback: string;
   widthback?: string;
   widthforward?: string;
+  onClick?: () => void;
 }
 
 export const DblStandardButton: React.FC<DblStandardButtonProps> = ({
@@ -16,6 +17,7 @@ export const DblStandardButton: React.FC<DblStandardButtonProps> = ({
   routeback,
   widthback = "15vw",
   widthforward = "60vw",
+  onClick,
 }) => {
   return (
     <HStack alignContent={"center"} marginTop={"20px"}>
@@ -39,6 +41,7 @@ export const DblStandardButton: React.FC<DblStandardButtonProps> = ({
         textColor="white"
         // marginTop={"20px"}
         width={widthforward}
+        onClick={onClick}
         maxWidth={"300px"}
         height="40px"
         bg="#5998A0"

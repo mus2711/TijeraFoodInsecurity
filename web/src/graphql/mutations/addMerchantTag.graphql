@@ -1,0 +1,3 @@
+mutation AddMerchantTag($tagId: Int!) {
+  addMerchantTag(tagId: $tagId)
+}

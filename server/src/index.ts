@@ -10,6 +10,7 @@ import { createConnection } from "typeorm";
 import { typeormConfig } from "./typeorm.config";
 
 import dotenv from "dotenv-safe";
+
 dotenv.config({
   allowEmptyValues: !__prod__,
   example: ".env.EXAMPLE",
