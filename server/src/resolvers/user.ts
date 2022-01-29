@@ -273,4 +273,84 @@ export default class UserResolver {
     user.lastname = lastname;
     return await user.save();
   }
+
+  @Mutation(() => User)
+  async changeIncome(
+    @Arg("income", () => Int) income: number,
+    @Ctx() { req }: MyContext
+  ): Promise<User> {
+    if (!req.session.userId) throw new Error("User not logged in");
+    const user = await User.findOne(req.session.userId);
+    if (!user) throw new Error("User not found");
+
+    user.income = income;
+    return await user.save();
+  }
+
+  @Mutation(() => User)
+  async changeDependents(
+    @Arg("dependents", () => Int) dependents: number,
+    @Ctx() { req }: MyContext
+  ): Promise<User> {
+    if (!req.session.userId) throw new Error("User not logged in");
+    const user = await User.findOne(req.session.userId);
+    if (!user) throw new Error("User not found");
+
+    user.dependents = dependents;
+    return await user.save();
+  }
+
+  @Mutation(() => User)
+  async changeDOB(
+    @Arg("day", () => Int) day: number,
+    @Arg("month", () => Int) month: number,
+    @Arg("year", () => Int) year: number,
+    @Ctx() { req }: MyContext
+  ): Promise<User> {
+    if (!req.session.userId) throw new Error("User not logged in");
+    const user = await User.findOne(req.session.userId);
+    if (!user) throw new Error("User not found");
+
+    user.dob = new Date(year, month, day);
+    return await user.save();
+  }
+
+  @Mutation(() => User)
+  async changeCountry(
+    @Arg("country", () => String) country: string,
+    @Ctx() { req }: MyContext
+  ): Promise<User> {
+    if (!req.session.userId) throw new Error("User not logged in");
+    const user = await User.findOne(req.session.userId);
+    if (!user) throw new Error("User not found");
+
+    user.country = country;
+    return await user.save();
+  }
+
+  @Mutation(() => User)
+  async changeGender(
+    @Arg("gender", () => String) gender: string,
+    @Ctx() { req }: MyContext
+  ): Promise<User> {
+    if (!req.session.userId) throw new Error("User not logged in");
+    const user = await User.findOne(req.session.userId);
+    if (!user) throw new Error("User not found");
+
+    user.gender = gender;
+    return await user.save();
+  }
+
+  @Mutation(() => User)
+  async changePhoneNumber(
+    @Arg("phoneNumber", () => String) phoneNumber: string,
+    @Ctx() { req }: MyContext
+  ): Promise<User> {
+    if (!req.session.userId) throw new Error("User not logged in");
+    const user = await User.findOne(req.session.userId);
+    if (!user) throw new Error("User not found");
+
+    user.phoneNumber = phoneNumber;
+    return await user.save();
+  }
 }

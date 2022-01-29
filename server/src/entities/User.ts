@@ -36,6 +36,30 @@ export class User extends BaseEntity {
   @Column()
   password!: string;
 
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  income?: number;
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  dependents?: number;
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  dob?: Date;
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  country?: string;
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  gender?: string;
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  phoneNumber?: string;
+
   @OneToMany(() => Review, (review) => review.user)
   reviews!: Review[];
 
