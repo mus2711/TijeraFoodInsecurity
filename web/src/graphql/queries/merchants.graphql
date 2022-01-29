@@ -9,4 +9,12 @@ query Merchants {
     reviewCount
     averageRating
   }
+  allMerchantTags {
+    merchantId
+    tagId
+  }
+  tags {
+    tagName
+    id
+  }
 }

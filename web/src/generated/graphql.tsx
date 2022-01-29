@@ -372,7 +372,7 @@ export type MerchantTagsQuery = { __typename?: 'Query', merchantTags: Array<{ __
 export type MerchantsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MerchantsQuery = { __typename?: 'Query', merchants: Array<{ __typename?: 'Merchant', id: number, cpname: string, imageUrl?: Maybe<string>, imageAlt?: Maybe<string>, cplogo?: Maybe<string>, location?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number> }> };
+export type MerchantsQuery = { __typename?: 'Query', merchants: Array<{ __typename?: 'Merchant', id: number, cpname: string, imageUrl?: Maybe<string>, imageAlt?: Maybe<string>, cplogo?: Maybe<string>, location?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number> }>, allMerchantTags: Array<{ __typename?: 'MerchantTag', merchantId: number, tagId: number }>, tags: Array<{ __typename?: 'Tag', tagName: string, id: number }> };
 
 export type ReviewsQueryVariables = Exact<{
   merchantId: Scalars['Int'];
@@ -657,6 +657,14 @@ export const MerchantsDocument = gql`
     location
     reviewCount
     averageRating
+  }
+  allMerchantTags {
+    merchantId
+    tagId
+  }
+  tags {
+    tagName
+    id
   }
 }
     `;

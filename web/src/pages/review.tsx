@@ -62,7 +62,7 @@ const review = ({}) => {
               console.log(values);
               const response = await addReview({
                 comment: values.comment,
-                merchantId: menuProps.merchantID,
+                merchantId: menuProps.merchantID ?? 0,
                 rating: star,
               });
               console.log(response);
