@@ -342,7 +342,7 @@ export default class MerchantResolver {
     @Arg("userId", () => Int) userId: number,
     @Arg("merchantId", () => Int) merchantId: number,
     @Ctx() { req }: MyContext
-  ) {
+  ): Promise<boolean> {
     const currentUserId = req.session.userId;
     if (!currentUserId) throw new Error("User not logged in");
 
@@ -369,7 +369,7 @@ export default class MerchantResolver {
   async addMerchantTag(
     @Arg("tagId", () => Int) tagId: number,
     @Ctx() { req }: MyContext
-  ) {
+  ): Promise<boolean> {
     const currentMerchantId = req.session.merchantId;
     if (!currentMerchantId) throw new Error("Merchant not logged in.");
 
@@ -388,7 +388,7 @@ export default class MerchantResolver {
   async removeMerchantTag(
     @Arg("tagId", () => Int) tagId: number,
     @Ctx() { req }: MyContext
-  ) {
+  ): Promise<boolean> {
     const currentMerchantId = req.session.merchantId;
     if (!currentMerchantId) throw new Error("Merchant not logged in.");
 
@@ -406,14 +406,13 @@ export default class MerchantResolver {
     return true;
   }
 
-  // Returns tags for merchant currently logged in.
+  // Returns tags for a given merchant
   @Query(() => [Tag])
-  async merchantTags(@Ctx() { req }: MyContext) {
-    const currentMerchantId = req.session.merchantId;
-    if (!currentMerchantId) throw new Error("Merchant not logged in.");
-
+  async merchantTags(
+    @Arg("merchantId", () => Int) merchantId: number
+  ): Promise<Tag[]> {
     const merchantTags = await MerchantTag.find({
-      merchantId: parseInt(currentMerchantId),
+      merchantId: merchantId,
     });
 
     let tags: Tag[] = [];
