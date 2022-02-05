@@ -4,8 +4,6 @@ import {
   Input,
   FormErrorMessage,
   InputGroup,
-  InputLeftElement,
-  InputRightElement,
 } from "@chakra-ui/react";
 import { useField } from "formik";
 import React from "react";

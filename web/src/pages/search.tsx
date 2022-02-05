@@ -2,6 +2,7 @@ import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import React, { useState } from "react";
 import {
+  Badge,
   Box,
   Button,
   Divider,
@@ -154,35 +155,17 @@ const Search = () => {
   console.log(merchantTagIDs);
 
   let [menu, setMenu] = useState(true);
-  let [photos, setPhotos] = useState(false);
   let [videos, setVideos] = useState(false);
-  let [loc, setLoc] = useState(false);
 
   const menuUp = () => {
-    setPhotos((menu = false));
     setVideos((videos = false));
-    setLoc((loc = false));
-    setMenu((photos = true));
-  };
-  const photoUp = () => {
-    setPhotos((menu = true));
-    setVideos((videos = false));
-    setLoc((loc = false));
-    setMenu((photos = false));
+    setMenu((menu = true));
   };
 
   const videoUp = () => {
-    setPhotos((menu = false));
     setVideos((videos = true));
-    setLoc((loc = false));
-    setMenu((photos = false));
-  };
 
-  const locUp = () => {
-    setPhotos((menu = false));
-    setVideos((videos = false));
-    setLoc((loc = true));
-    setMenu((photos = false));
+    setMenu((menu = false));
   };
 
   const found = (arr1: string[], arr2: string[]) => {
@@ -326,14 +309,9 @@ const Search = () => {
       </>
     );
   }
-  if (photos == true) {
-    body = <Button>Photos</Button>;
-  }
+
   if (videos == true) {
     body = <Button>Videos</Button>;
-  }
-  if (loc == true) {
-    body = <Button>Loc</Button>;
   }
 
   return (
@@ -344,61 +322,23 @@ const Search = () => {
         alignItems="center"
         overflowX={"hidden"}
       >
-        <Flex
-          direction={"row"}
-          mt={6}
-          alignItems={"center"}
-          justifyContent={"center"}
-          maxWidth={"85vw"}
-        >
-          <Box padding={"3vw"}>
-            <IconButton
-              borderColor={"#5998A0"}
-              variant="outline"
-              isRound={true}
-              aria-label={"yes"}
-              onClick={menuUp}
-            >
-              <MdMenu size={"20px"} color="#5998A0" />
-            </IconButton>
-          </Box>
-          {/* <Box padding={"1vw"}>
-            <IconButton
-              borderColor={"#5998A0"}
-              variant="outline"
-              isRound={true}
-              aria-label={"yes"}
-              onClick={photoUp}
-            >
-              <MdCamera size={"20px"} color="#5998A0" />
-            </IconButton>
-          </Box> */}
-          <Box padding={"3vw"}>
-            <IconButton
-              borderColor={"#5998A0"}
-              variant="outline"
-              isRound={true}
-              aria-label={"yes"}
-              onClick={videoUp}
-            >
-              <MdVideocam size={"20px"} color="#5998A0" />
-            </IconButton>
-          </Box>
-          {/* <Box padding={"3vw"}>
-            <IconButton
-              borderColor={"#5998A0"}
-              variant="outline"
-              isRound={true}
-              aria-label={"yes"}
-              onClick={locUp}
+        <HStack spacing={5}>
+          <Badge
+            colorScheme={"cyan"}
+            variant={menu ? "solid" : "outline"}
+            onClick={menuUp}
+          >
+            Food
+          </Badge>
+          <Badge
+            colorScheme={"cyan"}
+            variant={videos ? "solid" : "outline"}
+            onClick={videoUp}
+          >
+            Education
+          </Badge>
+        </HStack>
 
-              // backgroundColor={post.voteStatus === 1 ? "yellowgreen" : undefined}
-            >
-              <MdLocationOn size={"20px"} color="#5998A0" />
-            </IconButton>
-          </Box> */}
-        </Flex>
-        {/* <SimpleGrid columns={[1, null, 3]} spacing="40px"> */}
         <Box
           spacing={8}
           marginTop={"5px"}
@@ -408,7 +348,6 @@ const Search = () => {
         >
           {body}
         </Box>
-        {/* </SimpleGrid> */}
       </Flex>
     </Layout>
   );

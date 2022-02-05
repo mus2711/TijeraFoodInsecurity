@@ -23,14 +23,11 @@ export const DblStandardButton: React.FC<DblStandardButtonProps> = ({
     <HStack alignContent={"center"} marginTop={"20px"}>
       <NextLink href={routeback}>
         <IconButton
-          variant={"solid"}
-          textColor="white"
-          // marginTop={"20px"}
+          variant={"outline"}
+          textColor="black"
           width={widthback}
           maxWidth={"50px"}
-          height="40px"
-          bg="#5998A0"
-          _hover={{ bg: "black" }}
+          colorScheme={"cyan"}
           children={<ChevronLeftIcon />}
           aria-label={"back"}
         />
@@ -38,14 +35,12 @@ export const DblStandardButton: React.FC<DblStandardButtonProps> = ({
 
       <Button
         variant={"solid"}
-        textColor="white"
+        textColor="black"
         // marginTop={"20px"}
         width={widthforward}
         onClick={onClick}
         maxWidth={"300px"}
-        height="40px"
-        bg="#5998A0"
-        _hover={{ bg: "black" }}
+        colorScheme={"cyan"}
         type="submit"
         rightIcon={<ChevronRightIcon />}
       >

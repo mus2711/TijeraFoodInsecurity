@@ -1,28 +1,23 @@
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
-import { useMeQuery, usePostsQuery } from "../generated/graphql";
 import React from "react";
 import {
   Box,
-  Button,
   Flex,
   Heading,
   HStack,
   IconButton,
   Radio,
   RadioGroup,
-  Stack,
   Text,
+  VStack,
 } from "@chakra-ui/react";
-import NextLink from "next/link";
 import { Layout } from "../components/layout";
-import { useState } from "react";
 import { MdOutlineFastfood } from "react-icons/md";
 import { HiOutlineUserGroup } from "react-icons/hi";
 import { Ahac } from "../components/AHAC";
 import { LogInButton } from "../components/LogInButton";
 import { StandardButton } from "../components/StandardButton";
-import { m } from "framer-motion";
 
 const Register_1 = () => {
   let body = null;
@@ -34,7 +29,7 @@ const Register_1 = () => {
   }
   return (
     <Layout title="SIGN UP">
-      <Flex direction="column" justifyContent="center" alignItems="center">
+      <VStack justifyContent="center" alignItems="center" spacing={5}>
         <Heading>Step 1/3</Heading>
         <Text textAlign={"center"} maxWidth={"70vw"}>
           Please select the type of account you would like to setup.
@@ -51,25 +46,23 @@ const Register_1 = () => {
             paddingTop={"50px"}
           >
             <Box justifyContent="center" alignItems="center">
-              {/* <NextLink href={"/register_2"}> */}
               <IconButton
                 bg="none"
                 aria-label="Menu"
                 icon={<MdOutlineFastfood size={"100px"} />}
                 padding={"20px"}
               />
-              {/* </NextLink> */}
+
               <HStack justifyContent={"center"} marginTop={"40px"}>
                 <Text
-                  textColor={"#5998A0"}
+                  textColor={"black"}
                   fontWeight={"bold"}
                   textAlign={"center"}
-                  // marginTop={"40px"}
                 >
                   Merchant
                 </Text>
                 <Radio
-                  colorScheme="blue"
+                  colorScheme="cyan"
                   value="2"
                   onClick={() => {
                     console.log(typevalue);
@@ -89,15 +82,14 @@ const Register_1 = () => {
 
               <HStack justifyContent={"center"} marginTop={"40px"}>
                 <Text
-                  textColor={"#5998A0"}
+                  textColor={"black"}
                   fontWeight={"bold"}
                   textAlign={"center"}
-                  // marginTop={"40px"}
                 >
                   User
                 </Text>
                 <Radio
-                  colorScheme="blue"
+                  colorScheme="cyan"
                   value="1"
                   onClick={() => {
                     console.log(typevalue);
@@ -110,7 +102,7 @@ const Register_1 = () => {
         {body}
         <Ahac />
         <LogInButton />
-      </Flex>
+      </VStack>
     </Layout>
   );
 };

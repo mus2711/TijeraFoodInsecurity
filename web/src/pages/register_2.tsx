@@ -2,7 +2,7 @@ import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useRegisterMutation } from "../generated/graphql";
 import React, { useState } from "react";
-import { Box, Flex, Heading, InputGroup, Text, VStack } from "@chakra-ui/react";
+import { Box, Flex, Heading, Text, VStack } from "@chakra-ui/react";
 import { Layout } from "../components/layout";
 import { Ahac } from "../components/AHAC";
 import { LogInButton } from "../components/LogInButton";
@@ -12,7 +12,6 @@ import { toErrorMap } from "../../utils/toErrorMap";
 import { SignInOptions } from "../components/SignInOptions";
 import { DblStandardButton } from "../components/DblStandardButton";
 import { Inputfield } from "../components/inputfield";
-import { HiUser } from "react-icons/hi";
 
 const Register_2 = () => {
   const router = useRouter();
@@ -52,12 +51,6 @@ const Register_2 = () => {
       label: "Password",
       type: "password",
     },
-    // {
-    //   name: "re_password",
-    //   placeholder: "Retype Password",
-    //   label: "Retype Password",
-    //   type: "password",
-    // },
   ];
 
   return (
@@ -82,7 +75,7 @@ const Register_2 = () => {
               }
             }}
           >
-            {({ isSubmitting }) => (
+            {() => (
               <Form>
                 <VStack spacing={4}>
                   {formikInputs.map((p) => (
@@ -106,22 +99,15 @@ const Register_2 = () => {
                   mt={6}
                   alignItems={"center"}
                   justifyContent={"center"}
-                >
-                  <Text
-                    textAlign={"center"}
-                    fontSize={"15px"}
-                    maxWidth={"60vw"}
-                  >
-                    Or Sign up with your social media account below:
-                  </Text>
-                  <SignInOptions />
-                </Flex>
+                ></Flex>
               </Form>
             )}
           </Formik>
         </Box>
-        <Ahac />
-        <LogInButton />
+        <VStack spacing={5}>
+          <Ahac />
+          <LogInButton />
+        </VStack>
       </VStack>
     </Layout>
   );

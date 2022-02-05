@@ -1,10 +1,6 @@
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
-import {
-  useMeQuery,
-  usePostsQuery,
-  useRegisterMutation,
-} from "../generated/graphql";
+import { useMeQuery, useRegisterMutation } from "../generated/graphql";
 import React from "react";
 import {
   Avatar,
@@ -30,25 +26,16 @@ import { Formik, Form } from "formik";
 import { useRouter } from "next/router";
 import { toErrorMap } from "../../utils/toErrorMap";
 import { DblStandardButton } from "../components/DblStandardButton";
-import { useFileUpload } from "use-file-upload";
 
 const bl = "#5998A0";
 
 const Index = () => {
-  const [variables, setVariables] = useState({
-    limit: 15,
-    cursor: null as null | string,
-  });
-  const [{ data: meData }] = useMeQuery();
-
-  // console.log("var: ", variables);
   const router = useRouter();
   const [, register] = useRegisterMutation();
-  const [lat, setLat] = useState(null);
-  const [lng, setLng] = useState(null);
-  const [status, setStatus] = useState(null);
-
-  const [files, selectFiles] = useFileUpload();
+  const [lat, setLat] = useState(0);
+  const [lng, setLng] = useState(0);
+  const [status, setStatus] = useState("");
+  let [image, setImage] = React.useState("");
 
   const getLocation = () => {
     if (!navigator.geolocation) {
@@ -57,7 +44,7 @@ const Index = () => {
       setStatus("Locating...");
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setStatus(null);
+          setStatus("");
           setLat(position.coords.latitude);
           setLng(position.coords.longitude);
           console.log("Lat: ", lat);
@@ -69,6 +56,11 @@ const Index = () => {
       );
     }
   };
+  const onImageChange = (e: any) => {
+    console.log(e.target.files[0]);
+    setImage((image = URL.createObjectURL(e.target.files[0])));
+  };
+
   return (
     <Layout title="SIGN UP">
       <Flex direction="column" justifyContent="center" alignItems="center">
@@ -76,27 +68,29 @@ const Index = () => {
 
         <Box padding={"25px"} paddingTop={"30px"}>
           <Avatar
-            src={files?.source || undefined}
-            onClick={() => {
-              selectFiles(
-                { accept: "image/*", multiple: false },
-                ({ name, size, source, file }) => {
-                  console.log("Files Selected", { name, size, source, file });
-                }
-              );
-            }}
+            src={image}
+            onClick={() => {}}
             boxSize={"100px"}
+            position={"absolute"}
           >
-            <AvatarBadge boxSize="1.25em" bg="green.500" />
+            {/* <AvatarBadge boxSize="1.25em" bg="green.500" /> */}
           </Avatar>
+          <Input
+            type={"file"}
+            accept="image/*"
+            onClick={() => console.log("yes")}
+            className="inputPhoto"
+            onChange={onImageChange}
+            placeholder="Pick an Image"
+            borderWidth={"0px"}
+            opacity={0}
+            width="100px"
+            height={"100px"}
+          />
         </Box>
 
         <Formik
-          initialValues={{
-            userName: "",
-            email: "",
-            password: "",
-          }}
+          initialValues={{}}
           onSubmit={async (values, { setErrors }) => {
             console.log(values);
             const response = await register(values);
@@ -117,6 +111,8 @@ const Index = () => {
                       placeholder="Country"
                       iconColor={bl}
                       color="gray.300"
+                      colorScheme={"cyan"}
+                      variant="filled"
                     >
                       <option value="option1">United Kingdom</option>
                       <option value="option2">United States</option>
@@ -141,12 +137,12 @@ const Index = () => {
                     </InputGroup>
                     <IconButton
                       aria-label={"findlocation"}
-                      bg={bl}
+                      colorScheme={"cyan"}
                       width={"50px"}
                       height={"40px"}
                       onClick={getLocation}
                     >
-                      <MdLocationOn size={"30px"} color="white" />
+                      <MdLocationOn size={"30px"} color="black" />
                     </IconButton>
                   </HStack>
                   <InputGroup>
@@ -240,7 +236,6 @@ const Index = () => {
           routeback="register_2"
         />
       </Flex>
-      {/* </Flex> */}
     </Layout>
   );
 };

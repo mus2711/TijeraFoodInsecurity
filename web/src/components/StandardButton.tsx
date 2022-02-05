@@ -1,5 +1,5 @@
 import { ChevronRightIcon } from "@chakra-ui/icons";
-import { Button, Text } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 import NextLink from "next/link";
 
 interface StandardButtonProps {
@@ -17,13 +17,11 @@ export const StandardButton: React.FC<StandardButtonProps> = ({
     <NextLink href={route}>
       <Button
         variant={"solid"}
-        textColor="white"
         marginTop={"20px"}
         width={width}
         maxWidth={"350px"}
-        height="40px"
-        bg="#5998A0"
-        _hover={{ bg: "black" }}
+        // height="40px"
+        colorScheme={"cyan"}
         rightIcon={<ChevronRightIcon />}
       >
         {title}

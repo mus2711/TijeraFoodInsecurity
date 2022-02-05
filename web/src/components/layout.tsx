@@ -1,6 +1,4 @@
-import { useColorMode } from "@chakra-ui/react";
-import React, { Children } from "react";
-import { useMeQuery } from "../generated/graphql";
+import React from "react";
 import { Navbar } from "./navbar";
 
 import Wrapper, { WrapperVariant } from "./wrapper";
@@ -17,12 +15,6 @@ export const Layout: React.FC<LayoutProps> = ({
   title,
   icon,
 }) => {
-  // const [{ data, fetching }] = useMeQuery();
-  // const { colorMode, toggleColorMode } = useColorMode();
-  // if (data?.me.merchant) {
-  //   toggleColorMode();
-  // }
-
   return (
     <>
       <Navbar title={title} icon={icon} />

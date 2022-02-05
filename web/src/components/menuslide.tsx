@@ -212,16 +212,6 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
                     });
                   }}
                 />
-                {/* <IconButton
-                  colorScheme={"teal"}
-                  aria-label="Menu"
-                  icon={<HiPencil size={"20px"} />}
-                  padding={"5px"}
-                  onClick={() => {}}
-                /> */}
-                {/* <Button padding={"20px"} colorScheme={"teal"}>
-                Review
-              </Button> */}
               </HStack>
             ))}
           </ModalBody>
@@ -310,16 +300,6 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
                     });
                   }}
                 />
-                {/* <IconButton
-                  colorScheme={"teal"}
-                  aria-label="Menu"
-                  icon={<HiPencil size={"20px"} />}
-                  padding={"5px"}
-                  onClick={() => {}}
-                /> */}
-                {/* <Button padding={"20px"} colorScheme={"teal"}>
-                Review
-              </Button> */}
               </HStack>
             ))}
           </ModalBody>
@@ -404,16 +384,7 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
             <Badge borderRadius="full" px="2" colorScheme="teal">
               {badge}
             </Badge>
-            {/* <Box
-              color="gray.500"
-              fontWeight="semibold"
-              letterSpacing="wide"
-              fontSize="xs"
-              textTransform="uppercase"
-              ml="2"
-            >
-              {cuisine[0]} &bull; {cuisine[1]} &bull; + {cuisine.length - 2}
-            </Box> */}
+
             {tagline}
           </Box>
           <HStack paddingTop={"10px"}>
@@ -435,7 +406,6 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
           </HStack>
 
           <Box>
-            {/* {property.formattedPrice} */}
             <Box as="span" color="gray.600" fontSize="sm">
               {location}
             </Box>

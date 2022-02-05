@@ -3,14 +3,16 @@ import {
   Flex,
   HStack,
   IconButton,
-  Link,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
   useDisclosure,
+  Badge,
+  Text,
+  Button,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React from "react";
 import NextLink from "next/link";
 import {
   useLogoutmMutation,
@@ -26,35 +28,18 @@ import {
   MdSettings,
   MdShoppingBasket,
 } from "react-icons/md";
-import { ReactNode } from "react";
-import { useGlobalState } from "../state/state";
 
 interface NavbarProps {
   title: string;
   icon?: "stack" | "arrow" | null;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ title, icon }) => {
+export const Navbar: React.FC<NavbarProps> = ({ title }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
-  const [{ fetching: LogoutFetching }, logout] = useLogoutMutation();
-  const [{ fetching: LogoutmFetching }, logoutm] = useLogoutmMutation();
-  let [navCol, setnavCol] = useState("blue");
+  const [, logout] = useLogoutMutation();
+  const [, logoutm] = useLogoutmMutation();
   const [{ data, fetching }] = useMeQuery();
-  const Links = ["Dashboard", "Projects", "Team"];
-  const NavLink = ({ children }: { children: ReactNode }) => (
-    <Link
-      px={2}
-      py={1}
-      rounded={"md"}
-      _hover={{
-        textDecoration: "none",
-      }}
-      href={"#"}
-    >
-      {children}
-    </Link>
-  );
 
   let body = null;
   if (fetching) {
@@ -104,15 +89,24 @@ export const Navbar: React.FC<NavbarProps> = ({ title, icon }) => {
                 </MenuList>
               </Menu>
             </Box>
-            <Box m={0} fontWeight={"bold"}>
-              {title}
+            <Box m={0} fontWeight={"bold"} maxWidth={"40px"}>
+              <img src="https://i.ibb.co/C8bKrfp/tijera.png"></img>
             </Box>
-
+            {/* 
             <NextLink href={"/"}>
               <Box maxWidth={"55px"}>
                 <img src="https://i.ibb.co/H7stfJf/200e0beeccb5598b2d3dc83db38f3c52.png"></img>
               </Box>
-            </NextLink>
+            </NextLink> */}
+            <Button
+              variant={"outline"}
+              color="black"
+              colorScheme={"cyan"}
+              borderRadius={20}
+              borderWidth={1}
+            >
+              Log In
+            </Button>
           </HStack>
         </Flex>
       </Box>
@@ -199,7 +193,7 @@ export const Navbar: React.FC<NavbarProps> = ({ title, icon }) => {
               </Menu>
             </Box>
             <Box m={0} fontWeight={"bold"}>
-              {title}
+              <svg href="https://gist.githack.com/mus2711/1ec2f2be3f8097eb4a7782cb8aa80f01/raw/7800086679339b5064ec25c93b3cedf08a51ee22/tijera.svg" />
             </Box>
 
             <NextLink href={"/"}>
@@ -277,25 +271,19 @@ export const Navbar: React.FC<NavbarProps> = ({ title, icon }) => {
                 {title}
               </Box>
 
-              <NextLink href={"/"}>
-                <Box maxWidth={"55px"}>
-                  <img src="https://i.ibb.co/H7stfJf/200e0beeccb5598b2d3dc83db38f3c52.png"></img>
-                </Box>
-              </NextLink>
+              <Box>
+                <HStack maxWidth={"55px"}>
+                  <Text fontSize="sm" fontWeight="bold" textAlign={"end"}>
+                    Hi {data.me.user.firstname}!
+                    <Badge colorScheme="blue" variant={"outline"}>
+                      Tokens Remaining: 70%
+                    </Badge>
+                  </Text>
+                </HStack>
+              </Box>
             </HStack>
           </Flex>
         </Box>
-        {/* 
-        <Button
-          onClick={async () => {
-            await logout();
-            router.reload();
-          }}
-          isLoading={LogoutFetching}
-          backgroundColor="rgba(152, 52, 90, 0.0)"
-        >
-          ({data.me.username}) Logout
-        </Button> */}
       </>
     );
   }
@@ -304,8 +292,7 @@ export const Navbar: React.FC<NavbarProps> = ({ title, icon }) => {
       zIndex={1}
       position="sticky"
       top={0}
-      bg="teal"
-      // ml="auto"
+      bg="cyan.300"
       p={4}
       align="center"
     >

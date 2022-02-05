@@ -1,38 +1,40 @@
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
-import { useMeQuery } from "../generated/graphql";
 import React from "react";
-import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Flex, SimpleGrid, Text, VStack } from "@chakra-ui/react";
 import { Layout } from "../components/layout";
-import { useState } from "react";
 import { Carousel, Image } from "grommet";
 import { LogInButton } from "../components/LogInButton";
 import { Ahac } from "../components/AHAC";
 import { StandardButton } from "../components/StandardButton";
-import { isServer } from "../../utils/isServer";
 
 const Index = () => {
-  // const [variables, setVariables] = useState({
-  //   limit: 15,
-  //   cursor: null as null | string,
-  // });
-  // const [{ data: meData }] = useMeQuery();
-
-  // const [{ data, fetching }] = usePostsQuery({ variables });
-
   return (
     <Layout title="ONBOARDING">
-      <SimpleGrid columns={[1, null, 2]} spacing="40px" overflowY={"hidden"}>
+      <SimpleGrid columns={[1, null, 2]} spacing="50px" overflowY={"hidden"}>
         <Box>
-          <Flex paddingTop="3vw" justifyContent="center" m="auto">
+          <VStack
+            // paddingTop="3vw"
+            justifyContent="center"
+            // m="auto"
+            minH={["300px", "80vh"]}
+          >
             <Box
-              height="80vw"
-              width="80vw"
-              maxWidth={"600px"}
-              maxHeight={"600px"}
+              height="25vw"
+              width="25vw"
+              minW={"300px"}
+              minH={"300px"}
+              // maxWidth={"700px"}
+              // maxHeight={"700px"}
               overflow="hidden"
+              borderRadius={20}
             >
-              <Carousel play={5000} alignSelf="center" fill={true}>
+              <Carousel
+                play={5000}
+                alignSelf="center"
+                fill={true}
+                controls={false}
+              >
                 <Image
                   fit="cover"
                   src="https://i.ibb.co/1XtW1z5/bdc016d5dcf93c09464df8c3c7fe4016.jpg"
@@ -47,25 +49,25 @@ const Index = () => {
                 />
               </Carousel>
             </Box>
-          </Flex>
+          </VStack>
         </Box>
-        <Box justifyContent={"center"} justifyItems={"center"}>
-          <Flex direction="column" justifyContent="center" alignItems="center">
+        <Box>
+          <VStack justifyContent="center" minH={["300px", "80vh"]} spacing={5}>
             <Box
               width={"30vw"}
               maxWidth={"250px"}
-              marginTop={"-5vw"}
+              // marginTop={"5vw"}
               justifyContent={"center"}
               alignItems={"center"}
-              paddingTop={["0px", "80px"]}
+              // paddingTop={["0px", "80px"]}
             >
               <Image
                 fill={true}
                 fit="cover"
-                src="https://i.ibb.co/NxbSvnB/8d6c0ff554d73e7efd109677d9e0857c.png"
+                src="https://i.ibb.co/C8bKrfp/tijera.png"
               />
             </Box>
-            <Text
+            {/* <Text
               textAlign={"center"}
               fontSize={"20px"}
               textColor={"#5998A0"}
@@ -73,14 +75,13 @@ const Index = () => {
               marginTop={["-20px", "-60px"]}
             >
               Yellow Basket
-            </Text>
+            </Text> */}
 
             <Text
               maxWidth={"300px"}
               textAlign={"center"}
               fontSize={"15px"}
-              textColor={"#5998A0"}
-              marginTop={"20px"}
+              textColor={"cyan.800"}
             >
               Find a meal in Barbados from amazing food suppliers, without
               spending a cent.
@@ -89,7 +90,7 @@ const Index = () => {
             <StandardButton title="Let's Start" route="/register_1" />
             <Ahac />
             <LogInButton />
-          </Flex>
+          </VStack>
         </Box>
       </SimpleGrid>
     </Layout>

@@ -15,7 +15,7 @@ interface loginProp {
   ay: string;
 }
 
-export const LoginPage: React.FC<loginProp> = ({ id }) => {
+export const LoginPage: React.FC<loginProp> = ({}) => {
   const router = useRouter();
   const [, login] = useLoginMutation();
   const [, loginm] = useLoginmMutation();

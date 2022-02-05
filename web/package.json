@@ -32,7 +32,6 @@
     "react-speech-recognition": "^3.9.0",
     "react-ssr-prepass": "^1.4.0",
     "styled-components": "^5.3.3",
-    "swiper": "^7.3.3",
     "ts-react-google-login-component": "^1.1.9",
     "urql": "^2.0.4",
     "use-file-upload": "^1.0.11"

@@ -1,19 +1,8 @@
-import { StarIcon } from "@chakra-ui/icons";
 import {
   Box,
   Image,
-  Badge,
   HStack,
-  Avatar,
   useDisclosure,
-  Button,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   Text,
   IconButton,
   Spacer,
@@ -21,10 +10,8 @@ import {
   Stack,
   Divider,
 } from "@chakra-ui/react";
-import { PlusIcon } from "evergreen-ui";
 import { useRouter } from "next/router";
-import { HiOutlineUserGroup, HiPencil, HiPlus, HiX } from "react-icons/hi";
-import { MdShoppingBasket } from "react-icons/md";
+import { HiX } from "react-icons/hi";
 
 interface FoodSlideProps {
   menulist: {
