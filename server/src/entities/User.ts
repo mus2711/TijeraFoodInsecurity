@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Order } from "./Order";
 import { Review } from "./Review";
 
 @Entity()
@@ -62,6 +63,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Review, (review) => review.user)
   reviews!: Review[];
+
+  @OneToMany(() => Order, (order) => order.user)
+  orders!: Order[];
 
   @CreateDateColumn()
   @Field(() => String)

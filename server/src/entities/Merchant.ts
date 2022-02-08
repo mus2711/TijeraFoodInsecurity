@@ -8,7 +8,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { FoodItem } from "./FoodItem";
 import { MerchantTag } from "./MerchantTag";
+import { Order } from "./Order";
 import { Review } from "./Review";
 
 @Entity()
@@ -60,8 +62,11 @@ export class Merchant extends BaseEntity {
   @Field({ nullable: true })
   averageRating?: number;
 
-  // @OneToMany(() => FoodItem, (fooditem) => fooditem.merchant)
-  // menulist!: FoodItem[];
+  @OneToMany(() => Order, (order) => order.user)
+  orders!: Order[];
+
+  @OneToMany(() => FoodItem, (fooditem) => fooditem.merchant)
+  menulist!: FoodItem[];
 
   @OneToMany(() => MerchantTag, (mt) => mt.merchant)
   merchantConnection!: Promise<MerchantTag[]>;
