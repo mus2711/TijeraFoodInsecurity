@@ -82,7 +82,7 @@ export default class FoodItemResolver {
 
   // TODO: Add mutations to edit food item
 
-  // Add food item to user's current order
+  // Adds (1) food item to user's current order
   @Mutation(() => OrderItem)
   async addToOrder(
     @Ctx() { req }: MyContext,
@@ -126,5 +126,45 @@ export default class FoodItemResolver {
       orderItem.quantity += 1;
       return await orderItem.save();
     }
+  }
+
+  // Removes (1) food item from user's current order
+  @Mutation(() => Boolean)
+  async removeFromOrder(
+    @Ctx() { req }: MyContext,
+    @Arg("foodItemId", () => Int) foodItemId: number
+  ): Promise<Boolean> {
+    const userId = req.session.userId;
+    if (!userId) throw new Error("User not logged in.");
+
+    const foodItem = await FoodItem.findOne({ id: foodItemId });
+    if (!foodItem) throw new Error("Food item not found.");
+
+    let order = await Order.findOne({
+      userId: parseInt(userId),
+      isComplete: false,
+    });
+
+    if (!order) throw new Error("User has no current order.");
+
+    const orderItem = await OrderItem.findOne({
+      orderId: order.id,
+      foodItemId: foodItem.id,
+    });
+
+    if (!orderItem) return false;
+
+    foodItem.stock += 1;
+    await foodItem.save();
+
+    if (orderItem.quantity > 1) {
+      orderItem.quantity -= 1;
+      await orderItem.save();
+      return true;
+    }
+
+    await orderItem!.remove();
+
+    return true;
   }
 }
