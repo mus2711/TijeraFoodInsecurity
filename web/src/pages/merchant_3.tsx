@@ -108,12 +108,12 @@ const Merchant3 = () => {
             name={data?.me.merchant ? data?.me.merchant.cpname : undefined}
           ></MenuSlide>
           <HStack paddingTop={"20px"}>
-            <Box>
-              <Button size="md" colorScheme={"blue"} position={"absolute"}>
+            <VStack>
+              <Button size="md" colorScheme={"cyan"} position={"absolute"}>
                 Pick Logo
               </Button>
               <Input
-                size={"md"}
+                // size={"md"}
                 type={"file"}
                 accept="image/*"
                 onClick={() => console.log("yes")}
@@ -122,18 +122,18 @@ const Merchant3 = () => {
                 placeholder="Pick an Image"
                 borderWidth={"0px"}
                 opacity={0}
-                width="100px"
-                height={"100px"}
+                width="120px"
+                // height={"100px"}
               />
-            </Box>
+            </VStack>
 
             {/* <Button colorScheme={"red"}>Pick Backdrop</Button> */}
-            <Box>
+            <VStack>
               <Button size="md" colorScheme={"red"} position={"absolute"}>
                 Pick Backdrop
               </Button>
               <Input
-                size={"md"}
+                // size={"md"}
                 type={"file"}
                 accept="image/*"
                 onClick={() => console.log("yes")}
@@ -142,10 +142,10 @@ const Merchant3 = () => {
                 placeholder="Pick an Image"
                 borderWidth={"0px"}
                 opacity={0}
-                width="100px"
-                height={"100px"}
+                width="120px"
+                // height={"100px"}
               />
-            </Box>
+            </VStack>
           </HStack>
         </VStack>
         <Box paddingTop={"15px"}>
