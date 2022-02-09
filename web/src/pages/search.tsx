@@ -29,8 +29,6 @@ import {
   AccordionIcon,
 } from "@chakra-ui/react";
 
-const bl = "#5998A0";
-
 const datalist = [
   {
     imageUrl: "https://i.ibb.co/Cmk22Xv/72a025a0efc630882a6aabbc435e2bcd.jpg",
@@ -116,7 +114,7 @@ const datalist = [
 ];
 
 const Search = () => {
-  const [{ data, fetching }] = useMerchantsQuery();
+  const [{ data }] = useMerchantsQuery();
 
   // map of tags to their index
   let mapTags: Map<number, string> = new Map();

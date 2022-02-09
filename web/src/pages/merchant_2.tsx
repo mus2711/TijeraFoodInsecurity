@@ -1,50 +1,16 @@
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
-import {
-  useLoginmMutation,
-  useMeQuery,
-  useRegistermMutation,
-  useRegisterMutation,
-} from "../generated/graphql";
+import { useLoginmMutation, useRegistermMutation } from "../generated/graphql";
 import React from "react";
-import {
-  Box,
-  Button,
-  ChakraProvider,
-  Flex,
-  Heading,
-  HStack,
-  IconButton,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  InputRightElement,
-  Radio,
-  RadioGroup,
-  Stack,
-  Text,
-  useColorMode,
-  VStack,
-} from "@chakra-ui/react";
-import NextLink from "next/link";
+import { Box, Flex, Heading, Text, VStack } from "@chakra-ui/react";
 import { Layout } from "../components/layout";
-import { useState } from "react";
-import { MdEmail, MdOutlineFastfood } from "react-icons/md";
-import { HiOutlineUserGroup, HiUser } from "react-icons/hi";
 import { Ahac } from "../components/AHAC";
 import { LogInButton } from "../components/LogInButton";
-import { StandardButton } from "../components/StandardButton";
 import { Formik, Form } from "formik";
 import router from "next/router";
-import { RiLockPasswordFill } from "react-icons/ri";
 import { toMerchErrorMap } from "../../utils/toMerchErrorMap";
-import { SignInOptions } from "../components/SignInOptions";
-import register from "./register";
-import { extendTheme } from "@chakra-ui/react";
-import { CheckIcon } from "@chakra-ui/icons";
 import { DblStandardButton } from "../components/DblStandardButton";
 import { Inputfield } from "../components/inputfield";
-import { MerchLayout } from "../components/merchLayout";
 
 const Merchant2 = () => {
   const [, registerm] = useRegistermMutation();

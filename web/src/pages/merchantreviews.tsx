@@ -1,20 +1,13 @@
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
-import { useMeQuery, useReviewsQuery } from "../generated/graphql";
+import { useReviewsQuery } from "../generated/graphql";
 import React from "react";
 import { Box, VStack, Text, Divider, HStack } from "@chakra-ui/react";
 import { Layout } from "../components/layout";
 import { StarIcon } from "evergreen-ui";
+import { findMerchantId } from "../functions/findMerchantId";
 
 const merchantReviews = () => {
-  const findMerchantId = () => {
-    const [{ data, fetching }] = useMeQuery();
-    if (data?.me.merchant) {
-      return data?.me?.merchant?.id;
-    } else {
-      return 0;
-    }
-  };
   const [{ data, fetching }] = useReviewsQuery({
     variables: { merchantId: findMerchantId() },
   });

@@ -4,6 +4,7 @@ import {
   TagsandMeQuery,
   useAddLocationMutation,
   useAddMerchantTagMutation,
+  useMeQuery,
   useTagsandMeQuery,
 } from "../generated/graphql";
 import React, { useState } from "react";
@@ -13,6 +14,7 @@ import {
   Flex,
   Heading,
   HStack,
+  Input,
   Tag,
   TagLabel,
   TagLeftIcon,
@@ -23,23 +25,36 @@ import { Formik, Form } from "formik";
 import { AddIcon } from "@chakra-ui/icons";
 import { DblStandardButton } from "../components/DblStandardButton";
 import { Inputfield } from "../components/inputfield";
-import { MenuSlide } from "../components/menuslide";
 import { RemoveIcon } from "evergreen-ui";
-import { useFileUpload } from "use-file-upload";
 import { useRouter } from "next/router";
 import { Layout } from "../components/layout";
+import { findMerchantId } from "../functions/findMerchantId";
+import { MenuSlide } from "../components/menuslide";
 
 const Merchant3 = () => {
-  const [{ data, fetching }] = useTagsandMeQuery();
+  const [{ data, fetching }] = useTagsandMeQuery({
+    variables: { merchantId: findMerchantId() },
+  });
+
   let [tags, setTags] = useState([] as string[]);
-  // let [avLogo, setavLogo] = useState("");
-  const [files, selectFiles] = useFileUpload();
-  const [files2, selectFiles2] = useFileUpload();
   const router = useRouter();
   const [, addLocation] = useAddLocationMutation();
   const [, addMerchantTag] = useAddMerchantTagMutation();
+  let [image, setImage] = React.useState("");
+  let [banner, setBanner] = React.useState<string | undefined>(undefined);
+
   const initialInputs = {
     location: "",
+  };
+
+  const onImageChange = (e: any) => {
+    console.log(e.target.files[0]);
+    setImage((image = URL.createObjectURL(e.target.files[0])));
+  };
+
+  const onBannerChange = (e: any) => {
+    console.log(e.target.files[0]);
+    setBanner((image = URL.createObjectURL(e.target.files[0])));
   };
 
   let mapTags: Map<string, number> = new Map();
@@ -84,42 +99,53 @@ const Merchant3 = () => {
           Here we set your menu and your merchant account.
         </Text>
         <VStack paddingTop={"20px"}>
-          {/* <MenuSlide
+          <MenuSlide
             modal={false}
-            avatarlogo={files?.source || undefined}
-            imageUrl={files2?.source || undefined}
+            avatarlogo={image}
+            imageUrl={banner}
             cuisine={tags}
             badge="Top"
             name={data?.me.merchant ? data?.me.merchant.cpname : undefined}
-          ></MenuSlide> */}
+          ></MenuSlide>
           <HStack paddingTop={"20px"}>
-            <Button
-              // onClick={() => {
-              //   selectFiles(
-              //     { accept: "image/*", multiple: false },
-              //     ({ name, size, source, file }) => {
-              //       console.log("Files Selected", { name, size, source, file });
-              //     }
-              //   );
-              // }}
-              colorScheme={"blue"}
-            >
-              Pick Logo
-            </Button>
+            <Box>
+              <Button size="md" colorScheme={"blue"} position={"absolute"}>
+                Pick Logo
+              </Button>
+              <Input
+                size={"md"}
+                type={"file"}
+                accept="image/*"
+                onClick={() => console.log("yes")}
+                className="inputPhoto"
+                onChange={onImageChange}
+                placeholder="Pick an Image"
+                borderWidth={"0px"}
+                opacity={0}
+                width="100px"
+                height={"100px"}
+              />
+            </Box>
 
-            <Button
-              // onClick={() => {
-              //   selectFiles2(
-              //     { accept: "image/*", multiple: false },
-              //     ({ name, size, source, file }) => {
-              //       console.log("Files Selected", { name, size, source, file });
-              //     }
-              //   );
-              // }}
-              colorScheme={"red"}
-            >
-              Pick Backdrop
-            </Button>
+            {/* <Button colorScheme={"red"}>Pick Backdrop</Button> */}
+            <Box>
+              <Button size="md" colorScheme={"red"} position={"absolute"}>
+                Pick Backdrop
+              </Button>
+              <Input
+                size={"md"}
+                type={"file"}
+                accept="image/*"
+                onClick={() => console.log("yes")}
+                className="inputPhoto"
+                onChange={onBannerChange}
+                placeholder="Pick an Image"
+                borderWidth={"0px"}
+                opacity={0}
+                width="100px"
+                height={"100px"}
+              />
+            </Box>
           </HStack>
         </VStack>
         <Box paddingTop={"15px"}>
@@ -156,6 +182,7 @@ const Merchant3 = () => {
                         size={"md"}
                         variant="subtle"
                         colorScheme="teal"
+                        m={1}
                         onClick={() => {
                           setTags([...tags, tagName]);
                         }}
@@ -171,14 +198,19 @@ const Merchant3 = () => {
                     Your tags
                   </Text>
                   <VStack>
-                    <HStack spacing={4}>
+                    <Box maxWidth={"350px"}>
                       {tags.map((tagName) => (
-                        <Tag size={"md"} variant="subtle" colorScheme="red">
+                        <Tag
+                          size={"md"}
+                          variant="subtle"
+                          colorScheme="red"
+                          m={1}
+                        >
                           <TagLeftIcon boxSize="12px" as={RemoveIcon} />
                           <TagLabel>{tagName}</TagLabel>
                         </Tag>
                       ))}
-                    </HStack>
+                    </Box>
                     <Button
                       height={"30px"}
                       colorScheme={"green"}
