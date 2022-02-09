@@ -29,7 +29,7 @@ export class FoodItem extends BaseEntity {
   @Field()
   imageAlt!: string;
 
-  @Column()
+  @Column("float")
   @Field(() => Float)
   cost!: number;
 

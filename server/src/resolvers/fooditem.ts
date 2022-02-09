@@ -80,7 +80,127 @@ export default class FoodItemResolver {
     return true;
   }
 
-  // TODO: Add mutations to edit food item
+  // Mutations for merchant to edit food item
+
+  @Mutation(() => FoodItem)
+  async changeFoodItemName(
+    @Ctx() { req }: MyContext,
+    @Arg("foodItemId", () => Int) foodItemId: number,
+    @Arg("itemName", () => String) itemName: string
+  ): Promise<FoodItem> {
+    const merchantId = req.session.merchantId;
+    if (!merchantId) throw new Error("Merchant not logged in.");
+
+    const foodItem = await FoodItem.findOne({ id: foodItemId });
+    if (!foodItem) throw new Error("Food item not found");
+
+    if (foodItem.merchantId != parseInt(merchantId)) {
+      throw new Error("Food item does not belong to current merchant.");
+    }
+
+    foodItem.itemName = itemName;
+    return await foodItem.save();
+  }
+
+  @Mutation(() => FoodItem)
+  async changeFoodImageUrl(
+    @Ctx() { req }: MyContext,
+    @Arg("foodItemId", () => Int) foodItemId: number,
+    @Arg("imageUrl", () => String) imageUrl: string
+  ): Promise<FoodItem> {
+    const merchantId = req.session.merchantId;
+    if (!merchantId) throw new Error("Merchant not logged in.");
+
+    const foodItem = await FoodItem.findOne({ id: foodItemId });
+    if (!foodItem) throw new Error("Food item not found");
+
+    if (foodItem.merchantId != parseInt(merchantId)) {
+      throw new Error("Food item does not belong to current merchant.");
+    }
+
+    foodItem.imageUrl = imageUrl;
+    return await foodItem.save();
+  }
+
+  @Mutation(() => FoodItem)
+  async changeFoodImageAlt(
+    @Ctx() { req }: MyContext,
+    @Arg("foodItemId", () => Int) foodItemId: number,
+    @Arg("imageAlt", () => String) imageAlt: string
+  ): Promise<FoodItem> {
+    const merchantId = req.session.merchantId;
+    if (!merchantId) throw new Error("Merchant not logged in.");
+
+    const foodItem = await FoodItem.findOne({ id: foodItemId });
+    if (!foodItem) throw new Error("Food item not found");
+
+    if (foodItem.merchantId != parseInt(merchantId)) {
+      throw new Error("Food item does not belong to current merchant.");
+    }
+
+    foodItem.imageAlt = imageAlt;
+    return await foodItem.save();
+  }
+
+  @Mutation(() => FoodItem)
+  async changeFoodCost(
+    @Ctx() { req }: MyContext,
+    @Arg("foodItemId", () => Int) foodItemId: number,
+    @Arg("cost", () => Float) cost: number
+  ): Promise<FoodItem> {
+    const merchantId = req.session.merchantId;
+    if (!merchantId) throw new Error("Merchant not logged in.");
+
+    const foodItem = await FoodItem.findOne({ id: foodItemId });
+    if (!foodItem) throw new Error("Food item not found");
+
+    if (foodItem.merchantId != parseInt(merchantId)) {
+      throw new Error("Food item does not belong to current merchant.");
+    }
+
+    foodItem.cost = cost;
+    return await foodItem.save();
+  }
+
+  @Mutation(() => FoodItem)
+  async changeFoodDescription(
+    @Ctx() { req }: MyContext,
+    @Arg("foodItemId", () => Int) foodItemId: number,
+    @Arg("description", () => String) description: string
+  ): Promise<FoodItem> {
+    const merchantId = req.session.merchantId;
+    if (!merchantId) throw new Error("Merchant not logged in.");
+
+    const foodItem = await FoodItem.findOne({ id: foodItemId });
+    if (!foodItem) throw new Error("Food item not found");
+
+    if (foodItem.merchantId != parseInt(merchantId)) {
+      throw new Error("Food item does not belong to current merchant.");
+    }
+
+    foodItem.description = description;
+    return await foodItem.save();
+  }
+
+  @Mutation(() => FoodItem)
+  async changeFoodStock(
+    @Ctx() { req }: MyContext,
+    @Arg("foodItemId", () => Int) foodItemId: number,
+    @Arg("stock", () => Float) stock: number
+  ): Promise<FoodItem> {
+    const merchantId = req.session.merchantId;
+    if (!merchantId) throw new Error("Merchant not logged in.");
+
+    const foodItem = await FoodItem.findOne({ id: foodItemId });
+    if (!foodItem) throw new Error("Food item not found");
+
+    if (foodItem.merchantId != parseInt(merchantId)) {
+      throw new Error("Food item does not belong to current merchant.");
+    }
+
+    foodItem.stock = stock;
+    return await foodItem.save();
+  }
 
   // Adds (1) food item to user's current order
   @Mutation(() => OrderItem)
