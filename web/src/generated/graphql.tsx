@@ -436,14 +436,19 @@ export type AddReviewMutationVariables = Exact<{
 
 export type AddReviewMutation = { __typename?: 'Mutation', addReview: { __typename?: 'Review', comment: string, rating: number, user: { __typename?: 'User', username: string }, merchant: { __typename?: 'Merchant', cpname: string } } };
 
-export type ChangeDobMutationVariables = Exact<{
+export type RegisterUserFinalMutationVariables = Exact<{
   year: Scalars['Int'];
   month: Scalars['Int'];
   day: Scalars['Int'];
+  income: Scalars['Int'];
+  dependents: Scalars['Int'];
+  country: Scalars['String'];
+  gender: Scalars['String'];
+  phoneNumber: Scalars['String'];
 }>;
 
 
-export type ChangeDobMutation = { __typename?: 'Mutation', changeDOB: { __typename?: 'User', username: string, dob?: Maybe<any> } };
+export type RegisterUserFinalMutation = { __typename?: 'Mutation', changeDOB: { __typename?: 'User', username: string, dob?: Maybe<any> }, changePhoneNumber: { __typename?: 'User', username: string, phoneNumber?: Maybe<string> }, changeGender: { __typename?: 'User', username: string, gender?: Maybe<string> }, changeCountry: { __typename?: 'User', username: string, country?: Maybe<string> }, changeIncome: { __typename?: 'User', username: string, income?: Maybe<number> }, changeDependents: { __typename?: 'User', username: string, dependents?: Maybe<number> } };
 
 export type ChangeFirstnameMutationVariables = Exact<{
   firstname: Scalars['String'];
@@ -636,17 +641,37 @@ export const AddReviewDocument = gql`
 export function useAddReviewMutation() {
   return Urql.useMutation<AddReviewMutation, AddReviewMutationVariables>(AddReviewDocument);
 };
-export const ChangeDobDocument = gql`
-    mutation changeDOB($year: Int!, $month: Int!, $day: Int!) {
+export const RegisterUserFinalDocument = gql`
+    mutation registerUserFinal($year: Int!, $month: Int!, $day: Int!, $income: Int!, $dependents: Int!, $country: String!, $gender: String!, $phoneNumber: String!) {
   changeDOB(year: $year, month: $month, day: $day) {
     username
     dob
   }
+  changePhoneNumber(phoneNumber: $phoneNumber) {
+    username
+    phoneNumber
+  }
+  changeGender(gender: $gender) {
+    username
+    gender
+  }
+  changeCountry(country: $country) {
+    username
+    country
+  }
+  changeIncome(income: $income) {
+    username
+    income
+  }
+  changeDependents(dependents: $dependents) {
+    username
+    dependents
+  }
 }
     `;
 
-export function useChangeDobMutation() {
-  return Urql.useMutation<ChangeDobMutation, ChangeDobMutationVariables>(ChangeDobDocument);
+export function useRegisterUserFinalMutation() {
+  return Urql.useMutation<RegisterUserFinalMutation, RegisterUserFinalMutationVariables>(RegisterUserFinalDocument);
 };
 export const ChangeFirstnameDocument = gql`
     mutation changeFirstname($firstname: String!) {

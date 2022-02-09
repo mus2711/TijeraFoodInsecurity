@@ -1,6 +1,35 @@
-mutation changeDOB($year: Int!, $month: Int!, $day: Int!) {
+mutation registerUserFinal(
+  $year: Int!
+  $month: Int!
+  $day: Int!
+  $income: Int!
+  $dependents: Int!
+  $country: String!
+  $gender: String!
+  $phoneNumber: String!
+) {
   changeDOB(year: $year, month: $month, day: $day) {
     username
     dob
+  }
+  changePhoneNumber(phoneNumber: $phoneNumber) {
+    username
+    phoneNumber
+  }
+  changeGender(gender: $gender) {
+    username
+    gender
+  }
+  changeCountry(country: $country) {
+    username
+    country
+  }
+  changeIncome(income: $income) {
+    username
+    income
+  }
+  changeDependents(dependents: $dependents) {
+    username
+    dependents
   }
 }

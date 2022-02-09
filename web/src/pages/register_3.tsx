@@ -1,9 +1,9 @@
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import {
-  useChangeDobMutation,
   useMeQuery,
   useRegisterMutation,
+  useRegisterUserFinalMutation,
 } from "../generated/graphql";
 import React, { useEffect } from "react";
 import {
@@ -55,8 +55,7 @@ const Register_3 = () => {
   const [gender, setGender] = useState<String | null>(null);
   const [address, setAddress] = useState<String | null>(null);
 
-  const [, changeDOB] = useChangeDobMutation();
-
+  const [, registerUserFinal] = useRegisterUserFinalMutation();
   var date_regex =
     /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
 
@@ -86,10 +85,15 @@ const Register_3 = () => {
 
   const onRegisterUser = () => {
     if (date_regex.test(DOB)) {
-      changeDOB({
+      registerUserFinal({
         year: Number(DOB.slice(6, 10)),
         month: Number(DOB.slice(3, 5)),
         day: Number(DOB.slice(0, 2)),
+        income: initialValue,
+        dependents: dependents,
+        country: country,
+        gender: String(gender) ?? "",
+        phoneNumber: phone,
       });
     }
   };
