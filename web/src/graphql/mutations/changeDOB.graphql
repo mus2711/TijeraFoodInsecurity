@@ -1,0 +1,6 @@
+mutation changeDOB($year: Int!, $month: Int!, $day: Int!) {
+  changeDOB(year: $year, month: $month, day: $day) {
+    username
+    dob
+  }
+}

@@ -12,7 +12,10 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
+  DateTime: any;
 };
+
 
 export type FieldError = {
   __typename?: 'FieldError';
@@ -24,6 +27,19 @@ export type FieldMerchantError = {
   __typename?: 'FieldMerchantError';
   field: Scalars['String'];
   merchantmsg: Scalars['String'];
+};
+
+export type FoodItem = {
+  __typename?: 'FoodItem';
+  cost: Scalars['Float'];
+  description: Scalars['String'];
+  id: Scalars['Int'];
+  imageAlt: Scalars['String'];
+  imageUrl: Scalars['String'];
+  itemName: Scalars['String'];
+  merchant: Merchant;
+  merchantId: Scalars['Float'];
+  stock: Scalars['Float'];
 };
 
 export type LoginInput = {
@@ -77,10 +93,21 @@ export type Mutation = {
   addLogo: Merchant;
   addMerchantTag: Scalars['Boolean'];
   addReview: Review;
+  addToOrder: OrderItem;
+  changeCountry: User;
   changeCpname: Merchant;
+  changeDOB: User;
+  changeDependents: User;
   changeFirstname: User;
+  changeGender: User;
+  changeIncome: User;
   changeLastName: User;
+  changePhoneNumber: User;
+  completeOrder: Order;
+  createFoodItem: FoodItem;
   createTag: Tag;
+  deleteFoodItem: Scalars['Boolean'];
+  deleteOrder: Scalars['Boolean'];
   deleteReview: Scalars['Boolean'];
   deleteTag: Scalars['Boolean'];
   login: UserResponse;
@@ -89,6 +116,7 @@ export type Mutation = {
   logoutm: Scalars['Boolean'];
   register: UserResponse;
   registerm: MerchantResponse;
+  removeFromOrder: Scalars['Boolean'];
   removeMerchantTag: Scalars['Boolean'];
 };
 
@@ -121,8 +149,30 @@ export type MutationAddReviewArgs = {
 };
 
 
+export type MutationAddToOrderArgs = {
+  foodItemId: Scalars['Int'];
+};
+
+
+export type MutationChangeCountryArgs = {
+  country: Scalars['String'];
+};
+
+
 export type MutationChangeCpnameArgs = {
   cpname: Scalars['String'];
+};
+
+
+export type MutationChangeDobArgs = {
+  day: Scalars['Int'];
+  month: Scalars['Int'];
+  year: Scalars['Int'];
+};
+
+
+export type MutationChangeDependentsArgs = {
+  dependents: Scalars['Int'];
 };
 
 
@@ -131,13 +181,43 @@ export type MutationChangeFirstnameArgs = {
 };
 
 
+export type MutationChangeGenderArgs = {
+  gender: Scalars['String'];
+};
+
+
+export type MutationChangeIncomeArgs = {
+  income: Scalars['Int'];
+};
+
+
 export type MutationChangeLastNameArgs = {
   lastname: Scalars['String'];
 };
 
 
+export type MutationChangePhoneNumberArgs = {
+  phoneNumber: Scalars['String'];
+};
+
+
+export type MutationCreateFoodItemArgs = {
+  cost: Scalars['Float'];
+  description: Scalars['String'];
+  imageAlt: Scalars['String'];
+  imageUrl: Scalars['String'];
+  itemName: Scalars['String'];
+  stock: Scalars['Int'];
+};
+
+
 export type MutationCreateTagArgs = {
   tagName: Scalars['String'];
+};
+
+
+export type MutationDeleteFoodItemArgs = {
+  foodItemId: Scalars['Int'];
 };
 
 
@@ -172,27 +252,74 @@ export type MutationRegistermArgs = {
 };
 
 
+export type MutationRemoveFromOrderArgs = {
+  foodItemId: Scalars['Int'];
+};
+
+
 export type MutationRemoveMerchantTagArgs = {
   tagId: Scalars['Int'];
+};
+
+export type Order = {
+  __typename?: 'Order';
+  cost?: Maybe<Scalars['Float']>;
+  id: Scalars['Int'];
+  isComplete: Scalars['Boolean'];
+  merchant: Merchant;
+  merchantId: Scalars['Float'];
+  user: User;
+  userId: Scalars['Float'];
+};
+
+export type OrderItem = {
+  __typename?: 'OrderItem';
+  foodItem: FoodItem;
+  foodItemId: Scalars['Float'];
+  order: Order;
+  orderId: Scalars['Float'];
+  quantity: Scalars['Float'];
+};
+
+export type OrderResponse = {
+  __typename?: 'OrderResponse';
+  order?: Maybe<Order>;
+  orderItems?: Maybe<Array<OrderItem>>;
 };
 
 export type Query = {
   __typename?: 'Query';
   allMerchantTags: Array<MerchantTag>;
+  foodItems: Array<FoodItem>;
+  getMenu: Array<FoodItem>;
   me: MeResponse;
   merchant?: Maybe<Merchant>;
+  merchantCurrentOrders: Array<OrderResponse>;
+  merchantOrders: Array<OrderResponse>;
   merchantTags: Array<Tag>;
   merchants: Array<Merchant>;
   reviews: Array<Review>;
   tagMerchants: Array<Merchant>;
   tags: Array<Tag>;
   user?: Maybe<User>;
+  userCurrentOrder: OrderResponse;
+  userOrders: Array<OrderResponse>;
   users: Array<User>;
+};
+
+
+export type QueryGetMenuArgs = {
+  merchantId: Scalars['Int'];
 };
 
 
 export type QueryMerchantArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryMerchantTagsArgs = {
+  merchantId: Scalars['Int'];
 };
 
 
@@ -208,6 +335,16 @@ export type QueryTagMerchantsArgs = {
 
 export type QueryUserArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryUserCurrentOrderArgs = {
+  userId: Scalars['Int'];
+};
+
+
+export type QueryUserOrdersArgs = {
+  userId: Scalars['Int'];
 };
 
 export type RegisterInput = {
@@ -243,11 +380,17 @@ export type Tag = {
 
 export type User = {
   __typename?: 'User';
+  country?: Maybe<Scalars['String']>;
   createdAt: Scalars['String'];
+  dependents?: Maybe<Scalars['Float']>;
+  dob?: Maybe<Scalars['DateTime']>;
   email: Scalars['String'];
   firstname: Scalars['String'];
+  gender?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
+  income?: Maybe<Scalars['Float']>;
   lastname: Scalars['String'];
+  phoneNumber?: Maybe<Scalars['String']>;
   updatedAt: Scalars['String'];
   username: Scalars['String'];
 };
@@ -292,6 +435,15 @@ export type AddReviewMutationVariables = Exact<{
 
 
 export type AddReviewMutation = { __typename?: 'Mutation', addReview: { __typename?: 'Review', comment: string, rating: number, user: { __typename?: 'User', username: string }, merchant: { __typename?: 'Merchant', cpname: string } } };
+
+export type ChangeDobMutationVariables = Exact<{
+  year: Scalars['Int'];
+  month: Scalars['Int'];
+  day: Scalars['Int'];
+}>;
+
+
+export type ChangeDobMutation = { __typename?: 'Mutation', changeDOB: { __typename?: 'User', username: string, dob?: Maybe<any> } };
 
 export type ChangeFirstnameMutationVariables = Exact<{
   firstname: Scalars['String'];
@@ -354,7 +506,9 @@ export type RegistermMutationVariables = Exact<{
 
 export type RegistermMutation = { __typename?: 'Mutation', registerm: { __typename?: 'MerchantResponse', errors?: Maybe<Array<{ __typename?: 'FieldMerchantError', field: string, merchantmsg: string }>>, merchant?: Maybe<{ __typename?: 'Merchant', id: number, cpname: string, imageUrl?: Maybe<string>, imageAlt?: Maybe<string>, cplogo?: Maybe<string>, username: string, location?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number> }> } };
 
-export type TagsandMeQueryVariables = Exact<{ [key: string]: never; }>;
+export type TagsandMeQueryVariables = Exact<{
+  merchantId: Scalars['Int'];
+}>;
 
 
 export type TagsandMeQuery = { __typename?: 'Query', tags: Array<{ __typename?: 'Tag', tagName: string, id: number }>, me: { __typename?: 'MeResponse', merchant?: Maybe<{ __typename?: 'Merchant', id: number, cpname: string, cplogo?: Maybe<string>, imageUrl?: Maybe<string>, location?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number>, username: string }>, user?: Maybe<{ __typename?: 'User', id: number, firstname: string, lastname: string, username: string, email: string }> }, merchantTags: Array<{ __typename?: 'Tag', tagName: string, id: number }> };
@@ -364,7 +518,9 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me: { __typename?: 'MeResponse', merchant?: Maybe<{ __typename?: 'Merchant', id: number, cpname: string, cplogo?: Maybe<string>, imageUrl?: Maybe<string>, location?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number>, username: string }>, user?: Maybe<{ __typename?: 'User', id: number, firstname: string, lastname: string, username: string, email: string }> } };
 
-export type MerchantTagsQueryVariables = Exact<{ [key: string]: never; }>;
+export type MerchantTagsQueryVariables = Exact<{
+  merchantId: Scalars['Int'];
+}>;
 
 
 export type MerchantTagsQuery = { __typename?: 'Query', merchantTags: Array<{ __typename?: 'Tag', tagName: string, id: number }> };
@@ -480,6 +636,18 @@ export const AddReviewDocument = gql`
 export function useAddReviewMutation() {
   return Urql.useMutation<AddReviewMutation, AddReviewMutationVariables>(AddReviewDocument);
 };
+export const ChangeDobDocument = gql`
+    mutation changeDOB($year: Int!, $month: Int!, $day: Int!) {
+  changeDOB(year: $year, month: $month, day: $day) {
+    username
+    dob
+  }
+}
+    `;
+
+export function useChangeDobMutation() {
+  return Urql.useMutation<ChangeDobMutation, ChangeDobMutationVariables>(ChangeDobDocument);
+};
 export const ChangeFirstnameDocument = gql`
     mutation changeFirstname($firstname: String!) {
   changeFirstname(firstname: $firstname) {
@@ -571,7 +739,7 @@ export function useRegistermMutation() {
   return Urql.useMutation<RegistermMutation, RegistermMutationVariables>(RegistermDocument);
 };
 export const TagsandMeDocument = gql`
-    query TagsandMe {
+    query TagsandMe($merchantId: Int!) {
   tags {
     tagName
     id
@@ -596,7 +764,7 @@ export const TagsandMeDocument = gql`
       email
     }
   }
-  merchantTags {
+  merchantTags(merchantId: $merchantId) {
     tagName
     id
   }
@@ -635,8 +803,8 @@ export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'q
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
 };
 export const MerchantTagsDocument = gql`
-    query MerchantTags {
-  merchantTags {
+    query MerchantTags($merchantId: Int!) {
+  merchantTags(merchantId: $merchantId) {
     tagName
     id
   }

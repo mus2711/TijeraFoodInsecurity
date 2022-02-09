@@ -1,4 +1,4 @@
-query TagsandMe {
+query TagsandMe($merchantId: Int!) {
   tags {
     tagName
     id
@@ -24,7 +24,7 @@ query TagsandMe {
     }
   }
 
-  merchantTags {
+  merchantTags(merchantId: $merchantId) {
     tagName
     id
   }

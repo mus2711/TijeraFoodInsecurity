@@ -1,5 +1,5 @@
-query MerchantTags {
-  merchantTags {
+query MerchantTags($merchantId: Int!) {
+  merchantTags(merchantId: $merchantId) {
     tagName
     id
   }
