@@ -29,7 +29,7 @@ Edit `CORS_ORIGIN` and `DOMAIN` as needed, and then run
 yarn
 yarn build
 yarn watch
-redis-server
+yarn redis
 yarn dev
 ```
 
