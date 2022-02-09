@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { HiX } from "react-icons/hi";
+import { useDeleteFoodItemMutation } from "../generated/graphql";
 
 interface FoodSlideProps {
   menulist: {
@@ -28,7 +29,9 @@ interface FoodSlideProps {
 
 export const Foodslide: React.FC<FoodSlideProps> = ({ menulist }) => {
   const router = useRouter();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [, deleteFoodItem] = useDeleteFoodItemMutation();
   const initialInputs = {
     description: "",
     item: "",
@@ -63,6 +66,7 @@ export const Foodslide: React.FC<FoodSlideProps> = ({ menulist }) => {
       borderWidth="1px"
       borderRadius="lg"
       overflow="hidden"
+      id={String(menulist.id)}
     >
       <VStack spacing={2} p="15px" paddingBottom={"20px"}>
         <HStack>
@@ -101,6 +105,7 @@ export const Foodslide: React.FC<FoodSlideProps> = ({ menulist }) => {
               aria-label="Menu"
               icon={<HiX size={"20px"} />}
               padding={"5px"}
+              onClick={() => deleteFoodItem({ foodItemId: menulist.id })}
             />
             {/* <IconButton
                 colorScheme={"teal"}

@@ -192,15 +192,24 @@ export const Navbar: React.FC<NavbarProps> = ({ title }) => {
                 </MenuList>
               </Menu>
             </Box>
-            <Box m={0} fontWeight={"bold"}>
-              <svg href="https://gist.githack.com/mus2711/1ec2f2be3f8097eb4a7782cb8aa80f01/raw/7800086679339b5064ec25c93b3cedf08a51ee22/tijera.svg" />
+            <Box m={0} fontWeight={"bold"} maxWidth={"40px"}>
+              <img src="https://i.ibb.co/C8bKrfp/tijera.png"></img>
             </Box>
-
+            {/* 
             <NextLink href={"/"}>
               <Box maxWidth={"55px"}>
                 <img src="https://i.ibb.co/H7stfJf/200e0beeccb5598b2d3dc83db38f3c52.png"></img>
               </Box>
-            </NextLink>
+            </NextLink> */}
+            <Button
+              variant={"outline"}
+              color="black"
+              colorScheme={"cyan"}
+              borderRadius={20}
+              borderWidth={1}
+            >
+              {data.me.merchant.username} (Logout)
+            </Button>
           </HStack>
         </Flex>
       </Box>
@@ -267,20 +276,24 @@ export const Navbar: React.FC<NavbarProps> = ({ title }) => {
                   </MenuList>
                 </Menu>
               </Box>
-              <Box m={0} fontWeight={"bold"}>
-                {title}
+              <Box m={0} fontWeight={"bold"} maxWidth={"40px"}>
+                <img src="https://i.ibb.co/C8bKrfp/tijera.png"></img>
               </Box>
-
-              <Box>
-                <HStack maxWidth={"55px"}>
-                  <Text fontSize="sm" fontWeight="bold" textAlign={"end"}>
-                    Hi {data.me.user.firstname}!
-                    <Badge colorScheme="blue" variant={"outline"}>
-                      Tokens Remaining: 70%
-                    </Badge>
-                  </Text>
-                </HStack>
+              {/* 
+            <NextLink href={"/"}>
+              <Box maxWidth={"55px"}>
+                <img src="https://i.ibb.co/H7stfJf/200e0beeccb5598b2d3dc83db38f3c52.png"></img>
               </Box>
+            </NextLink> */}
+              <Button
+                variant={"outline"}
+                color="black"
+                colorScheme={"cyan"}
+                borderRadius={20}
+                borderWidth={1}
+              >
+                Log In
+              </Button>
             </HStack>
           </Flex>
         </Box>

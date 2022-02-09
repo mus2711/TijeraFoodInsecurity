@@ -2,6 +2,7 @@ import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import React from "react";
 import {
+  Avatar,
   Box,
   Button,
   Heading,
@@ -22,7 +23,10 @@ import { Foodslide } from "../components/foodslide";
 import { Formik, Form } from "formik";
 import { useRouter } from "next/router";
 import { Inputfield } from "../components/inputfield";
-import { useTagsandMeQuery } from "../generated/graphql";
+import {
+  useCreateFoodItemMutation,
+  useTagsandMeQuery,
+} from "../generated/graphql";
 import { useIsAuthMerchant } from "../../utils/useIsAuthMerchant";
 import { Layout } from "../components/layout";
 import { findMerchantId } from "../functions/findMerchantId";
@@ -75,11 +79,11 @@ const MerchAccount = () => {
   const [{ data, fetching }] = useTagsandMeQuery({
     variables: { merchantId: findMerchantId() },
   });
-  console.log(data?.getMenu);
-
+  const [, createFoodItem] = useCreateFoodItemMutation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   let [image, setImage] = React.useState("");
   let [banner, setBanner] = React.useState<string | undefined>(undefined);
+  let [menuPhoto, setMenuPhoto] = React.useState("");
 
   const onImageChange = (e: any) => {
     console.log(e.target.files[0]);
@@ -90,38 +94,44 @@ const MerchAccount = () => {
     console.log(e.target.files[0]);
     setBanner((image = URL.createObjectURL(e.target.files[0])));
   };
+  const onMenuPhotoChange = (e: any) => {
+    console.log(e.target.files[0]);
+    setMenuPhoto((image = URL.createObjectURL(e.target.files[0])));
+  };
 
   const initialInputs = {
+    itemName: "",
     description: "",
-    item: "",
-    foodpic: "",
-    name: "",
-    itemID: "",
+    stock: 0,
+    cost: 0,
+    imageAlt: "",
+    imageURL: "",
   };
   const formikInputs = [
     {
-      name: "item",
+      name: "itemName",
       placeholder: "Prawn Curry",
-      label: "Dish Name",
-      itemID: "984375",
+      label: "Item Name",
     },
     {
       name: "description",
       placeholder: "Ingredients:...",
       label: "Description",
-      itemID: "fg84375",
     },
     {
-      name: "foodpic",
-      placeholder: "...",
-      label: "Upload Image",
-      itemID: "984575",
+      name: "stock",
+      placeholder: "2",
+      label: "How much stock available?",
     },
     {
-      name: "price",
-      placeholder: "£10.00",
+      name: "cost",
+      placeholder: "10.00",
       label: "Price",
-      itemID: "4375",
+    },
+    {
+      name: "imageAlt",
+      placeholder: "Photo of Prawn Curry...",
+      label: "Image Description",
     },
   ];
 
@@ -148,7 +158,6 @@ const MerchAccount = () => {
         }
         avatarlogo={image}
         merchantID={data?.me?.merchant?.id ? data?.me?.merchant?.id : undefined}
-        // avatarlogo={files?.source || data?.me?.merchant?.cplogo}
         name={data?.me?.merchant?.cpname}
       />
     </VStack>
@@ -189,7 +198,6 @@ const MerchAccount = () => {
             />
           </VStack>
 
-          {/* <Button colorScheme={"red"}>Pick Backdrop</Button> */}
           <VStack>
             <Button size="md" colorScheme={"red"} position={"absolute"}>
               Pick Backdrop
@@ -223,17 +231,16 @@ const MerchAccount = () => {
             <ModalBody>
               <Formik
                 initialValues={initialInputs}
-                // onSubmit={async (values, { setErrors }) => {
-                //   console.log(values);
-                //   const response = await registerm(values);
-                //   console.log(response);
-                //   if (response.data?.registerm.errors) {
-                //     setErrors(toErrorMap(response.data.registerm.errors));
-                //   } else if (response.data?.registerm.merchant) {
-                //     router.push("/");
-                //   }
-                // }}
-                onSubmit={() => {}}
+                onSubmit={async (values, { setErrors }) => {
+                  console.log(values);
+                  values.cost = Number(values.cost);
+                  values.stock = Number(values.stock);
+                  const response = await createFoodItem(values);
+                  console.log(response);
+                  if (response.data?.createFoodItem.id) {
+                    console.log(response.data?.createFoodItem.id);
+                  }
+                }}
               >
                 {({ isSubmitting }) => (
                   <Form>
@@ -245,23 +252,48 @@ const MerchAccount = () => {
                           placeholder={p.placeholder}
                         />
                       ))}
+                      <HStack>
+                        <Avatar src={menuPhoto} />
+                        <VStack>
+                          <Button
+                            size="md"
+                            colorScheme={"cyan"}
+                            position={"absolute"}
+                          >
+                            Pick Photo
+                          </Button>
+                          <Input
+                            // size={"md"}
+                            type={"file"}
+                            accept="image/*"
+                            onClick={() => console.log("yes")}
+                            className="inputPhoto"
+                            onChange={onMenuPhotoChange}
+                            placeholder="Pick an Image"
+                            borderWidth={"0px"}
+                            opacity={0}
+                            width="120px"
+                            // height={"100px"}
+                          />
+                        </VStack>
+                      </HStack>
                     </VStack>
+                    <ModalFooter>
+                      <Button
+                        width={"100%"}
+                        colorScheme="blue"
+                        mr={3}
+                        // onClick={() => {}}
+                        type="submit"
+                        rightIcon={<MdPlusOne />}
+                      >
+                        Add Item
+                      </Button>
+                    </ModalFooter>
                   </Form>
                 )}
               </Formik>
             </ModalBody>
-
-            <ModalFooter>
-              <Button
-                width={"100%"}
-                colorScheme="blue"
-                mr={3}
-                onClick={onClose}
-                rightIcon={<MdPlusOne />}
-              >
-                Add Item
-              </Button>
-            </ModalFooter>
           </ModalContent>
         </Modal>
         <HStack>

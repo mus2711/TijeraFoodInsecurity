@@ -1,0 +1,25 @@
+mutation createFoodItem(
+  $stock: Int!
+  $cost: Float!
+  $description: String!
+  $itemName: String!
+  $imageURL: String!
+  $imageAlt: String!
+) {
+  createFoodItem(
+    stock: $stock
+    cost: $cost
+    description: $description
+    itemName: $itemName
+    imageUrl: $imageURL
+    imageAlt: $imageAlt
+  ) {
+    description
+    id
+    itemName
+    merchantId
+    merchant {
+      cpname
+    }
+  }
+}

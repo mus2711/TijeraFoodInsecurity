@@ -464,6 +464,25 @@ export type ChangeLastNameMutationVariables = Exact<{
 
 export type ChangeLastNameMutation = { __typename?: 'Mutation', changeLastName: { __typename?: 'User', firstname: string, lastname: string } };
 
+export type CreateFoodItemMutationVariables = Exact<{
+  stock: Scalars['Int'];
+  cost: Scalars['Float'];
+  description: Scalars['String'];
+  itemName: Scalars['String'];
+  imageURL: Scalars['String'];
+  imageAlt: Scalars['String'];
+}>;
+
+
+export type CreateFoodItemMutation = { __typename?: 'Mutation', createFoodItem: { __typename?: 'FoodItem', description: string, id: number, itemName: string, merchantId: number, merchant: { __typename?: 'Merchant', cpname: string } } };
+
+export type DeleteFoodItemMutationVariables = Exact<{
+  foodItemId: Scalars['Int'];
+}>;
+
+
+export type DeleteFoodItemMutation = { __typename?: 'Mutation', deleteFoodItem: boolean };
+
 export type LoginMutationVariables = Exact<{
   usernameOrEmail: Scalars['String'];
   password: Scalars['String'];
@@ -703,6 +722,39 @@ export const ChangeLastNameDocument = gql`
 
 export function useChangeLastNameMutation() {
   return Urql.useMutation<ChangeLastNameMutation, ChangeLastNameMutationVariables>(ChangeLastNameDocument);
+};
+export const CreateFoodItemDocument = gql`
+    mutation createFoodItem($stock: Int!, $cost: Float!, $description: String!, $itemName: String!, $imageURL: String!, $imageAlt: String!) {
+  createFoodItem(
+    stock: $stock
+    cost: $cost
+    description: $description
+    itemName: $itemName
+    imageUrl: $imageURL
+    imageAlt: $imageAlt
+  ) {
+    description
+    id
+    itemName
+    merchantId
+    merchant {
+      cpname
+    }
+  }
+}
+    `;
+
+export function useCreateFoodItemMutation() {
+  return Urql.useMutation<CreateFoodItemMutation, CreateFoodItemMutationVariables>(CreateFoodItemDocument);
+};
+export const DeleteFoodItemDocument = gql`
+    mutation deleteFoodItem($foodItemId: Int!) {
+  deleteFoodItem(foodItemId: $foodItemId)
+}
+    `;
+
+export function useDeleteFoodItemMutation() {
+  return Urql.useMutation<DeleteFoodItemMutation, DeleteFoodItemMutationVariables>(DeleteFoodItemDocument);
 };
 export const LoginDocument = gql`
     mutation Login($usernameOrEmail: String!, $password: String!) {
