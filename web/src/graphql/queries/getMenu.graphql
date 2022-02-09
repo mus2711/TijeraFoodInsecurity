@@ -1,0 +1,11 @@
+query getMenu($merchantId: Int!) {
+  getMenu(merchantId: $merchantId) {
+    itemName
+    id
+    cost
+    description
+    stock
+    imageUrl
+    imageAlt
+  }
+}

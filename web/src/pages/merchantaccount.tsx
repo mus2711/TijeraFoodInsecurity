@@ -1,11 +1,12 @@
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
-import React, { useState } from "react";
+import React from "react";
 import {
   Box,
   Button,
   Heading,
   HStack,
+  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -21,12 +22,10 @@ import { Foodslide } from "../components/foodslide";
 import { Formik, Form } from "formik";
 import { useRouter } from "next/router";
 import { Inputfield } from "../components/inputfield";
-import { TagsandMeQuery, useTagsandMeQuery } from "../generated/graphql";
+import { useTagsandMeQuery } from "../generated/graphql";
 import { useIsAuthMerchant } from "../../utils/useIsAuthMerchant";
 import { Layout } from "../components/layout";
-import { useFileUpload } from "use-file-upload";
-
-const bl = "#5998A0";
+import { findMerchantId } from "../functions/findMerchantId";
 
 const datalist = [
   {
@@ -73,12 +72,25 @@ const datalist = [
 const MerchAccount = () => {
   const router = useRouter();
   useIsAuthMerchant();
-  const [{ data, fetching }] = useTagsandMeQuery();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [{ data, fetching }] = useTagsandMeQuery({
+    variables: { merchantId: findMerchantId() },
+  });
+  console.log(data?.getMenu);
 
-  let [avLogo, setavLogo] = useState("");
-  const [files, selectFiles] = useFileUpload();
-  const [files2, selectFiles2] = useFileUpload();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  let [image, setImage] = React.useState("");
+  let [banner, setBanner] = React.useState<string | undefined>(undefined);
+
+  const onImageChange = (e: any) => {
+    console.log(e.target.files[0]);
+    setImage((image = URL.createObjectURL(e.target.files[0])));
+  };
+
+  const onBannerChange = (e: any) => {
+    console.log(e.target.files[0]);
+    setBanner((image = URL.createObjectURL(e.target.files[0])));
+  };
+
   const initialInputs = {
     description: "",
     item: "",
@@ -118,27 +130,10 @@ const MerchAccount = () => {
   console.log(merchantTagSet);
 
   let body = (
-    // <VStack spacing={6}>
-    //   {datalist.map((p) => (
-    //     <MenuSlide
-    //       imageUrl={p.imageUrl}
-    //       imageAlt={p.imageAlt}
-    //       name={p.name}
-    //       reviewCount={p.reviewCount}
-    //       rating={p.rating}
-    //       cuisine={p.cuisine}
-    //       menulist={p.menulist}
-    //       location={p.location}
-    //       avatarlogo={p.avatarlogo}
-    //       key={p.key}
-    //       modal={false}
-    //     />
-    //   ))}
-    // </VStack>
     <VStack spacing={6}>
       (
       <MenuSlide
-        // imageUrl={files2?.source || data?.me?.merchant?.imageUrl}
+        imageUrl={banner}
         cuisine={merchantTagSet}
         location={
           data?.me?.merchant?.location
@@ -151,7 +146,8 @@ const MerchAccount = () => {
             ? data?.me?.merchant?.averageRating
             : undefined
         }
-        // merchantId={data?.me?.merchant?.id ? data?.me?.merchant?.id : undefined}
+        avatarlogo={image}
+        merchantID={data?.me?.merchant?.id ? data?.me?.merchant?.id : undefined}
         // avatarlogo={files?.source || data?.me?.merchant?.cplogo}
         name={data?.me?.merchant?.cpname}
       />
@@ -160,8 +156,8 @@ const MerchAccount = () => {
 
   let menu = (
     <VStack spacing={6} paddingBottom={"50px"}>
-      {datalist.map((p) => (
-        <Foodslide menulist={p.menulist}></Foodslide>
+      {data?.getMenu.map((p) => (
+        <Foodslide menulist={p}></Foodslide>
       ))}
     </VStack>
   );
@@ -173,34 +169,45 @@ const MerchAccount = () => {
         <Box spacing={8} marginTop={"25px"} gridColumn={"auto"} p="20px">
           {body}
         </Box>
-        <HStack paddingBottom={"20px"}>
-          <Button
-            // onClick={() => {
-            //   selectFiles(
-            //     { accept: "image/*", multiple: false },
-            //     ({ name, size, source, file }) => {
-            //       console.log("Files Selected", { name, size, source, file });
-            //     }
-            //   );
-            // }}
-            colorScheme={"blue"}
-          >
-            Change Logo
-          </Button>
+        <HStack paddingTop={"0px"}>
+          <VStack>
+            <Button size="md" colorScheme={"cyan"} position={"absolute"}>
+              Pick Logo
+            </Button>
+            <Input
+              // size={"md"}
+              type={"file"}
+              accept="image/*"
+              onClick={() => console.log("yes")}
+              className="inputPhoto"
+              onChange={onImageChange}
+              placeholder="Pick an Image"
+              borderWidth={"0px"}
+              opacity={0}
+              width="120px"
+              // height={"100px"}
+            />
+          </VStack>
 
-          <Button
-            // onClick={() => {
-            //   selectFiles2(
-            //     { accept: "image/*", multiple: false },
-            //     ({ name, size, source, file }) => {
-            //       console.log("Files Selected", { name, size, source, file });
-            //     }
-            //   );
-            // }}
-            colorScheme={"red"}
-          >
-            Change Backdrop
-          </Button>
+          {/* <Button colorScheme={"red"}>Pick Backdrop</Button> */}
+          <VStack>
+            <Button size="md" colorScheme={"red"} position={"absolute"}>
+              Pick Backdrop
+            </Button>
+            <Input
+              // size={"md"}
+              type={"file"}
+              accept="image/*"
+              onClick={() => console.log("yes")}
+              className="inputPhoto"
+              onChange={onBannerChange}
+              placeholder="Pick an Image"
+              borderWidth={"0px"}
+              opacity={0}
+              width="120px"
+              // height={"100px"}
+            />
+          </VStack>
         </HStack>
         <Heading>Your Items</Heading>
         <Modal isOpen={isOpen} onClose={onClose}>

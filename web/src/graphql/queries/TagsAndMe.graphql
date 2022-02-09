@@ -24,6 +24,16 @@ query TagsandMe($merchantId: Int!) {
     }
   }
 
+  getMenu(merchantId: $merchantId) {
+    itemName
+    id
+    cost
+    description
+    stock
+    imageUrl
+    imageAlt
+  }
+
   merchantTags(merchantId: $merchantId) {
     tagName
     id

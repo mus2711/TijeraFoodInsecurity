@@ -516,7 +516,14 @@ export type TagsandMeQueryVariables = Exact<{
 }>;
 
 
-export type TagsandMeQuery = { __typename?: 'Query', tags: Array<{ __typename?: 'Tag', tagName: string, id: number }>, me: { __typename?: 'MeResponse', merchant?: Maybe<{ __typename?: 'Merchant', id: number, cpname: string, cplogo?: Maybe<string>, imageUrl?: Maybe<string>, location?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number>, username: string }>, user?: Maybe<{ __typename?: 'User', id: number, firstname: string, lastname: string, username: string, email: string }> }, merchantTags: Array<{ __typename?: 'Tag', tagName: string, id: number }> };
+export type TagsandMeQuery = { __typename?: 'Query', tags: Array<{ __typename?: 'Tag', tagName: string, id: number }>, me: { __typename?: 'MeResponse', merchant?: Maybe<{ __typename?: 'Merchant', id: number, cpname: string, cplogo?: Maybe<string>, imageUrl?: Maybe<string>, location?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number>, username: string }>, user?: Maybe<{ __typename?: 'User', id: number, firstname: string, lastname: string, username: string, email: string }> }, getMenu: Array<{ __typename?: 'FoodItem', itemName: string, id: number, cost: number, description: string, stock: number, imageUrl: string, imageAlt: string }>, merchantTags: Array<{ __typename?: 'Tag', tagName: string, id: number }> };
+
+export type GetMenuQueryVariables = Exact<{
+  merchantId: Scalars['Int'];
+}>;
+
+
+export type GetMenuQuery = { __typename?: 'Query', getMenu: Array<{ __typename?: 'FoodItem', itemName: string, id: number, cost: number, description: string, stock: number, imageUrl: string, imageAlt: string }> };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -789,6 +796,15 @@ export const TagsandMeDocument = gql`
       email
     }
   }
+  getMenu(merchantId: $merchantId) {
+    itemName
+    id
+    cost
+    description
+    stock
+    imageUrl
+    imageAlt
+  }
   merchantTags(merchantId: $merchantId) {
     tagName
     id
@@ -798,6 +814,23 @@ export const TagsandMeDocument = gql`
 
 export function useTagsandMeQuery(options: Omit<Urql.UseQueryArgs<TagsandMeQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<TagsandMeQuery>({ query: TagsandMeDocument, ...options });
+};
+export const GetMenuDocument = gql`
+    query getMenu($merchantId: Int!) {
+  getMenu(merchantId: $merchantId) {
+    itemName
+    id
+    cost
+    description
+    stock
+    imageUrl
+    imageAlt
+  }
+}
+    `;
+
+export function useGetMenuQuery(options: Omit<Urql.UseQueryArgs<GetMenuQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetMenuQuery>({ query: GetMenuDocument, ...options });
 };
 export const MeDocument = gql`
     query Me {
