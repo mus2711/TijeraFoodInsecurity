@@ -95,6 +95,7 @@ const Register_3 = () => {
         gender: String(gender) ?? "",
         phoneNumber: phone,
       });
+      router.push("/search");
     }
   };
   return (

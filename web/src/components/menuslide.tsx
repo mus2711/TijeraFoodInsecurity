@@ -22,6 +22,8 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { HiPencil, HiPlus } from "react-icons/hi";
 import { MdShoppingBasket } from "react-icons/md";
+
+import { useTagsandMeQuery } from "../generated/graphql";
 import { setGlobalState, useGlobalState } from "../state/state";
 
 enum Nothing {
@@ -54,6 +56,7 @@ interface MenuSlideProps {
   modal?: boolean;
   badge?: string;
   scrt?: boolean;
+  id: number;
 }
 let theBasket = [] as {
   picture: string;
@@ -78,10 +81,15 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
   modal = true,
   badge = "New",
   scrt = false,
+  id,
 }) => {
   const [currentBasket] = useGlobalState("userBasket");
   let currentLength: number = useGlobalState("userBasket")[0].length;
   let [basketLength, setBasketLength] = useState(currentLength);
+
+  const [{ data, fetching }] = useTagsandMeQuery({
+    variables: { merchantId: id },
+  });
 
   const addToBasket = (item: {
     picture: string;
@@ -257,7 +265,7 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
           <ModalHeader>Food Menu</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {menulist?.map((p) => (
+            {data?.getMenu?.map((p) => (
               <HStack spacing={2} p="5px" paddingBottom={"20px"}>
                 <Box
                   maxW="80px"
@@ -269,13 +277,14 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
                     maxHeight={"80px"}
                     width={"10vw"}
                     fit={"cover"}
-                    src={p.foodpic}
+                    src={p.imageUrl}
+                    alt={p.imageAlt}
                   ></Image>
                 </Box>
 
                 <Stack textAlign={"left"}>
                   <Text fontWeight={"bold"} maxWidth={"200px"}>
-                    {p.item}
+                    {p.itemName}
                     {/* {p.itemID} */}
                   </Text>
                   <Text fontSize={"12px"} maxWidth={"200px"}>
@@ -284,7 +293,7 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
                 </Stack>
 
                 <Spacer />
-                <Text>${p.price}</Text>
+                <Text>${p.cost}</Text>
                 <IconButton
                   colorScheme={"teal"}
                   aria-label="Menu"
@@ -292,11 +301,11 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
                   padding={"5px"}
                   onClick={() => {
                     addToBasket({
-                      picture: p.foodpic,
-                      title: p.item,
+                      picture: p.imageUrl,
+                      title: p.itemName,
                       desc: p.description,
-                      price: p.price,
-                      itemID: p.itemID,
+                      price: p.cost,
+                      itemID: String(p.id),
                     });
                   }}
                 />

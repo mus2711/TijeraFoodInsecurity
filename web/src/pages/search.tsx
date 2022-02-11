@@ -243,7 +243,7 @@ const Search = () => {
                     location={p.location ? p.location : undefined}
                     // avatarlogo={p.avatarlogo}
                     key={p.id}
-                    merchantID={p.id}
+                    id={p.id}
                   />
                   <Divider />
                 </>
@@ -262,14 +262,14 @@ const Search = () => {
                     location={p.location ? p.location : undefined}
                     // avatarlogo={p.avatarlogo}
                     key={p.id}
-                    merchantID={p.id}
+                    id={p.id}
                   />
                   <Divider />
                 </>
               );
             }
           })}
-          // for demo purpouses
+          {/* // for demo purpouses
           <Accordion allowToggle>
             <AccordionItem>
               <h2>
@@ -296,13 +296,14 @@ const Search = () => {
                       // merchantID={p.merchantID}
                       // key={p.id}
                       scrt={true}
+                      id={1}
                     />
-                    <Divider />
+                    <Divider />---
                   </>
                 ))}
               </AccordionPanel>
             </AccordionItem>
-          </Accordion>
+          </Accordion> */}
         </VStack>
       </>
     );

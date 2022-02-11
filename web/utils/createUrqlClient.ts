@@ -1,4 +1,9 @@
-import { Cache, cacheExchange, QueryInput } from "@urql/exchange-graphcache";
+import {
+  Cache,
+  cacheExchange,
+  query,
+  QueryInput,
+} from "@urql/exchange-graphcache";
 import { SSRExchange } from "next-urql";
 import { dedupExchange, fetchExchange } from "urql";
 import {
@@ -6,6 +11,8 @@ import {
   AddReviewMutation,
   ChangeFirstnameMutation,
   ChangeLastNameMutation,
+  CreateFoodItemMutation,
+  DeleteFoodItemMutation,
   LoginmMutation,
   LoginMutation,
   LogoutmMutation,
@@ -15,6 +22,8 @@ import {
   MerchantsDocument,
   MerchantsQuery,
   RegisterMutation,
+  TagsandMeDocument,
+  TagsandMeQuery,
 } from "../src/generated/graphql";
 import { isServer } from "./isServer";
 
@@ -49,7 +58,7 @@ export const createUrqlClient = (ssrExchange: SSRExchange, ctx: any) => {
                 cache,
                 { query: MeDocument },
                 _result,
-                (result, query) => {
+                (result: any, query) => {
                   if (result.login.errors) {
                     return query;
                   } else {
@@ -66,7 +75,7 @@ export const createUrqlClient = (ssrExchange: SSRExchange, ctx: any) => {
                 cache,
                 { query: MeDocument },
                 _result,
-                (result, query) => {
+                (result: any, query) => {
                   console.log("result", result);
                   if (result.loginm.errors) {
                     return query;
@@ -113,7 +122,7 @@ export const createUrqlClient = (ssrExchange: SSRExchange, ctx: any) => {
                 cache,
                 { query: MeDocument },
                 _result,
-                (result, query) => {
+                (result: any, query) => {
                   if (result.register.errors) {
                     return query;
                   } else {
@@ -159,10 +168,42 @@ export const createUrqlClient = (ssrExchange: SSRExchange, ctx: any) => {
                 cache,
                 { query: MeDocument },
                 _result,
+
                 (result, query) => {
                   if (result.changeLastName) {
                     return {
                       me: result.changeLastName.lastname,
+                    };
+                  }
+                }
+              );
+            },
+            deleteFoodItem: (_result, _, cache, __) => {
+              betterUpdateQuery<DeleteFoodItemMutation, TagsandMeQuery>(
+                cache,
+                { query: TagsandMeDocument },
+                _result,
+                (result, query) => {
+                  if (result.deleteFoodItem) {
+                    console.log("deleting...");
+                    return {
+                      me: query.me,
+                      getMenu: query.getMenu,
+                    };
+                  }
+                }
+              );
+            },
+            createFoodItem: (_result, _, cache, __) => {
+              betterUpdateQuery<CreateFoodItemMutation, TagsandMeQuery>(
+                cache,
+                { query: TagsandMeDocument },
+                _result,
+                (result, query) => {
+                  if (result.createFoodItem) {
+                    console.log("adding...");
+                    return {
+                      getMenu: query.getMenu,
                     };
                   }
                 }

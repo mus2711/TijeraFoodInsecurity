@@ -99,6 +99,12 @@ export type Mutation = {
   changeDOB: User;
   changeDependents: User;
   changeFirstname: User;
+  changeFoodCost: FoodItem;
+  changeFoodDescription: FoodItem;
+  changeFoodImageAlt: FoodItem;
+  changeFoodImageUrl: FoodItem;
+  changeFoodItemName: FoodItem;
+  changeFoodStock: FoodItem;
   changeGender: User;
   changeIncome: User;
   changeLastName: User;
@@ -178,6 +184,42 @@ export type MutationChangeDependentsArgs = {
 
 export type MutationChangeFirstnameArgs = {
   firstname: Scalars['String'];
+};
+
+
+export type MutationChangeFoodCostArgs = {
+  cost: Scalars['Float'];
+  foodItemId: Scalars['Int'];
+};
+
+
+export type MutationChangeFoodDescriptionArgs = {
+  description: Scalars['String'];
+  foodItemId: Scalars['Int'];
+};
+
+
+export type MutationChangeFoodImageAltArgs = {
+  foodItemId: Scalars['Int'];
+  imageAlt: Scalars['String'];
+};
+
+
+export type MutationChangeFoodImageUrlArgs = {
+  foodItemId: Scalars['Int'];
+  imageUrl: Scalars['String'];
+};
+
+
+export type MutationChangeFoodItemNameArgs = {
+  foodItemId: Scalars['Int'];
+  itemName: Scalars['String'];
+};
+
+
+export type MutationChangeFoodStockArgs = {
+  foodItemId: Scalars['Int'];
+  stock: Scalars['Float'];
 };
 
 

@@ -159,6 +159,7 @@ const MerchAccount = () => {
         avatarlogo={image}
         merchantID={data?.me?.merchant?.id ? data?.me?.merchant?.id : undefined}
         name={data?.me?.merchant?.cpname}
+        id={data?.me?.merchant?.id ? data?.me?.merchant?.id : 0}
       />
     </VStack>
   );
@@ -300,14 +301,14 @@ const MerchAccount = () => {
           <Button colorScheme={"teal"} onClick={onOpen}>
             Add Item
           </Button>
-          <Button
+          {/* <Button
             colorScheme="green"
             mr={3}
             onClick={onClose}
             rightIcon={<MdPlusOne />}
           >
             Save
-          </Button>
+          </Button> */}
         </HStack>
         <>{menu}</>
       </VStack>
