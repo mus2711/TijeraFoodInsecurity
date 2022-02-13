@@ -478,6 +478,13 @@ export type AddReviewMutationVariables = Exact<{
 
 export type AddReviewMutation = { __typename?: 'Mutation', addReview: { __typename?: 'Review', comment: string, rating: number, user: { __typename?: 'User', username: string }, merchant: { __typename?: 'Merchant', cpname: string } } };
 
+export type AddToOrderMutationVariables = Exact<{
+  foodItemId: Scalars['Int'];
+}>;
+
+
+export type AddToOrderMutation = { __typename?: 'Mutation', addToOrder: { __typename?: 'OrderItem', orderId: number, order: { __typename?: 'Order', cost?: Maybe<number>, userId: number, merchantId: number }, foodItem: { __typename?: 'FoodItem', itemName: string } } };
+
 export type RegisterUserFinalMutationVariables = Exact<{
   year: Scalars['Int'];
   month: Scalars['Int'];
@@ -591,6 +598,11 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me: { __typename?: 'MeResponse', merchant?: Maybe<{ __typename?: 'Merchant', id: number, cpname: string, cplogo?: Maybe<string>, imageUrl?: Maybe<string>, location?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number>, username: string }>, user?: Maybe<{ __typename?: 'User', id: number, firstname: string, lastname: string, username: string, email: string }> } };
 
+export type MerchantOrdersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MerchantOrdersQuery = { __typename?: 'Query', merchantOrders: Array<{ __typename?: 'OrderResponse', orderItems?: Maybe<Array<{ __typename?: 'OrderItem', orderId: number, foodItemId: number, foodItem: { __typename?: 'FoodItem', itemName: string, cost: number, description: string, id: number, imageUrl: string, imageAlt: string } }>>, order?: Maybe<{ __typename?: 'Order', isComplete: boolean, userId: number, id: number }> }> };
+
 export type MerchantTagsQueryVariables = Exact<{
   merchantId: Scalars['Int'];
 }>;
@@ -614,6 +626,13 @@ export type TagsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type TagsQuery = { __typename?: 'Query', tags: Array<{ __typename?: 'Tag', tagName: string }> };
+
+export type UserOrdersQueryVariables = Exact<{
+  userId: Scalars['Int'];
+}>;
+
+
+export type UserOrdersQuery = { __typename?: 'Query', userOrders: Array<{ __typename?: 'OrderResponse', orderItems?: Maybe<Array<{ __typename?: 'OrderItem', orderId: number, foodItemId: number, order: { __typename?: 'Order', merchantId: number }, foodItem: { __typename?: 'FoodItem', stock: number, cost: number, itemName: string, imageUrl: string, imageAlt: string, description: string } }>> }> };
 
 export const RegularMerchantErrorFragmentDoc = gql`
     fragment RegularMerchantError on FieldMerchantError {
@@ -708,6 +727,25 @@ export const AddReviewDocument = gql`
 
 export function useAddReviewMutation() {
   return Urql.useMutation<AddReviewMutation, AddReviewMutationVariables>(AddReviewDocument);
+};
+export const AddToOrderDocument = gql`
+    mutation addToOrder($foodItemId: Int!) {
+  addToOrder(foodItemId: $foodItemId) {
+    order {
+      cost
+      userId
+      merchantId
+    }
+    foodItem {
+      itemName
+    }
+    orderId
+  }
+}
+    `;
+
+export function useAddToOrderMutation() {
+  return Urql.useMutation<AddToOrderMutation, AddToOrderMutationVariables>(AddToOrderDocument);
 };
 export const RegisterUserFinalDocument = gql`
     mutation registerUserFinal($year: Int!, $month: Int!, $day: Int!, $income: Int!, $dependents: Int!, $country: String!, $gender: String!, $phoneNumber: String!) {
@@ -954,6 +992,33 @@ export const MeDocument = gql`
 export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
 };
+export const MerchantOrdersDocument = gql`
+    query merchantOrders {
+  merchantOrders {
+    orderItems {
+      orderId
+      foodItemId
+      foodItem {
+        itemName
+        cost
+        description
+        id
+        imageUrl
+        imageAlt
+      }
+    }
+    order {
+      isComplete
+      userId
+      id
+    }
+  }
+}
+    `;
+
+export function useMerchantOrdersQuery(options: Omit<Urql.UseQueryArgs<MerchantOrdersQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<MerchantOrdersQuery>({ query: MerchantOrdersDocument, ...options });
+};
 export const MerchantTagsDocument = gql`
     query MerchantTags($merchantId: Int!) {
   merchantTags(merchantId: $merchantId) {
@@ -1023,4 +1088,29 @@ export const TagsDocument = gql`
 
 export function useTagsQuery(options: Omit<Urql.UseQueryArgs<TagsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<TagsQuery>({ query: TagsDocument, ...options });
+};
+export const UserOrdersDocument = gql`
+    query userOrders($userId: Int!) {
+  userOrders(userId: $userId) {
+    orderItems {
+      order {
+        merchantId
+      }
+      orderId
+      foodItem {
+        stock
+        cost
+        itemName
+        imageUrl
+        imageAlt
+        description
+      }
+      foodItemId
+    }
+  }
+}
+    `;
+
+export function useUserOrdersQuery(options: Omit<Urql.UseQueryArgs<UserOrdersQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<UserOrdersQuery>({ query: UserOrdersDocument, ...options });
 };

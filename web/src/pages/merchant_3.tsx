@@ -106,6 +106,7 @@ const Merchant3 = () => {
             cuisine={tags}
             badge="Top"
             name={data?.me.merchant ? data?.me.merchant.cpname : undefined}
+            id={Number(data?.me.merchant?.id)}
           ></MenuSlide>
           <HStack paddingTop={"20px"}>
             <VStack>

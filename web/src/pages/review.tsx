@@ -55,6 +55,8 @@ const review = ({}) => {
             reviewCount={menuProps.reviewCount}
             cuisine={menuProps.cuisine}
             merchantID={menuProps.merchantID}
+            id={menuProps.id}
+            // id={menuProps.merchantID}
           />
           <Formik
             initialValues={initialInputs}

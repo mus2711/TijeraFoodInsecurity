@@ -1,0 +1,21 @@
+query merchantOrders {
+  merchantOrders {
+    orderItems {
+      orderId
+      foodItemId
+      foodItem {
+        itemName
+        cost
+        description
+        id
+        imageUrl
+        imageAlt
+      }
+    }
+    order {
+      isComplete
+      userId
+      id
+    }
+  }
+}

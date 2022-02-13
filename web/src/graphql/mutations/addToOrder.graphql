@@ -1,0 +1,13 @@
+mutation addToOrder($foodItemId: Int!) {
+  addToOrder(foodItemId: $foodItemId) {
+    order {
+      cost
+      userId
+      merchantId
+    }
+    foodItem {
+      itemName
+    }
+    orderId
+  }
+}

@@ -17,15 +17,24 @@ import {
 import { Layout } from "../components/layout";
 import { setGlobalState, useGlobalState } from "../state/state";
 import { HiMinus } from "react-icons/hi";
-
-const bl = "#5998A0";
+import {
+  useAddToOrderMutation,
+  useUserOrdersQuery,
+} from "../generated/graphql";
+import { findUserId } from "../functions/findUserId";
 
 const Search = () => {
   const [currentBasket] = useGlobalState("userBasket");
+  const [, addToOrder] = useAddToOrderMutation();
+  console.log(findUserId());
+  const [{ data }] = useUserOrdersQuery({
+    variables: { userId: Number(findUserId()) },
+  });
+  console.log(data);
   function totalPrice() {
     let totalPr = 0;
     currentBasket.map((p) => {
-      totalPr = totalPr + p.price;
+      totalPr = totalPr + p.cost;
     });
     return totalPr;
   }
@@ -33,17 +42,17 @@ const Search = () => {
   let currentLength: number = useGlobalState("userBasket").length;
 
   const removeFromBasket = (
-    picture: string,
-    title: string,
-    desc: string,
-    price: number,
-    itemID: string
+    imageURL: string,
+    itenName: string,
+    description: string,
+    cost: number,
+    itemID: number
   ) => {
     const removedItem = {
-      picture: picture,
-      title: title,
-      desc: desc,
-      price: price,
+      imageURL: imageURL,
+      itenName: itenName,
+      description: description,
+      cost: cost,
       itemID: itemID,
     };
     let c = -1;
@@ -69,37 +78,37 @@ const Search = () => {
                 borderWidth="1px"
                 borderRadius="lg"
                 overflow="hidden"
-                id={p.itemID}
+                id={String(p.itemID)}
               >
                 <Image
                   maxHeight={"80px"}
                   width={"10vw"}
                   fit={"cover"}
-                  src={p.picture}
+                  src={p.imageUrl}
                 ></Image>
               </Box>
               <Stack textAlign={"left"}>
                 <Text fontWeight={"bold"} maxWidth={"200px"}>
-                  {p.title}
+                  {p.itemName}
                 </Text>
                 <Text fontSize={"12px"} maxWidth={"200px"}>
-                  {p.desc}
+                  {p.description}
                 </Text>
               </Stack>
               <Spacer />
-              <Text>${p.price}</Text>
+              <Text>${p.cost}</Text>
               <IconButton
                 colorScheme={"red"}
-                value={p.title}
+                value={p.itemName}
                 aria-label="Menu"
                 icon={<HiMinus size={"20px"} />}
                 padding={"5px"}
                 onClick={() => {
                   removeFromBasket(
-                    p.picture,
-                    p.title,
-                    p.desc,
-                    p.price,
+                    p.imageUrl,
+                    p.itemName,
+                    p.description,
+                    p.cost,
                     p.itemID
                   );
                 }}
@@ -109,7 +118,14 @@ const Search = () => {
           <Box>
             <Text>Total: ${currentPrice}</Text>
           </Box>
-          <Button colorScheme={"teal"}>Checkout</Button>
+          <Button
+            colorScheme={"teal"}
+            onClick={() => {
+              currentBasket.map((p) => addToOrder({ foodItemId: p.itemID }));
+            }}
+          >
+            Checkout
+          </Button>
           <Button
             colorScheme={"red"}
             onClick={() => {

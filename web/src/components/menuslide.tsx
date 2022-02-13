@@ -47,7 +47,7 @@ interface MenuSlideProps {
   menulist?: {
     item: string;
     description: string;
-    foodpic: string;
+    imageUrl: string;
     price: number;
     itemID: string;
   }[];
@@ -59,11 +59,11 @@ interface MenuSlideProps {
   id: number;
 }
 let theBasket = [] as {
-  picture: string;
-  title: string;
-  desc: string;
-  price: number;
-  itemID: string;
+  imageUrl: string;
+  itemName: string;
+  description: string;
+  cost: number;
+  itemID: number;
 }[];
 export const MenuSlide: React.FC<MenuSlideProps> = ({
   imageAlt = "...",
@@ -73,8 +73,6 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
   rating = 0,
   cuisine = [],
   location = "TS Food Security St.",
-  route,
-  menulist,
   avatarlogo,
   key,
   merchantID,
@@ -92,11 +90,11 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
   });
 
   const addToBasket = (item: {
-    picture: string;
-    title: string;
-    desc: string;
-    price: number;
-    itemID: string;
+    imageUrl: string;
+    itemName: string;
+    description: string;
+    cost: number;
+    itemID: number;
   }) => {
     theBasket = [...theBasket, item];
     setGlobalState("userBasket", [...currentBasket, item]);
@@ -117,11 +115,12 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
       avatarlogo: avatarlogo,
       key: key,
       modal: false,
+      id: id,
     });
 
     router.push("/review");
   };
-  const bl = "#5998A0";
+
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
   let menu = null;
@@ -140,29 +139,29 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
   if (scrt == true) {
     const dummyMenu = [
       {
-        item: "Cheese Burger",
-        foodpic:
+        itemName: "Cheese Burger",
+        imageUrl:
           "https://i.ibb.co/ZYYqy2x/f0b1b4305b287bf541822022e1883694.jpg",
-        price: 8,
+        cost: 8,
         description: "Delicious Hamburger with Cheese",
-        itemID: "039043",
+        itemID: 34,
       },
       {
-        item: "Fries",
-        foodpic:
+        itemName: "Fries",
+        imageUrl:
           "https://i.ibb.co/ZYYqy2x/f0b1b4305b287bf541822022e1883694.jpg",
         price: 3,
         description:
           "Fried potatoes with choice of 2 sauces: Ketchup, Mayo, BBQ, Ranch.",
-        itemID: "654043",
+        itemNameID: 43,
       },
       {
-        item: "Chocolate Milkshake",
-        foodpic:
+        itemName: "Chocolate Milkshake",
+        imageUrl:
           "https://i.ibb.co/ZYYqy2x/f0b1b4305b287bf541822022e1883694.jpg",
         price: 6,
         description: "Made with Whole Milk, and Chocolate Ice Cream.",
-        itemID: "12343",
+        itemID: 53,
       },
     ];
     menu = (
@@ -189,13 +188,13 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
                     maxHeight={"80px"}
                     width={"10vw"}
                     fit={"cover"}
-                    src={p.foodpic}
+                    src={p.imageUrl}
                   ></Image>
                 </Box>
 
                 <Stack textAlign={"left"}>
                   <Text fontWeight={"bold"} maxWidth={"200px"}>
-                    {p.item}
+                    {p.itemName}
                     {/* {p.itemID} */}
                   </Text>
                   <Text fontSize={"12px"} maxWidth={"200px"}>
@@ -212,11 +211,11 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
                   padding={"5px"}
                   onClick={() => {
                     addToBasket({
-                      picture: p.foodpic,
-                      title: p.item,
-                      desc: p.description,
-                      price: p.price,
-                      itemID: p.itemID,
+                      imageUrl: p.imageUrl,
+                      itemName: p.itemName,
+                      description: p.description,
+                      cost: p.cost ? p.cost : 0,
+                      itemID: p.itemID ? p.itemID : 0,
                     });
                   }}
                 />
@@ -301,11 +300,11 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
                   padding={"5px"}
                   onClick={() => {
                     addToBasket({
-                      picture: p.imageUrl,
-                      title: p.itemName,
-                      desc: p.description,
-                      price: p.cost,
-                      itemID: String(p.id),
+                      imageUrl: p.imageUrl,
+                      itemName: p.itemName,
+                      description: p.description,
+                      cost: p.cost,
+                      itemID: p.id,
                     });
                   }}
                 />

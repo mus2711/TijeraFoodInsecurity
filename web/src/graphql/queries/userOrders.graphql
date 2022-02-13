@@ -1,0 +1,19 @@
+query userOrders($userId: Int!) {
+  userOrders(userId: $userId) {
+    orderItems {
+      order {
+        merchantId
+      }
+      orderId
+      foodItem {
+        stock
+        cost
+        itemName
+        imageUrl
+        imageAlt
+        description
+      }
+      foodItemId
+    }
+  }
+}

@@ -2,11 +2,11 @@ import { createGlobalState } from "react-hooks-global-state";
 
 const { setGlobalState, useGlobalState } = createGlobalState({
   userBasket: [] as {
-    picture: string;
-    title: string;
-    desc: string;
-    price: number;
-    itemID: string;
+    imageUrl: string;
+    itemName: string;
+    description: string;
+    cost: number;
+    itemID: number;
   }[],
   reviewRes: {} as {
     imageUrl: string;
@@ -20,6 +20,7 @@ const { setGlobalState, useGlobalState } = createGlobalState({
     avatarlogo?: string;
     key?: number;
     modal?: boolean;
+    id: number;
   },
 });
 
