@@ -15,11 +15,20 @@ import {
   Resolver,
   Root,
 } from "type-graphql";
-import { COOKIE_NAME, EMAIL_REGEX, USERNAME_REGEX } from "../constants";
+import {
+  COOKIE_NAME,
+  EMAIL_REGEX,
+  MERCHANT_IMAGES_PATH,
+  MERCHANT_LOGOS_PATH,
+  USERNAME_REGEX,
+} from "../constants";
 import { Merchant } from "../entities/Merchant";
 import { MyContext } from "../types";
 import { Tag } from "../entities/Tag";
 import { MerchantTag } from "../entities/MerchantTag";
+import { FileUpload, GraphQLUpload } from "graphql-upload";
+import { createWriteStream } from "fs";
+import path from "path";
 
 @InputType()
 class RegisterMerchantInput {
@@ -250,7 +259,7 @@ export default class MerchantResolver {
   @Mutation(() => Boolean)
   logoutm(@Ctx() { req, res }: MyContext): Promise<boolean> {
     return new Promise((resolve) =>
-      req.session.destroy((err) => {
+      req.session.destroy((err: any) => {
         res.clearCookie(COOKIE_NAME);
         if (err) resolve(false);
 
@@ -259,32 +268,55 @@ export default class MerchantResolver {
     );
   }
 
-  @Mutation(() => Merchant)
-  async addImage(
+  @Mutation(() => Boolean)
+  async addMerchantImage(
     @Ctx() { req }: MyContext,
-    @Arg("imageUrl", () => String) imageUrl: string,
-    @Arg("imageAlt", () => String, { nullable: true }) imageAlt?: string
-  ): Promise<Merchant> {
-    if (!req.session.merchantId) throw new Error("Merchant not Logged in");
-    const merchant = await Merchant.findOne(req.session.merchantId);
+    @Arg("image", () => GraphQLUpload)
+    { createReadStream }: FileUpload
+  ): Promise<Boolean> {
+    const merchantId = req.session.merchantId;
+    if (!merchantId) throw new Error("Merchant not Logged in");
+    const merchant = await Merchant.findOne(merchantId);
     if (!merchant) throw new Error("Merchant not found");
 
-    merchant.imageUrl = imageUrl;
-    if (imageAlt) merchant.imageAlt = imageAlt;
-    return await merchant.save();
+    const imageUrl = path.join(__dirname, MERCHANT_IMAGES_PATH, merchantId);
+
+    return await new Promise(async (resolve, reject) =>
+      createReadStream()
+        .pipe(createWriteStream(imageUrl))
+        .on("finish", async () => {
+          merchant.imageUrl = imageUrl;
+          merchant.imageAlt = merchant.cpname;
+          await merchant.save();
+          resolve(true);
+        })
+        .on("error", reject)
+    );
   }
 
-  @Mutation(() => Merchant)
-  async addLogo(
+  @Mutation(() => Boolean)
+  async addMerchantLogo(
     @Ctx() { req }: MyContext,
-    @Arg("cplogo", () => String) cplogo: string
-  ): Promise<Merchant> {
-    if (!req.session.merchantId) throw new Error("Merchant not Logged in");
-    const merchant = await Merchant.findOne(req.session.merchantId);
+    @Arg("image", () => GraphQLUpload)
+    { createReadStream }: FileUpload
+  ): Promise<Boolean> {
+    const merchantId = req.session.merchantId;
+    if (!merchantId) throw new Error("Merchant not Logged in");
+    const merchant = await Merchant.findOne(merchantId);
     if (!merchant) throw new Error("Merchant not found");
 
-    merchant.cplogo = cplogo;
-    return await merchant.save();
+    const imageUrl = path.join(__dirname, MERCHANT_LOGOS_PATH, merchantId);
+
+    return await new Promise(async (resolve, reject) =>
+      createReadStream()
+        .pipe(createWriteStream(imageUrl))
+        .on("finish", async () => {
+          merchant.cplogo = imageUrl;
+          await merchant.save();
+          resolve(true);
+        })
+        .on("error", reject)
+    );
   }
 
   @Mutation(() => Merchant)

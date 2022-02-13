@@ -3,13 +3,20 @@ import connectRedis from "connect-redis";
 import express from "express";
 import session from "express-session";
 import redis from "redis";
-import { COOKIE_NAME, DB_NAME, TEST_DB_NAME, __prod__ } from "./constants";
+import {
+  COOKIE_NAME,
+  DB_NAME,
+  MAX_FILE_SIZE,
+  TEST_DB_NAME,
+  __prod__,
+} from "./constants";
 import cors from "cors";
 import { createSchema } from "./resolvers/graphql-schema";
 import { createConnection } from "typeorm";
 import { typeormConfig } from "./typeorm.config";
 
 import dotenv from "dotenv-safe";
+import { graphqlUploadExpress } from "graphql-upload";
 
 dotenv.config({
   allowEmptyValues: !__prod__,
@@ -31,6 +38,8 @@ const main = async () => {
       origin: `${origin}`,
     })
   );
+
+  app.use(graphqlUploadExpress({ maxFileSize: MAX_FILE_SIZE, maxFiles: 10 }));
 
   const redisClient = redis.createClient();
   const RedisStore = connectRedis(session);
@@ -62,6 +71,7 @@ const main = async () => {
     context: ({ req, res }) => {
       return { req, res };
     },
+    uploads: false,
   });
   apolloServer.applyMiddleware({ app, cors: false });
 
