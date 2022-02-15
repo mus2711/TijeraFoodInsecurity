@@ -1,8 +1,11 @@
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
-import { useUserOrdersQuery } from "../generated/graphql";
+import {
+  useCompleteOrderMutation,
+  useUserOrdersQuery,
+} from "../generated/graphql";
 import React from "react";
-import { Badge, Box, Divider, HStack, VStack } from "@chakra-ui/react";
+import { Badge, Box, Button, Divider, HStack, VStack } from "@chakra-ui/react";
 import { Layout } from "../components/layout";
 import { findUserId } from "../functions/findUserId";
 
@@ -10,6 +13,7 @@ const userorders = () => {
   const [{ data }] = useUserOrdersQuery({
     variables: { userId: findUserId() },
   });
+  const [, completeOrder] = useCompleteOrderMutation();
   const orders = () => {
     console.log("merchant orders: ", data?.userOrders);
   };
@@ -20,6 +24,18 @@ const userorders = () => {
         <Box as="span" ml="2" color="gray.600" fontSize="sm">
           {data?.userOrders ? data?.userOrders.length : "NaN"} Orders
         </Box>
+        <Badge size={"xl"} colorScheme={"black"} pt={-5}>
+          Your User Id: {findUserId()}
+        </Badge>
+        <Button
+          colorScheme={"cyan"}
+          size={"sm"}
+          onClick={() => {
+            completeOrder();
+          }}
+        >
+          Receievd your Orders?
+        </Button>
         {data?.userOrders.map((p) => (
           <>
             <VStack>

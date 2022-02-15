@@ -515,6 +515,11 @@ export type ChangeLastNameMutationVariables = Exact<{
 
 export type ChangeLastNameMutation = { __typename?: 'Mutation', changeLastName: { __typename?: 'User', firstname: string, lastname: string } };
 
+export type CompleteOrderMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CompleteOrderMutation = { __typename?: 'Mutation', completeOrder: { __typename?: 'Order', isComplete: boolean, userId: number, merchantId: number } };
+
 export type CreateFoodItemMutationVariables = Exact<{
   stock: Scalars['Int'];
   cost: Scalars['Float'];
@@ -607,10 +612,15 @@ export type MerchantQueryVariables = Exact<{
 
 export type MerchantQuery = { __typename?: 'Query', merchant?: Maybe<{ __typename?: 'Merchant', cpname: string }> };
 
+export type MerchantCurrentOrdersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MerchantCurrentOrdersQuery = { __typename?: 'Query', merchantCurrentOrders: Array<{ __typename?: 'OrderResponse', orderItems?: Maybe<Array<{ __typename?: 'OrderItem', orderId: number, foodItemId: number, foodItem: { __typename?: 'FoodItem', itemName: string, cost: number, description: string, id: number, imageUrl: string, imageAlt: string, merchantId: number } }>>, order?: Maybe<{ __typename?: 'Order', isComplete: boolean, userId: number, id: number, user: { __typename?: 'User', firstname: string, lastname: string } }> }> };
+
 export type MerchantOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MerchantOrdersQuery = { __typename?: 'Query', merchantOrders: Array<{ __typename?: 'OrderResponse', orderItems?: Maybe<Array<{ __typename?: 'OrderItem', orderId: number, foodItemId: number, foodItem: { __typename?: 'FoodItem', itemName: string, cost: number, description: string, id: number, imageUrl: string, imageAlt: string, merchantId: number } }>>, order?: Maybe<{ __typename?: 'Order', isComplete: boolean, userId: number, id: number }> }> };
+export type MerchantOrdersQuery = { __typename?: 'Query', merchantOrders: Array<{ __typename?: 'OrderResponse', orderItems?: Maybe<Array<{ __typename?: 'OrderItem', orderId: number, foodItemId: number, foodItem: { __typename?: 'FoodItem', itemName: string, cost: number, description: string, id: number, imageUrl: string, imageAlt: string, merchantId: number } }>>, order?: Maybe<{ __typename?: 'Order', isComplete: boolean, userId: number, id: number, user: { __typename?: 'User', firstname: string, lastname: string } }> }> };
 
 export type MerchantTagsQueryVariables = Exact<{
   merchantId: Scalars['Int'];
@@ -635,6 +645,13 @@ export type TagsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type TagsQuery = { __typename?: 'Query', tags: Array<{ __typename?: 'Tag', tagName: string }> };
+
+export type UserCurrentOrderQueryVariables = Exact<{
+  userId: Scalars['Int'];
+}>;
+
+
+export type UserCurrentOrderQuery = { __typename?: 'Query', userCurrentOrder: { __typename?: 'OrderResponse', orderItems?: Maybe<Array<{ __typename?: 'OrderItem', orderId: number, foodItemId: number, order: { __typename?: 'Order', merchantId: number }, foodItem: { __typename?: 'FoodItem', stock: number, cost: number, itemName: string, imageUrl: string, imageAlt: string, description: string } }>> } };
 
 export type UserOrdersQueryVariables = Exact<{
   userId: Scalars['Int'];
@@ -811,6 +828,19 @@ export const ChangeLastNameDocument = gql`
 
 export function useChangeLastNameMutation() {
   return Urql.useMutation<ChangeLastNameMutation, ChangeLastNameMutationVariables>(ChangeLastNameDocument);
+};
+export const CompleteOrderDocument = gql`
+    mutation completeOrder {
+  completeOrder {
+    isComplete
+    userId
+    merchantId
+  }
+}
+    `;
+
+export function useCompleteOrderMutation() {
+  return Urql.useMutation<CompleteOrderMutation, CompleteOrderMutationVariables>(CompleteOrderDocument);
 };
 export const CreateFoodItemDocument = gql`
     mutation createFoodItem($stock: Int!, $cost: Float!, $description: String!, $itemName: String!, $imageURL: String!, $imageAlt: String!) {
@@ -1016,6 +1046,38 @@ export const MerchantDocument = gql`
 export function useMerchantQuery(options: Omit<Urql.UseQueryArgs<MerchantQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MerchantQuery>({ query: MerchantDocument, ...options });
 };
+export const MerchantCurrentOrdersDocument = gql`
+    query merchantCurrentOrders {
+  merchantCurrentOrders {
+    orderItems {
+      orderId
+      foodItemId
+      foodItem {
+        itemName
+        cost
+        description
+        id
+        imageUrl
+        imageAlt
+        merchantId
+      }
+    }
+    order {
+      user {
+        firstname
+        lastname
+      }
+      isComplete
+      userId
+      id
+    }
+  }
+}
+    `;
+
+export function useMerchantCurrentOrdersQuery(options: Omit<Urql.UseQueryArgs<MerchantCurrentOrdersQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<MerchantCurrentOrdersQuery>({ query: MerchantCurrentOrdersDocument, ...options });
+};
 export const MerchantOrdersDocument = gql`
     query merchantOrders {
   merchantOrders {
@@ -1033,6 +1095,10 @@ export const MerchantOrdersDocument = gql`
       }
     }
     order {
+      user {
+        firstname
+        lastname
+      }
       isComplete
       userId
       id
@@ -1113,6 +1179,31 @@ export const TagsDocument = gql`
 
 export function useTagsQuery(options: Omit<Urql.UseQueryArgs<TagsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<TagsQuery>({ query: TagsDocument, ...options });
+};
+export const UserCurrentOrderDocument = gql`
+    query userCurrentOrder($userId: Int!) {
+  userCurrentOrder(userId: $userId) {
+    orderItems {
+      order {
+        merchantId
+      }
+      orderId
+      foodItem {
+        stock
+        cost
+        itemName
+        imageUrl
+        imageAlt
+        description
+      }
+      foodItemId
+    }
+  }
+}
+    `;
+
+export function useUserCurrentOrderQuery(options: Omit<Urql.UseQueryArgs<UserCurrentOrderQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<UserCurrentOrderQuery>({ query: UserCurrentOrderDocument, ...options });
 };
 export const UserOrdersDocument = gql`
     query userOrders($userId: Int!) {

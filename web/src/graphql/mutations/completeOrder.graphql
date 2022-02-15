@@ -1,0 +1,7 @@
+mutation completeOrder {
+  completeOrder {
+    isComplete
+    userId
+    merchantId
+  }
+}

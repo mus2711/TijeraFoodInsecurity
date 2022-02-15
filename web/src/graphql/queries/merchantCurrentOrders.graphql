@@ -1,5 +1,5 @@
-query merchantOrders {
-  merchantOrders {
+query merchantCurrentOrders {
+  merchantCurrentOrders {
     orderItems {
       orderId
       foodItemId
