@@ -17,25 +17,15 @@ import {
 import { Layout } from "../components/layout";
 import { setGlobalState, useGlobalState } from "../state/state";
 import { HiMinus } from "react-icons/hi";
-import {
-  useAddToOrderMutation,
-  useMerchantQuery,
-  useUserOrdersQuery,
-} from "../generated/graphql";
-import { findUserId } from "../functions/findUserId";
-import { findMerchantId } from "../functions/findMerchantId";
+import { useAddToOrderMutation, useMerchantQuery } from "../generated/graphql";
 
-const Search = () => {
+const Checkout = () => {
   const [currentBasket] = useGlobalState("userBasket");
+
   const [currentMerchant] = useGlobalState("basketMerchant");
   const [, addToOrder] = useAddToOrderMutation();
   const [{ data }] = useMerchantQuery({ variables: { id: currentMerchant } });
   console.log(data);
-
-  // const [{ data }] = useUserOrdersQuery({
-  //   variables: { userId: Number(findUserId()) },
-  // });
-  // console.log("user orders: ", data);
 
   function totalPrice() {
     let totalPr = 0;
@@ -46,33 +36,18 @@ const Search = () => {
   }
 
   let [currentPrice, setCurrentPrice] = useState(totalPrice());
-  let currentLength: number = useGlobalState("userBasket").length;
 
-  const removeFromBasket = (
-    imageURL: string,
-    itenName: string,
-    description: string,
-    cost: number,
-    itemID: number
-  ) => {
-    const removedItem = {
-      imageURL: imageURL,
-      itenName: itenName,
-      description: description,
-      cost: cost,
-      itemID: itemID,
-    };
-    let c = -1;
-    currentBasket.map((p) => {
-      //   console.log(p);
-      c += 1;
-      if (JSON.stringify(p) === JSON.stringify(removedItem)) {
-        currentBasket.splice(c, 1);
-        setGlobalState("userBasket", [...currentBasket]);
-        setCurrentPrice(totalPrice());
-      }
-    });
+  const removeFromBasket = (id: number) => {
+    currentBasket.splice(id, 1);
+    setGlobalState("userBasket", currentBasket);
+    setCurrentPrice(totalPrice());
+    if (currentBasket.length == 0) {
+      setGlobalState("userBasket", []);
+      setGlobalState("basketMerchant", 0);
+      setCurrentPrice((currentPrice = 0));
+    }
   };
+
   return (
     <Layout title="Checkout">
       <Flex direction="column" justifyContent="center" alignItems="center">
@@ -84,7 +59,7 @@ const Search = () => {
         ) : null}
 
         <VStack pt={10} pb={10}>
-          {currentBasket.map((p) => (
+          {currentBasket.map((p, value) => (
             <HStack>
               <Box
                 maxW="80px"
@@ -100,6 +75,7 @@ const Search = () => {
                   src={p.imageUrl}
                 ></Image>
               </Box>
+              <Spacer />
               <Stack textAlign={"left"}>
                 <Text fontWeight={"bold"} maxWidth={"200px"}>
                   {p.itemName}
@@ -110,6 +86,7 @@ const Search = () => {
               </Stack>
               <Spacer />
               <Text>${p.cost}</Text>
+              <Spacer />
               <IconButton
                 colorScheme={"red"}
                 value={p.itemName}
@@ -117,17 +94,13 @@ const Search = () => {
                 icon={<HiMinus size={"20px"} />}
                 padding={"5px"}
                 onClick={() => {
-                  removeFromBasket(
-                    p.imageUrl,
-                    p.itemName,
-                    p.description,
-                    p.cost,
-                    p.itemID
-                  );
+                  console.log(value);
+                  removeFromBasket(value);
                 }}
               />
             </HStack>
           ))}
+
           <Box pt={5} pb={10}>
             <Text>Total: ${currentPrice}</Text>
           </Box>
@@ -146,6 +119,7 @@ const Search = () => {
             colorScheme={"red"}
             onClick={() => {
               setGlobalState("userBasket", []);
+              setGlobalState("basketMerchant", 0);
               setCurrentPrice((currentPrice = 0));
             }}
           >
@@ -157,4 +131,4 @@ const Search = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: true })(Search);
+export default withUrqlClient(createUrqlClient, { ssr: true })(Checkout);
