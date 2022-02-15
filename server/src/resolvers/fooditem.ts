@@ -14,6 +14,10 @@ import { Merchant } from "../entities/Merchant";
 import { OrderItem } from "../entities/OrderItem";
 import { MyContext } from "../types";
 import { Order } from "../entities/Order";
+// import { FileUpload, GraphQLUpload } from "graphql-upload";
+// import { FOODITEM_IMAGES_PATH } from "../constants";
+// import path from "path";
+// import { createWriteStream } from "fs";
 
 @Resolver(FoodItem)
 export default class FoodItemResolver {
@@ -102,45 +106,42 @@ export default class FoodItemResolver {
     return await foodItem.save();
   }
 
-  @Mutation(() => FoodItem)
-  async changeFoodImageUrl(
-    @Ctx() { req }: MyContext,
-    @Arg("foodItemId", () => Int) foodItemId: number,
-    @Arg("imageUrl", () => String) imageUrl: string
-  ): Promise<FoodItem> {
-    const merchantId = req.session.merchantId;
-    if (!merchantId) throw new Error("Merchant not logged in.");
+  // @Mutation(() => Boolean)
+  // async changeFoodImage(
+  //   // @Ctx() { req }: MyContext,
+  //   @Arg("image", () => GraphQLUpload) { createReadStream }: FileUpload,
+  //   @Arg("foodItemId", () => Int) foodItemId: number
+  // ): Promise<Boolean> {
+  //   console.log(foodItemId);
+  //   // const merchantId = req.session.merchantId;
+  //   // if (!merchantId) throw new Error("Merchant not logged in.");
 
-    const foodItem = await FoodItem.findOne({ id: foodItemId });
-    if (!foodItem) throw new Error("Food item not found");
+  //   const foodItem = await FoodItem.findOne({ id: foodItemId });
+  //   if (!foodItem) throw new Error("Food item not found");
 
-    if (foodItem.merchantId != parseInt(merchantId)) {
-      throw new Error("Food item does not belong to current merchant.");
-    }
+  //   // if (foodItem.merchantId != parseInt(merchantId)) {
+  //   // throw new Error("Food item does not belong to current merchant.");
+  //   // }
 
-    foodItem.imageUrl = imageUrl;
-    return await foodItem.save();
-  }
+  //   const imageUrl = path.join(
+  //     __dirname,
+  //     FOODITEM_IMAGES_PATH,
+  //     foodItemId.toString()
+  //   );
 
-  @Mutation(() => FoodItem)
-  async changeFoodImageAlt(
-    @Ctx() { req }: MyContext,
-    @Arg("foodItemId", () => Int) foodItemId: number,
-    @Arg("imageAlt", () => String) imageAlt: string
-  ): Promise<FoodItem> {
-    const merchantId = req.session.merchantId;
-    if (!merchantId) throw new Error("Merchant not logged in.");
-
-    const foodItem = await FoodItem.findOne({ id: foodItemId });
-    if (!foodItem) throw new Error("Food item not found");
-
-    if (foodItem.merchantId != parseInt(merchantId)) {
-      throw new Error("Food item does not belong to current merchant.");
-    }
-
-    foodItem.imageAlt = imageAlt;
-    return await foodItem.save();
-  }
+  //   return await new Promise(async (resolve, reject) =>
+  //     createReadStream()
+  //       .pipe(createWriteStream(imageUrl))
+  //       .on("finish", async () => {
+  //         foodItem.imageUrl = imageUrl;
+  //         foodItem.imageAlt = foodItem.itemName;
+  //         console.log(imageUrl);
+  //         await foodItem.save();
+  //         resolve(true);
+  //       })
+  //       .on("error", reject)
+  //   );
+  // }
 
   @Mutation(() => FoodItem)
   async changeFoodCost(
@@ -226,6 +227,10 @@ export default class FoodItemResolver {
         merchantId: foodItem.merchantId,
         isComplete: false,
       }).save();
+    }
+
+    if (order.merchantId != foodItem.merchantId) {
+      throw new Error("You have an ongoing order with another merchant");
     }
 
     foodItem.stock -= 1;
