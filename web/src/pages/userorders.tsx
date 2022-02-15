@@ -1,24 +1,26 @@
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
-import { useMerchantOrdersQuery } from "../generated/graphql";
+import { useUserOrdersQuery } from "../generated/graphql";
 import React from "react";
 import { Badge, Box, Divider, HStack, VStack } from "@chakra-ui/react";
 import { Layout } from "../components/layout";
-import { findMerchantId } from "../functions/findMerchantId";
+import { findUserId } from "../functions/findUserId";
 
-const orders = () => {
-  const [{ data }] = useMerchantOrdersQuery();
+const userorders = () => {
+  const [{ data }] = useUserOrdersQuery({
+    variables: { userId: findUserId() },
+  });
   const orders = () => {
-    console.log("merchant orders: ", data?.merchantOrders);
+    console.log("merchant orders: ", data?.userOrders);
   };
   orders();
   return (
     <Layout title="Review History">
       <VStack spacing={12} paddingBottom={"40px"} borderColor={"grey"}>
         <Box as="span" ml="2" color="gray.600" fontSize="sm">
-          {data?.merchantOrders ? data?.merchantOrders.length : "NaN"} Orders
+          {data?.userOrders ? data?.userOrders.length : "NaN"} Orders
         </Box>
-        {data?.merchantOrders.map((p) => (
+        {data?.userOrders.map((p) => (
           <>
             <VStack>
               <HStack>
@@ -48,12 +50,12 @@ const orders = () => {
                     ))
                   : null}
               </HStack>
-              <Badge colorScheme={"blue"}>
-                Order Complete: {String(p.order?.isComplete)}
-              </Badge>
-              <Badge colorScheme={"green"}>
+              {/* <Badge colorScheme={"blue"}>
+                Order Complete: {String(p.orderItems?.isComplete)}
+              </Badge> */}
+              {/* <Badge colorScheme={"green"}>
                 User Id: {String(p.order?.userId)}
-              </Badge>
+              </Badge> */}
               <Divider colorScheme={"blue"} variant="dashed"></Divider>
             </VStack>
           </>
@@ -63,4 +65,4 @@ const orders = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: true })(orders);
+export default withUrqlClient(createUrqlClient, { ssr: true })(userorders);

@@ -67,6 +67,11 @@ const Login: React.FC<{}> = ({}) => {
                     <Link>Are you a merchant?</Link>
                   </NextLink>
                 </Box>
+                <Box mt={4}>
+                  <NextLink href={"/register_1"}>
+                    <Link>Want to Sign Up?</Link>
+                  </NextLink>
+                </Box>
               </>
 
               <Box mt={6}>

@@ -25,6 +25,7 @@ import { HiUser } from "react-icons/hi";
 import {
   MdFoodBank,
   MdMonetizationOn,
+  MdReceipt,
   MdSettings,
   MdShoppingBasket,
 } from "react-icons/md";
@@ -141,7 +142,7 @@ export const Navbar: React.FC<NavbarProps> = ({ title }) => {
                       Food Search
                     </MenuItem>
                   </NextLink>
-                  <NextLink href={"./"}>
+                  <NextLink href={"./orders"}>
                     <MenuItem
                       icon={<MdMonetizationOn />}
                       command="⌘T"
@@ -215,7 +216,7 @@ export const Navbar: React.FC<NavbarProps> = ({ title }) => {
       </Box>
     );
   } else if (data.me.user) {
-    body = body = (
+    body = (
       <>
         <Box>
           <Flex h={10} alignItems={"center"} justifyContent={"space-between"}>
@@ -243,6 +244,15 @@ export const Navbar: React.FC<NavbarProps> = ({ title }) => {
                         onClick={isOpen ? onClose : onOpen}
                       >
                         Food Search
+                      </MenuItem>
+                    </NextLink>
+                    <NextLink href={"./userorders"}>
+                      <MenuItem
+                        icon={<MdReceipt />}
+                        command="⌘⇧N"
+                        onClick={isOpen ? onClose : onOpen}
+                      >
+                        Your Orders
                       </MenuItem>
                     </NextLink>
                     <NextLink href={"/checkout"}>
