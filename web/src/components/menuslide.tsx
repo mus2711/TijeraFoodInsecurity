@@ -17,6 +17,7 @@ import {
   IconButton,
   Spacer,
   Stack,
+  Heading,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -82,6 +83,7 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
   id,
 }) => {
   const [currentBasket] = useGlobalState("userBasket");
+  const [currentMerchant] = useGlobalState("basketMerchant");
   let currentLength: number = useGlobalState("userBasket")[0].length;
   let [basketLength, setBasketLength] = useState(currentLength);
 
@@ -90,6 +92,7 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
   });
 
   const addToBasket = (item: {
+    merchantId: number;
     imageUrl: string;
     itemName: string;
     description: string;
@@ -97,6 +100,7 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
     itemID: number;
   }) => {
     theBasket = [...theBasket, item];
+    setGlobalState("basketMerchant", id);
     setGlobalState("userBasket", [...currentBasket, item]);
     setBasketLength(basketLength + 1);
     console.log(currentBasket);
@@ -211,6 +215,7 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
                   padding={"5px"}
                   onClick={() => {
                     addToBasket({
+                      merchantId: 0,
                       imageUrl: p.imageUrl,
                       itemName: p.itemName,
                       description: p.description,
@@ -261,9 +266,28 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
           borderRadius="lg"
           bg={"white"}
         >
-          <ModalHeader>Food Menu</ModalHeader>
+          <ModalHeader>
+            {data?.merchant?.cpname}'s Food Menu{" "}
+            <Text fontWeight={300} fontSize={"13px"}>
+              {data?.merchant?.location}
+            </Text>
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
+            {id == currentMerchant || currentMerchant == 0 ? null : (
+              <HStack>
+                <Text>You are currently ordering from another Store: </Text>
+                <Button
+                  colorScheme={"red"}
+                  onClick={() => {
+                    setGlobalState("userBasket", []);
+                    setGlobalState("basketMerchant", 0);
+                  }}
+                >
+                  New Basket
+                </Button>
+              </HStack>
+            )}
             {data?.getMenu?.map((p) => (
               <HStack spacing={2} p="5px" paddingBottom={"20px"}>
                 <Box
@@ -294,18 +318,26 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
                 <Spacer />
                 <Text>${p.cost}</Text>
                 <IconButton
-                  colorScheme={"teal"}
+                  colorScheme={
+                    id == currentMerchant || currentMerchant == 0
+                      ? "teal"
+                      : "red"
+                  }
                   aria-label="Menu"
                   icon={<HiPlus size={"20px"} />}
                   padding={"5px"}
                   onClick={() => {
-                    addToBasket({
-                      imageUrl: p.imageUrl,
-                      itemName: p.itemName,
-                      description: p.description,
-                      cost: p.cost,
-                      itemID: p.id,
-                    });
+                    if (id == currentMerchant || currentMerchant == 0) {
+                      addToBasket({
+                        merchantId: id,
+                        imageUrl: p.imageUrl,
+                        itemName: p.itemName,
+                        description: p.description,
+                        cost: p.cost,
+                        itemID: p.id,
+                      });
+                    } else {
+                    }
                   }}
                 />
               </HStack>

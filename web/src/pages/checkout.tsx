@@ -19,18 +19,24 @@ import { setGlobalState, useGlobalState } from "../state/state";
 import { HiMinus } from "react-icons/hi";
 import {
   useAddToOrderMutation,
+  useMerchantQuery,
   useUserOrdersQuery,
 } from "../generated/graphql";
 import { findUserId } from "../functions/findUserId";
+import { findMerchantId } from "../functions/findMerchantId";
 
 const Search = () => {
   const [currentBasket] = useGlobalState("userBasket");
+  const [currentMerchant] = useGlobalState("basketMerchant");
   const [, addToOrder] = useAddToOrderMutation();
-  console.log(findUserId());
-  const [{ data }] = useUserOrdersQuery({
-    variables: { userId: Number(findUserId()) },
-  });
+  const [{ data }] = useMerchantQuery({ variables: { id: currentMerchant } });
   console.log(data);
+
+  // const [{ data }] = useUserOrdersQuery({
+  //   variables: { userId: Number(findUserId()) },
+  // });
+  // console.log("user orders: ", data);
+
   function totalPrice() {
     let totalPr = 0;
     currentBasket.map((p) => {
@@ -38,6 +44,7 @@ const Search = () => {
     });
     return totalPr;
   }
+
   let [currentPrice, setCurrentPrice] = useState(totalPrice());
   let currentLength: number = useGlobalState("userBasket").length;
 
@@ -70,7 +77,13 @@ const Search = () => {
     <Layout title="Checkout">
       <Flex direction="column" justifyContent="center" alignItems="center">
         <Heading>Your Basket</Heading>
-        <VStack>
+        {data?.merchant !== null ? (
+          <Text>
+            You are current ordering from: <span>{data?.merchant?.cpname}</span>
+          </Text>
+        ) : null}
+
+        <VStack pt={10} pb={10}>
           {currentBasket.map((p) => (
             <HStack>
               <Box
@@ -115,13 +128,16 @@ const Search = () => {
               />
             </HStack>
           ))}
-          <Box>
+          <Box pt={5} pb={10}>
             <Text>Total: ${currentPrice}</Text>
           </Box>
           <Button
             colorScheme={"teal"}
             onClick={() => {
-              currentBasket.map((p) => addToOrder({ foodItemId: p.itemID }));
+              currentBasket.map((p) => {
+                console.log(p.itemID);
+                addToOrder({ foodItemId: p.itemID });
+              });
             }}
           >
             Checkout

@@ -14,6 +14,8 @@ export type Scalars = {
   Float: number;
   /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
   DateTime: any;
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: any;
 };
 
 
@@ -88,9 +90,9 @@ export type MerchantTag = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  addImage: Merchant;
   addLocation: Merchant;
-  addLogo: Merchant;
+  addMerchantImage: Scalars['Boolean'];
+  addMerchantLogo: Scalars['Boolean'];
   addMerchantTag: Scalars['Boolean'];
   addReview: Review;
   addToOrder: OrderItem;
@@ -127,19 +129,18 @@ export type Mutation = {
 };
 
 
-export type MutationAddImageArgs = {
-  imageAlt?: Maybe<Scalars['String']>;
-  imageUrl: Scalars['String'];
-};
-
-
 export type MutationAddLocationArgs = {
   location: Scalars['String'];
 };
 
 
-export type MutationAddLogoArgs = {
-  cplogo: Scalars['String'];
+export type MutationAddMerchantImageArgs = {
+  image: Scalars['Upload'];
+};
+
+
+export type MutationAddMerchantLogoArgs = {
+  image: Scalars['Upload'];
 };
 
 
@@ -420,6 +421,7 @@ export type Tag = {
   updatedAt: Scalars['String'];
 };
 
+
 export type User = {
   __typename?: 'User';
   country?: Maybe<Scalars['String']>;
@@ -584,7 +586,7 @@ export type TagsandMeQueryVariables = Exact<{
 }>;
 
 
-export type TagsandMeQuery = { __typename?: 'Query', tags: Array<{ __typename?: 'Tag', tagName: string, id: number }>, me: { __typename?: 'MeResponse', merchant?: Maybe<{ __typename?: 'Merchant', id: number, cpname: string, cplogo?: Maybe<string>, imageUrl?: Maybe<string>, location?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number>, username: string }>, user?: Maybe<{ __typename?: 'User', id: number, firstname: string, lastname: string, username: string, email: string }> }, getMenu: Array<{ __typename?: 'FoodItem', itemName: string, id: number, cost: number, description: string, stock: number, imageUrl: string, imageAlt: string }>, merchantTags: Array<{ __typename?: 'Tag', tagName: string, id: number }> };
+export type TagsandMeQuery = { __typename?: 'Query', tags: Array<{ __typename?: 'Tag', tagName: string, id: number }>, me: { __typename?: 'MeResponse', merchant?: Maybe<{ __typename?: 'Merchant', id: number, cpname: string, cplogo?: Maybe<string>, imageUrl?: Maybe<string>, location?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number>, username: string }>, user?: Maybe<{ __typename?: 'User', id: number, firstname: string, lastname: string, username: string, email: string }> }, getMenu: Array<{ __typename?: 'FoodItem', itemName: string, id: number, cost: number, description: string, stock: number, imageUrl: string, imageAlt: string }>, merchantTags: Array<{ __typename?: 'Tag', tagName: string, id: number }>, merchant?: Maybe<{ __typename?: 'Merchant', cpname: string, location?: Maybe<string> }> };
 
 export type GetMenuQueryVariables = Exact<{
   merchantId: Scalars['Int'];
@@ -598,10 +600,17 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me: { __typename?: 'MeResponse', merchant?: Maybe<{ __typename?: 'Merchant', id: number, cpname: string, cplogo?: Maybe<string>, imageUrl?: Maybe<string>, location?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number>, username: string }>, user?: Maybe<{ __typename?: 'User', id: number, firstname: string, lastname: string, username: string, email: string }> } };
 
+export type MerchantQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type MerchantQuery = { __typename?: 'Query', merchant?: Maybe<{ __typename?: 'Merchant', cpname: string }> };
+
 export type MerchantOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MerchantOrdersQuery = { __typename?: 'Query', merchantOrders: Array<{ __typename?: 'OrderResponse', orderItems?: Maybe<Array<{ __typename?: 'OrderItem', orderId: number, foodItemId: number, foodItem: { __typename?: 'FoodItem', itemName: string, cost: number, description: string, id: number, imageUrl: string, imageAlt: string } }>>, order?: Maybe<{ __typename?: 'Order', isComplete: boolean, userId: number, id: number }> }> };
+export type MerchantOrdersQuery = { __typename?: 'Query', merchantOrders: Array<{ __typename?: 'OrderResponse', orderItems?: Maybe<Array<{ __typename?: 'OrderItem', orderId: number, foodItemId: number, foodItem: { __typename?: 'FoodItem', itemName: string, cost: number, description: string, id: number, imageUrl: string, imageAlt: string, merchantId: number } }>>, order?: Maybe<{ __typename?: 'Order', isComplete: boolean, userId: number, id: number }> }> };
 
 export type MerchantTagsQueryVariables = Exact<{
   merchantId: Scalars['Int'];
@@ -941,6 +950,10 @@ export const TagsandMeDocument = gql`
     tagName
     id
   }
+  merchant(id: $merchantId) {
+    cpname
+    location
+  }
 }
     `;
 
@@ -992,6 +1005,17 @@ export const MeDocument = gql`
 export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
 };
+export const MerchantDocument = gql`
+    query Merchant($id: Int!) {
+  merchant(id: $id) {
+    cpname
+  }
+}
+    `;
+
+export function useMerchantQuery(options: Omit<Urql.UseQueryArgs<MerchantQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<MerchantQuery>({ query: MerchantDocument, ...options });
+};
 export const MerchantOrdersDocument = gql`
     query merchantOrders {
   merchantOrders {
@@ -1005,6 +1029,7 @@ export const MerchantOrdersDocument = gql`
         id
         imageUrl
         imageAlt
+        merchantId
       }
     }
     order {

@@ -38,4 +38,8 @@ query TagsandMe($merchantId: Int!) {
     tagName
     id
   }
+  merchant(id: $merchantId) {
+    cpname
+    location
+  }
 }

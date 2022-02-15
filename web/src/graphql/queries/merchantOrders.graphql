@@ -10,6 +10,7 @@ query merchantOrders {
         id
         imageUrl
         imageAlt
+        merchantId
       }
     }
     order {
