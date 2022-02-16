@@ -272,14 +272,20 @@ export default class MerchantResolver {
   async addMerchantImage(
     @Ctx() { req }: MyContext,
     @Arg("image", () => GraphQLUpload)
-    { createReadStream }: FileUpload
+    { createReadStream, filename }: FileUpload
   ): Promise<Boolean> {
     const merchantId = req.session.merchantId;
     if (!merchantId) throw new Error("Merchant not Logged in");
     const merchant = await Merchant.findOne(merchantId);
     if (!merchant) throw new Error("Merchant not found");
 
-    const imageUrl = path.join(__dirname, MERCHANT_IMAGES_PATH, merchantId);
+    const extension = path.extname(filename);
+    const imageUrl = path.join(
+      __dirname,
+      MERCHANT_IMAGES_PATH,
+      merchantId,
+      extension
+    );
 
     return await new Promise(async (resolve, reject) =>
       createReadStream()
@@ -298,14 +304,20 @@ export default class MerchantResolver {
   async addMerchantLogo(
     @Ctx() { req }: MyContext,
     @Arg("image", () => GraphQLUpload)
-    { createReadStream }: FileUpload
+    { createReadStream, filename }: FileUpload
   ): Promise<Boolean> {
     const merchantId = req.session.merchantId;
     if (!merchantId) throw new Error("Merchant not Logged in");
     const merchant = await Merchant.findOne(merchantId);
     if (!merchant) throw new Error("Merchant not found");
 
-    const imageUrl = path.join(__dirname, MERCHANT_LOGOS_PATH, merchantId);
+    const extension = path.extname(filename);
+    const imageUrl = path.join(
+      __dirname,
+      MERCHANT_LOGOS_PATH,
+      merchantId,
+      extension
+    );
 
     return await new Promise(async (resolve, reject) =>
       createReadStream()
