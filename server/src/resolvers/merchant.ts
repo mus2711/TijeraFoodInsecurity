@@ -283,8 +283,7 @@ export default class MerchantResolver {
     const imageUrl = path.join(
       __dirname,
       MERCHANT_IMAGES_PATH,
-      merchantId,
-      extension
+      merchantId + extension
     );
 
     return await new Promise(async (resolve, reject) =>
@@ -315,8 +314,7 @@ export default class MerchantResolver {
     const imageUrl = path.join(
       __dirname,
       MERCHANT_LOGOS_PATH,
-      merchantId,
-      extension
+      merchantId + extension
     );
 
     return await new Promise(async (resolve, reject) =>
