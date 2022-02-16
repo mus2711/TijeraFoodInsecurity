@@ -4,6 +4,8 @@ import {
   query,
   QueryInput,
 } from "@urql/exchange-graphcache";
+import { multipartFetchExchange } from "@urql/exchange-multipart-fetch";
+import { createUploadLink } from "apollo-upload-client";
 import { SSRExchange } from "next-urql";
 import { dedupExchange, fetchExchange } from "urql";
 import {
@@ -44,10 +46,12 @@ export const createUrqlClient = (ssrExchange: SSRExchange, ctx: any) => {
 
   return {
     url: `${process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT}`,
+
     fetchOptions: {
       credentials: "include",
       headers: cookie ? { cookie } : undefined,
     } as const,
+
     exchanges: [
       dedupExchange,
       cacheExchange({
@@ -213,7 +217,8 @@ export const createUrqlClient = (ssrExchange: SSRExchange, ctx: any) => {
         },
       }),
       ssrExchange,
-      fetchExchange,
+      // fetchExchange,
+      multipartFetchExchange,
     ],
   };
 };

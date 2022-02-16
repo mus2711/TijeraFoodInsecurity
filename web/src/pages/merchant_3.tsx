@@ -3,11 +3,12 @@ import { createUrqlClient } from "../../utils/createUrqlClient";
 import {
   TagsandMeQuery,
   useAddLocationMutation,
+  useAddMerchantLogoMutation,
   useAddMerchantTagMutation,
   useMeQuery,
   useTagsandMeQuery,
 } from "../generated/graphql";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   Box,
   Button,
@@ -30,8 +31,11 @@ import { useRouter } from "next/router";
 import { Layout } from "../components/layout";
 import { findMerchantId } from "../functions/findMerchantId";
 import { MenuSlide } from "../components/menuslide";
+import { useDropzone } from "react-dropzone";
+import { FileUpload, GraphQLUpload } from "graphql-upload";
+import { ReadStream } from "fs";
 
-const Merchant3 = () => {
+const merchant_3 = () => {
   const [{ data, fetching }] = useTagsandMeQuery({
     variables: { merchantId: findMerchantId() },
   });
@@ -46,8 +50,58 @@ const Merchant3 = () => {
   const initialInputs = {
     location: "",
   };
+  //// /////
 
-  const onImageChange = (e: any) => {
+  // const [upload] = useMutation(uploadFileMutation);
+  const [, addMerchantLogo] = useAddMerchantLogoMutation();
+  let [fileToUpload, setFileToUpload] = useState<File>();
+  let [imageSrc, setImageSrc] = useState("");
+
+  const readFile = (file: File) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => resolve(reader.result), false);
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const onDrop = useCallback(
+    async ([file]) => {
+      console.log("arr file: ", [file]);
+      console.log("single file", file);
+      console.log("file 0:", file[0]);
+      let imageDataUrl: any = await readFile(file);
+      // console.log(imageDataUrl);
+      setImageSrc((imageSrc = imageDataUrl));
+      console.log("img_data: ", imageSrc);
+      setFileToUpload((fileToUpload = file));
+      console.log("readStream: ", file);
+      // console.log("file to upload: ", fileToUpload.encoding);
+      // setFileToUpload((fileToUpload.encoding))
+      addMerchantLogo({
+        image: fileToUpload,
+      }).then((response) => console.log(response));
+    },
+    [addMerchantLogo]
+  );
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
+  const InputDrop = () => {
+    if (fileToUpload) {
+      return <Text>📷 ✅</Text>;
+    } else if (isDragActive) {
+      return <Text>Drop thed image here</Text>;
+    } else {
+      return (
+        <Text>
+          Drag 'n' drop your image here, or just click to select an image🍎
+        </Text>
+      );
+    }
+  };
+  // ///////
+
+  const onImageChange = async (e: any) => {
     console.log(e.target.files[0]);
     setImage((image = URL.createObjectURL(e.target.files[0])));
   };
@@ -101,8 +155,8 @@ const Merchant3 = () => {
         <VStack paddingTop={"20px"}>
           <MenuSlide
             modal={false}
-            avatarlogo={image}
-            imageUrl={banner}
+            avatarlogo={data?.getMenu[2].description}
+            imageUrl={data?.getMenu[2].description}
             cuisine={tags}
             badge="Top"
             name={data?.me.merchant ? data?.me.merchant.cpname : undefined}
@@ -147,6 +201,10 @@ const Merchant3 = () => {
                 // height={"100px"}
               />
             </VStack>
+            <div {...getRootProps()}>
+              <input accept="image/*" {...getInputProps()} />
+              <InputDrop></InputDrop>
+            </div>
           </HStack>
         </VStack>
         <Box paddingTop={"15px"}>
@@ -165,11 +223,12 @@ const Merchant3 = () => {
             {({ isSubmitting }) => (
               <Form>
                 <VStack spacing={4}>
-                  {formikInputs.map((p) => (
+                  {formikInputs.map((p, val) => (
                     <Inputfield
                       name={p.name}
                       label={p.label}
                       placeholder={p.placeholder}
+                      key={String(val)}
                     />
                   ))}
                 </VStack>
@@ -200,12 +259,13 @@ const Merchant3 = () => {
                   </Text>
                   <VStack>
                     <Box maxWidth={"350px"}>
-                      {tags.map((tagName) => (
+                      {tags.map((tagName, value) => (
                         <Tag
                           size={"md"}
                           variant="subtle"
                           colorScheme="red"
                           m={1}
+                          id={String(value)}
                         >
                           <TagLeftIcon boxSize="12px" as={RemoveIcon} />
                           <TagLabel>{tagName}</TagLabel>
@@ -245,4 +305,4 @@ const Merchant3 = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: true })(Merchant3);
+export default withUrqlClient(createUrqlClient, { ssr: true })(merchant_3);

@@ -28,6 +28,7 @@ import {
   AccordionPanel,
   AccordionIcon,
 } from "@chakra-ui/react";
+import ReactPlayer from "react-player/lazy";
 
 const datalist = [
   {
@@ -115,6 +116,8 @@ const datalist = [
 
 const Search = () => {
   const [{ data }] = useMerchantsQuery();
+  const [played, setPlayed] = useState(0);
+  let [watchedState, setWatchedState] = useState(false);
 
   // map of tags to their index
   let mapTags: Map<number, string> = new Map();
@@ -133,7 +136,7 @@ const Search = () => {
   };
 
   populateTags(mapTags, data);
-  console.log(mapTags);
+  // console.log(mapTags);
 
   let merchantTagIDs: Map<number, number[]> = new Map();
   let populateMerchantTagsIDs = (
@@ -150,7 +153,7 @@ const Search = () => {
   };
 
   populateMerchantTagsIDs(merchantTagIDs, data);
-  console.log(merchantTagIDs);
+  // console.log(merchantTagIDs);
 
   let [menu, setMenu] = useState(true);
   let [videos, setVideos] = useState(false);
@@ -219,7 +222,7 @@ const Search = () => {
         </HStack>
         <VStack spacing={6}>
           {data?.merchants.map(function (p) {
-            console.log(p.id);
+            // console.log(p.id);
             let merchantTags: string[] = [];
             merchantTagIDs.get(p.id)?.forEach((e) => {
               const t = mapTags.get(e);
@@ -228,7 +231,7 @@ const Search = () => {
               }
             });
 
-            console.log(merchantTags);
+            // console.log(merchantTags);
             if (found(merchantTags, tags)) {
               return (
                 <>
@@ -310,7 +313,46 @@ const Search = () => {
   }
 
   if (videos == true) {
-    body = <Button>Videos</Button>;
+    body = (
+      <>
+        {/* <iframe
+          width="560"
+          height="315"
+          src="https://www.youtube.com/embed/I2wURDqiXdM"
+          title="YouTube video player"
+          // frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          onPlay={() => console.log("playing")}
+        ></iframe> */}
+        <VStack spacing={10} pt={10}>
+          <ReactPlayer
+            width={"500px"}
+            url="https://www.youtube.com/embed/I2wURDqiXdM"
+            light={true}
+            key={1}
+            config={{
+              youtube: {
+                playerVars: { showinfo: 1 },
+              },
+            }}
+            // onProgress={(progress) => {
+            //   setPlayed(progress.playedSeconds);
+            //   console.log(played);
+            // }}
+            onEnded={() => {
+              setWatchedState((watchedState = true));
+            }}
+          />
+          <Button
+            isLoading={watchedState ? false : true}
+            // spinner={<BeatLoader size={8} color="white" />}
+            colorScheme={"cyan"}
+          >
+            Claim Tokens
+          </Button>
+        </VStack>
+      </>
+    );
   }
 
   return (

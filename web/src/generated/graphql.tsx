@@ -450,6 +450,13 @@ export type AddLocationMutationVariables = Exact<{
 
 export type AddLocationMutation = { __typename?: 'Mutation', addLocation: { __typename?: 'Merchant', id: number } };
 
+export type AddMerchantLogoMutationVariables = Exact<{
+  image: Scalars['Upload'];
+}>;
+
+
+export type AddMerchantLogoMutation = { __typename?: 'Mutation', addMerchantLogo: boolean };
+
 export type AddMerchantTagMutationVariables = Exact<{
   tagId: Scalars['Int'];
 }>;
@@ -720,6 +727,15 @@ export const AddLocationDocument = gql`
 
 export function useAddLocationMutation() {
   return Urql.useMutation<AddLocationMutation, AddLocationMutationVariables>(AddLocationDocument);
+};
+export const AddMerchantLogoDocument = gql`
+    mutation AddMerchantLogo($image: Upload!) {
+  addMerchantLogo(image: $image)
+}
+    `;
+
+export function useAddMerchantLogoMutation() {
+  return Urql.useMutation<AddMerchantLogoMutation, AddMerchantLogoMutationVariables>(AddMerchantLogoDocument);
 };
 export const AddMerchantTagDocument = gql`
     mutation AddMerchantTag($tagId: Int!) {

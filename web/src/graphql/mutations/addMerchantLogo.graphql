@@ -1,0 +1,3 @@
+mutation AddMerchantLogo($image: Upload!) {
+  addMerchantLogo(image: $image)
+}
