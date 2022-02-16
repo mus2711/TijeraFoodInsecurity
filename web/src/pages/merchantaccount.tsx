@@ -156,7 +156,7 @@ const MerchAccount = () => {
             ? data?.me?.merchant?.averageRating
             : undefined
         }
-        avatarlogo={image}
+        avatarlogo={"../../../server/media/merchant_logos/6.jpg"}
         merchantID={data?.me?.merchant?.id ? data?.me?.merchant?.id : undefined}
         name={data?.me?.merchant?.cpname}
         id={data?.me?.merchant?.id ? data?.me?.merchant?.id : 0}

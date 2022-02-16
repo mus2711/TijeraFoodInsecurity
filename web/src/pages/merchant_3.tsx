@@ -155,8 +155,8 @@ const merchant_3 = () => {
         <VStack paddingTop={"20px"}>
           <MenuSlide
             modal={false}
-            avatarlogo={data?.getMenu[2].description}
-            imageUrl={data?.getMenu[2].description}
+            avatarlogo={imageSrc}
+            imageUrl={imageSrc}
             cuisine={tags}
             badge="Top"
             name={data?.me.merchant ? data?.me.merchant.cpname : undefined}
