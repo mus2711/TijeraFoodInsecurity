@@ -11,22 +11,20 @@ import { findMerchantId } from "../functions/findMerchantId";
 import { findUserId } from "../functions/findUserId";
 
 const orders = () => {
-  const [{ data }] = useMerchantCurrentOrdersQuery();
+  const [{ data }] = useMerchantOrdersQuery();
   const orders = () => {
-    console.log("merchant orders: ", data?.merchantCurrentOrders);
+    console.log("merchant orders: ", data?.merchantOrders);
   };
+
   orders();
   return (
     <Layout title="Review History">
       <VStack spacing={12} paddingBottom={"40px"} borderColor={"grey"}>
         <Box as="span" ml="2" color="gray.600" fontSize="sm">
-          {data?.merchantCurrentOrders
-            ? data?.merchantCurrentOrders.length
-            : "NaN"}{" "}
-          Orders
+          {data?.merchantOrders ? data?.merchantOrders.length : "NaN"} Orders
         </Box>
 
-        {data?.merchantCurrentOrders.map((p) => (
+        {data?.merchantOrders.map((p) => (
           <>
             <VStack>
               <HStack>

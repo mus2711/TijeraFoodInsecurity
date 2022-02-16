@@ -17,15 +17,18 @@ import {
 import { Layout } from "../components/layout";
 import { setGlobalState, useGlobalState } from "../state/state";
 import { HiMinus } from "react-icons/hi";
-import { useAddToOrderMutation, useMerchantQuery } from "../generated/graphql";
+import {
+  useAddToOrderMutation,
+  useCompleteOrderMutation,
+  useMerchantQuery,
+} from "../generated/graphql";
 
 const Checkout = () => {
   const [currentBasket] = useGlobalState("userBasket");
-
+  const [, completeOrder] = useCompleteOrderMutation();
   const [currentMerchant] = useGlobalState("basketMerchant");
   const [, addToOrder] = useAddToOrderMutation();
   const [{ data }] = useMerchantQuery({ variables: { id: currentMerchant } });
-  console.log(data);
 
   function totalPrice() {
     let totalPr = 0;
@@ -34,6 +37,20 @@ const Checkout = () => {
     });
     return totalPr;
   }
+
+  function delay(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  const pushCheckout = async () => {
+    for (let step = 0; step < currentBasket.length; step++) {
+      addToOrder({ foodItemId: currentBasket[step].itemID });
+      console.log("dn1");
+      await delay(100);
+    }
+    await delay(100);
+    completeOrder();
+  };
 
   let [currentPrice, setCurrentPrice] = useState(totalPrice());
 
@@ -104,15 +121,7 @@ const Checkout = () => {
           <Box pt={5} pb={10}>
             <Text>Total: ${currentPrice}</Text>
           </Box>
-          <Button
-            colorScheme={"teal"}
-            onClick={() => {
-              currentBasket.map((p) => {
-                console.log(p.itemID);
-                addToOrder({ foodItemId: p.itemID });
-              });
-            }}
-          >
+          <Button colorScheme={"teal"} onClick={() => pushCheckout()}>
             Checkout
           </Button>
           <Button

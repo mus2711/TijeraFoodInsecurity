@@ -103,8 +103,6 @@ export type Mutation = {
   changeFirstname: User;
   changeFoodCost: FoodItem;
   changeFoodDescription: FoodItem;
-  changeFoodImageAlt: FoodItem;
-  changeFoodImageUrl: FoodItem;
   changeFoodItemName: FoodItem;
   changeFoodStock: FoodItem;
   changeGender: User;
@@ -197,18 +195,6 @@ export type MutationChangeFoodCostArgs = {
 export type MutationChangeFoodDescriptionArgs = {
   description: Scalars['String'];
   foodItemId: Scalars['Int'];
-};
-
-
-export type MutationChangeFoodImageAltArgs = {
-  foodItemId: Scalars['Int'];
-  imageAlt: Scalars['String'];
-};
-
-
-export type MutationChangeFoodImageUrlArgs = {
-  foodItemId: Scalars['Int'];
-  imageUrl: Scalars['String'];
 };
 
 
@@ -508,6 +494,14 @@ export type ChangeFirstnameMutationVariables = Exact<{
 
 export type ChangeFirstnameMutation = { __typename?: 'Mutation', changeFirstname: { __typename?: 'User', firstname: string, lastname: string } };
 
+export type ChangeFoodStockMutationVariables = Exact<{
+  stock: Scalars['Float'];
+  foodItemId: Scalars['Int'];
+}>;
+
+
+export type ChangeFoodStockMutation = { __typename?: 'Mutation', changeFoodStock: { __typename?: 'FoodItem', itemName: string, stock: number } };
+
 export type ChangeLastNameMutationVariables = Exact<{
   lastname: Scalars['String'];
 }>;
@@ -658,7 +652,7 @@ export type UserOrdersQueryVariables = Exact<{
 }>;
 
 
-export type UserOrdersQuery = { __typename?: 'Query', userOrders: Array<{ __typename?: 'OrderResponse', orderItems?: Maybe<Array<{ __typename?: 'OrderItem', orderId: number, foodItemId: number, order: { __typename?: 'Order', merchantId: number }, foodItem: { __typename?: 'FoodItem', stock: number, cost: number, itemName: string, imageUrl: string, imageAlt: string, description: string } }>> }> };
+export type UserOrdersQuery = { __typename?: 'Query', userOrders: Array<{ __typename?: 'OrderResponse', order?: Maybe<{ __typename?: 'Order', merchantId: number, isComplete: boolean }>, orderItems?: Maybe<Array<{ __typename?: 'OrderItem', orderId: number, quantity: number, foodItemId: number, foodItem: { __typename?: 'FoodItem', stock: number, cost: number, itemName: string, imageUrl: string, imageAlt: string, description: string } }>> }> };
 
 export const RegularMerchantErrorFragmentDoc = gql`
     fragment RegularMerchantError on FieldMerchantError {
@@ -816,6 +810,18 @@ export const ChangeFirstnameDocument = gql`
 
 export function useChangeFirstnameMutation() {
   return Urql.useMutation<ChangeFirstnameMutation, ChangeFirstnameMutationVariables>(ChangeFirstnameDocument);
+};
+export const ChangeFoodStockDocument = gql`
+    mutation changeFoodStock($stock: Float!, $foodItemId: Int!) {
+  changeFoodStock(stock: $stock, foodItemId: $foodItemId) {
+    itemName
+    stock
+  }
+}
+    `;
+
+export function useChangeFoodStockMutation() {
+  return Urql.useMutation<ChangeFoodStockMutation, ChangeFoodStockMutationVariables>(ChangeFoodStockDocument);
 };
 export const ChangeLastNameDocument = gql`
     mutation changeLastName($lastname: String!) {
@@ -975,6 +981,7 @@ export const TagsandMeDocument = gql`
     stock
     imageUrl
     imageAlt
+    stock
   }
   merchantTags(merchantId: $merchantId) {
     tagName
@@ -1208,11 +1215,14 @@ export function useUserCurrentOrderQuery(options: Omit<Urql.UseQueryArgs<UserCur
 export const UserOrdersDocument = gql`
     query userOrders($userId: Int!) {
   userOrders(userId: $userId) {
+    order {
+      merchantId
+      isComplete
+    }
     orderItems {
-      order {
-        merchantId
-      }
       orderId
+      quantity
+      foodItemId
       foodItem {
         stock
         cost
@@ -1221,7 +1231,6 @@ export const UserOrdersDocument = gql`
         imageAlt
         description
       }
-      foodItemId
     }
   }
 }

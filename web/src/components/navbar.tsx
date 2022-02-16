@@ -105,6 +105,7 @@ export const Navbar: React.FC<NavbarProps> = ({ title }) => {
               colorScheme={"cyan"}
               borderRadius={20}
               borderWidth={1}
+              onClick={() => router.push("/login")}
             >
               Log In
             </Button>
@@ -202,7 +203,7 @@ export const Navbar: React.FC<NavbarProps> = ({ title }) => {
                 <img src="https://i.ibb.co/H7stfJf/200e0beeccb5598b2d3dc83db38f3c52.png"></img>
               </Box>
             </NextLink> */}
-            <Button
+            {/* <Button
               variant={"outline"}
               color="black"
               colorScheme={"cyan"}
@@ -210,7 +211,8 @@ export const Navbar: React.FC<NavbarProps> = ({ title }) => {
               borderWidth={1}
             >
               {data.me.merchant.username} (Logout)
-            </Button>
+            </Button> */}
+            <Box></Box>
           </HStack>
         </Flex>
       </Box>
@@ -273,6 +275,7 @@ export const Navbar: React.FC<NavbarProps> = ({ title }) => {
                         Settings
                       </MenuItem>
                     </NextLink>
+
                     <MenuItem
                       icon={<HiUser />}
                       command="⌘⇧N"
@@ -295,7 +298,7 @@ export const Navbar: React.FC<NavbarProps> = ({ title }) => {
                 <img src="https://i.ibb.co/H7stfJf/200e0beeccb5598b2d3dc83db38f3c52.png"></img>
               </Box>
             </NextLink> */}
-              <Button
+              {/* <Button
                 variant={"outline"}
                 color="black"
                 colorScheme={"cyan"}
@@ -303,7 +306,8 @@ export const Navbar: React.FC<NavbarProps> = ({ title }) => {
                 borderWidth={1}
               >
                 Log In
-              </Button>
+              </Button> */}
+              <Box></Box>
             </HStack>
           </Flex>
         </Box>

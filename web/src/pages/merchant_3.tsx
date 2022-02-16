@@ -71,7 +71,7 @@ const Merchant3 = () => {
   let tagSet: string[] = [];
   mapTags.forEach((ind, tag) => {
     tagSet.push(tag);
-    console.log(ind);
+    // console.log(ind);
   });
 
   const formikInputs = [

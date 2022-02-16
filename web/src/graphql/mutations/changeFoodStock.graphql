@@ -1,0 +1,6 @@
+mutation changeFoodStock($stock: Float!, $foodItemId: Int!) {
+  changeFoodStock(stock: $stock, foodItemId: $foodItemId) {
+    itemName
+    stock
+  }
+}
