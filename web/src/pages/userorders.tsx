@@ -13,11 +13,13 @@ const userorders = () => {
   const [{ data }] = useUserOrdersQuery({
     variables: { userId: findUserId() },
   });
+
   const [, completeOrder] = useCompleteOrderMutation();
   const orders = () => {
-    console.log("merchant orders: ", data?.userOrders);
+    console.log("user orders: ", data?.userOrders);
   };
-  orders();
+  // console.log(data.userOrders[0].order.isComplete);
+  // orders();
   return (
     <Layout title="Review History">
       <VStack spacing={12} paddingBottom={"40px"} borderColor={"grey"}>
@@ -36,7 +38,7 @@ const userorders = () => {
         >
           Receievd your Orders?
         </Button>
-        {data?.userOrders.map((p) => (
+        {data?.userOrders.reverse().map((p, value) => (
           <>
             <VStack>
               <HStack>
@@ -59,16 +61,20 @@ const userorders = () => {
                           <Badge colorScheme={"blue"}>
                             Food Item Id: {p.foodItemId}
                           </Badge>
-                          {/* <h1>Merchant Id: {p.foodItem.merchantId}</h1> */}
+                          <Badge colorScheme={"blue"}>
+                            Quantity: {p.quantity}
+                          </Badge>
                           <Divider></Divider>
                         </VStack>
                       </>
                     ))
                   : null}
               </HStack>
-              {/* <Badge colorScheme={"blue"}>
-                Order Complete: {String(p.orderItems?.isComplete)}
-              </Badge> */}
+              <Badge
+                colorScheme={Boolean(p.order?.isComplete) ? "blue" : "red"}
+              >
+                Order Complete: {String(p.order?.isComplete)}
+              </Badge>
               {/* <Badge colorScheme={"green"}>
                 User Id: {String(p.order?.userId)}
               </Badge> */}

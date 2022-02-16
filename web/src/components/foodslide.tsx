@@ -99,6 +99,8 @@ export const Foodslide: React.FC<FoodSlideProps> = ({ menulist }) => {
 
           <Spacer />
           <Text>${menulist.cost}</Text>
+          <Text>Stock: {menulist.stock}</Text>
+          <Text>ItemId: {menulist.id}</Text>
           <HStack>
             <IconButton
               colorScheme={"red"}
