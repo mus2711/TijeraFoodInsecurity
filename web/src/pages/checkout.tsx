@@ -13,6 +13,10 @@ import {
   Text,
   VStack,
   Image,
+  Stat,
+  StatHelpText,
+  StatLabel,
+  StatNumber,
 } from "@chakra-ui/react";
 import { Layout } from "../components/layout";
 import { setGlobalState, useGlobalState } from "../state/state";
@@ -118,9 +122,14 @@ const Checkout = () => {
             </HStack>
           ))}
 
-          <Box pt={5} pb={10}>
-            <Text>Total: ${currentPrice}</Text>
-          </Box>
+          {/* <Box pt={5} pb={10}>
+            <Text>Total: $</Text>
+          </Box> */}
+          <Stat pt={5} pb={10}>
+            <StatLabel>Total Fees</StatLabel>
+            <StatNumber>£{currentPrice}</StatNumber>
+            <StatHelpText>from {data?.merchant?.cpname}</StatHelpText>
+          </Stat>
           <Button colorScheme={"teal"} onClick={() => pushCheckout()}>
             Checkout
           </Button>

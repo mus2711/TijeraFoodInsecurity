@@ -567,7 +567,7 @@ const Settings = () => {
               </Text>
             </Box>
             <Spacer />
-            <Nextlink href={"/"}>
+            <Nextlink href={"/userorders"}>
               <IconButton
                 size={"md"}
                 colorScheme={"teal"}

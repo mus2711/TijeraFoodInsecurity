@@ -295,6 +295,7 @@ export default class MerchantResolver {
           await merchant.save();
           resolve(true);
         })
+
         .on("error", reject)
     );
   }

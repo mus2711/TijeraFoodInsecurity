@@ -12,12 +12,13 @@ import {
   Tag,
   TagLabel,
   TagLeftIcon,
+  Text,
   VStack,
 } from "@chakra-ui/react";
 import { Layout } from "../components/layout";
 import { MdMenu, MdVideocam } from "react-icons/md";
 import { MenuSlide } from "../components/menuslide";
-import { Combobox, RemoveIcon } from "evergreen-ui";
+import { AddLocationIcon, Combobox, RemoveIcon } from "evergreen-ui";
 import { MerchantsQuery, useMerchantsQuery } from "../generated/graphql";
 import { AddIcon } from "@chakra-ui/icons";
 import { ppid } from "process";
@@ -205,7 +206,17 @@ const Search = () => {
             placeholder="Search what you're looking for..."
             justifyContent="center"
           />
+          <HStack>
+            <Text>Search your nearest vendors: </Text>
+            <IconButton
+              size={"md"}
+              colorScheme={"teal"}
+              children={<AddLocationIcon />}
+              aria-label={"location"}
+            />
+          </HStack>
         </VStack>
+
         <HStack p={"20px"}>
           {tags.map((tagName) => (
             <Tag
@@ -325,6 +336,10 @@ const Search = () => {
           onPlay={() => console.log("playing")}
         ></iframe> */}
         <VStack spacing={10} pt={10}>
+          <Text maxWidth={"500px"} textAlign="center">
+            Watch vidoes and learn about new things, and collect tokens when you
+            finish them.
+          </Text>
           <ReactPlayer
             width={"500px"}
             url="https://www.youtube.com/embed/I2wURDqiXdM"
@@ -344,7 +359,7 @@ const Search = () => {
             }}
           />
           <Button
-            isLoading={watchedState ? false : true}
+            isDisabled={watchedState ? false : true}
             // spinner={<BeatLoader size={8} color="white" />}
             colorScheme={"cyan"}
           >

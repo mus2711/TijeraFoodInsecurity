@@ -65,6 +65,8 @@ export const Foodslide: React.FC<FoodSlideProps> = ({ menulist }) => {
       // maxW="sm"
       borderWidth="1px"
       borderRadius="lg"
+      width={"40vw"}
+      minWidth={"350px"}
       overflow="hidden"
       id={String(menulist.id)}
     >
@@ -99,8 +101,8 @@ export const Foodslide: React.FC<FoodSlideProps> = ({ menulist }) => {
 
           <Spacer />
           <Text>${menulist.cost}</Text>
-          <Text>Stock: {menulist.stock}</Text>
-          <Text>ItemId: {menulist.id}</Text>
+          {/* <Text>Stock: {menulist.stock}</Text>
+          <Text>ItemId: {menulist.id}</Text> */}
           <HStack>
             <IconButton
               colorScheme={"red"}

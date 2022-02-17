@@ -29,7 +29,7 @@ const userorders = () => {
         <Badge size={"xl"} colorScheme={"black"} pt={-5}>
           Your User Id: {findUserId()}
         </Badge>
-        <Button
+        {/* <Button
           colorScheme={"cyan"}
           size={"sm"}
           onClick={() => {
@@ -37,7 +37,7 @@ const userorders = () => {
           }}
         >
           Receievd your Orders?
-        </Button>
+        </Button> */}
         {data?.userOrders.reverse().map((p, value) => (
           <>
             <VStack>
