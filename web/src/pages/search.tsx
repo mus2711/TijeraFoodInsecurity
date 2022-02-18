@@ -8,28 +8,21 @@ import {
   Divider,
   Flex,
   Grid,
+  Heading,
   HStack,
   IconButton,
   Tag,
   TagLabel,
   TagLeftIcon,
   Text,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { Layout } from "../components/layout";
-import { MdMenu, MdVideocam } from "react-icons/md";
 import { MenuSlide } from "../components/menuslide";
 import { AddLocationIcon, Combobox, RemoveIcon } from "evergreen-ui";
 import { MerchantsQuery, useMerchantsQuery } from "../generated/graphql";
 import { AddIcon } from "@chakra-ui/icons";
-import { ppid } from "process";
-import {
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
-} from "@chakra-ui/react";
 import ReactPlayer from "react-player/lazy";
 
 const datalist = [
@@ -120,6 +113,9 @@ const Search = () => {
   const [{ data }] = useMerchantsQuery();
   const [played, setPlayed] = useState(0);
   let [watchedState, setWatchedState] = useState(false);
+  let [watchedState2, setWatchedState2] = useState(false);
+  let [watchedState3, setWatchedState3] = useState(false);
+  const toast = useToast();
 
   // map of tags to their index
   let mapTags: Map<number, string> = new Map();
@@ -286,41 +282,6 @@ const Search = () => {
               );
             }
           })}
-          {/* // for demo purpouses
-          <Accordion allowToggle>
-            <AccordionItem>
-              <h2>
-                <AccordionButton>
-                  <Box flex="1" textAlign="left">
-                    Demo Search
-                  </Box>
-                  <AccordionIcon />
-                </AccordionButton>
-              </h2>
-              <AccordionPanel pb={4}>
-                {datalist?.map((p) => (
-                  <>
-                    <MenuSlide
-                      imageUrl={p.imageUrl ? p.imageUrl : undefined}
-                      imageAlt={p.imageAlt ? p.imageAlt : undefined}
-                      name={p.name}
-                      reviewCount={p.reviewCount}
-                      rating={p.rating ? p.rating : undefined}
-                      // cuisine={p.cuisine}
-                      // menulist={p.menulist}
-                      location={p.location ? p.location : undefined}
-                      avatarlogo={p.avatarlogo ? p.avatarlogo : undefined}
-                      // merchantID={p.merchantID}
-                      // key={p.id}
-                      scrt={true}
-                      id={1}
-                    />
-                    <Divider />---
-                  </>
-                ))}
-              </AccordionPanel>
-            </AccordionItem>
-          </Accordion> */}
         </VStack>
       </>
     );
@@ -329,15 +290,6 @@ const Search = () => {
   if (videos == true) {
     body = (
       <>
-        {/* <iframe
-          width="560"
-          height="315"
-          src="https://www.youtube.com/embed/I2wURDqiXdM"
-          title="YouTube video player"
-          // frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          onPlay={() => console.log("playing")}
-        ></iframe> */}
         <VStack
           spacing={10}
           pt={10}
@@ -347,31 +299,118 @@ const Search = () => {
             Watch vidoes and learn about new things, and collect tokens when you
             finish them.
           </Text>
-          <ReactPlayer
-            width={"500px"}
-            url="https://www.youtube.com/embed/I2wURDqiXdM"
-            light={true}
-            key={1}
-            config={{
-              youtube: {
-                playerVars: { showinfo: 1 },
-              },
-            }}
-            // onProgress={(progress) => {
-            //   setPlayed(progress.playedSeconds);
-            //   console.log(played);
-            // }}
-            onEnded={() => {
-              setWatchedState((watchedState = true));
-            }}
-          />
-          <Button
-            isDisabled={watchedState ? false : true}
-            // spinner={<BeatLoader size={8} color="white" />}
-            colorScheme={"cyan"}
-          >
-            Claim Tokens
-          </Button>
+          <Box>
+            <Heading size={"sm"} textAlign={"left"} pb={2}>
+              Learn Python
+            </Heading>
+
+            <ReactPlayer
+              width={"500px"}
+              url="https://www.youtube.com/embed/I2wURDqiXdM"
+              light={true}
+              key={1}
+              config={{
+                youtube: {
+                  playerVars: { showinfo: 1 },
+                },
+              }}
+              onEnded={() => {
+                setWatchedState((watchedState = true));
+              }}
+            />
+            <Button
+              isDisabled={watchedState ? false : true}
+              colorScheme={"cyan"}
+              size={"sm"}
+              mt={2}
+              onClick={() =>
+                toast({
+                  title: "Tokens Claimed.",
+                  description: "Congrats! You should now have more tokens.",
+                  status: "success",
+                  duration: 9000,
+                  isClosable: true,
+                })
+              }
+            >
+              Claim Tokens
+            </Button>
+          </Box>
+
+          <Box>
+            <Heading size={"sm"} textAlign={"left"} pb={2}>
+              How to Manage Your Money
+            </Heading>
+
+            <ReactPlayer
+              width={"500px"}
+              url="https://www.youtube.com/watch?v=HQzoZfc3GwQ"
+              light={true}
+              key={1}
+              config={{
+                youtube: {
+                  playerVars: { showinfo: 1 },
+                },
+              }}
+              onEnded={() => {
+                setWatchedState2((watchedState2 = true));
+              }}
+            />
+            <Button
+              isDisabled={watchedState ? false : true}
+              colorScheme={"cyan"}
+              size={"sm"}
+              mt={2}
+              onClick={() =>
+                toast({
+                  title: "Tokens Claimed.",
+                  description: "Congrats! You should now have more tokens.",
+                  status: "success",
+                  duration: 9000,
+                  isClosable: true,
+                })
+              }
+            >
+              Claim Tokens
+            </Button>
+          </Box>
+          <Box>
+            <Heading size={"sm"} textAlign={"left"} pb={2}>
+              Gordon's Quick & Simple Recipes | Gordon Ramsay
+            </Heading>
+
+            <ReactPlayer
+              width={"500px"}
+              url="https://www.youtube.com/watch?v=mhDJNfV7hjk"
+              light={true}
+              key={1}
+              config={{
+                youtube: {
+                  playerVars: { showinfo: 1 },
+                },
+              }}
+              onEnded={() => {
+                setWatchedState3((watchedState3 = true));
+              }}
+            />
+            <Button
+              isDisabled={watchedState ? false : true}
+              colorScheme={"cyan"}
+              size={"sm"}
+              mt={2}
+              onClick={() =>
+                toast({
+                  title: "Tokens Claimed.",
+                  description: "Congrats! You should now have more tokens.",
+                  status: "success",
+                  duration: 9000,
+                  isClosable: true,
+                })
+              }
+            >
+              Claim Tokens
+            </Button>
+          </Box>
         </VStack>
       </>
     );
