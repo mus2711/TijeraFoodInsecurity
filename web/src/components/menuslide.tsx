@@ -18,11 +18,13 @@ import {
   Spacer,
   Stack,
   Heading,
+  Icon,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { HiPencil, HiPlus } from "react-icons/hi";
-import { MdShoppingBasket } from "react-icons/md";
+import { HiLocationMarker, HiPencil, HiPlus } from "react-icons/hi";
+import { MdOutlineMyLocation, MdShoppingBasket } from "react-icons/md";
+import { TiLocation } from "react-icons/ti";
 
 import { useTagsandMeQuery } from "../generated/graphql";
 import { setGlobalState, useGlobalState } from "../state/state";
@@ -451,6 +453,14 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
             <Box as="span" color="gray.600" fontSize="sm">
               {location}
             </Box>
+          </Box>
+          <Box>
+            <HStack>
+              <Icon as={MdOutlineMyLocation} />
+              <Text color="gray.600" fontSize="sm">
+                2.0 miles
+              </Text>
+            </HStack>
           </Box>
 
           <Box display="flex" mt="2" alignItems="center">

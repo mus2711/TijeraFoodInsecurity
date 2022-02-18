@@ -13,6 +13,8 @@ import {
   PopoverBody,
   PopoverContent,
   IconButton,
+  Divider,
+  useToast,
 } from "@chakra-ui/react";
 import { Layout } from "../components/layout";
 import { ArrowRightIcon } from "@chakra-ui/icons";
@@ -41,6 +43,8 @@ const Settings = () => {
   const [, changeFirstname] = useChangeFirstnameMutation();
   const [, changeLastName] = useChangeLastNameMutation();
   let [buttonL, setbuttonL] = useState(false);
+  const toast = useToast();
+
   const initialInputs = {
     location: "",
   };
@@ -601,6 +605,26 @@ const Settings = () => {
             </Box>
           </HStack>
         </Box>
+        <Divider />
+        <Text maxWidth={"400px"} textAlign={"center"}>
+          Do you want to sign up to become a delivery driver and earn more
+          tokens?
+        </Text>
+        <Button
+          colorScheme={"blue"}
+          size={"xs"}
+          onClick={() =>
+            toast({
+              title: "Signed up for Delivery Driving.",
+              description: "Thank you for registering your interest!",
+              status: "success",
+              duration: 9000,
+              isClosable: true,
+            })
+          }
+        >
+          Click here to Register
+        </Button>
       </VStack>
     );
   } else if (!data?.me?.user && !data?.me?.merchant) {
