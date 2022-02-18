@@ -17,4 +17,17 @@ query Merchants {
     tagName
     id
   }
+  me {
+    merchant {
+      id
+      cpname
+      cplogo
+      imageUrl
+      imageUrl
+      location
+      reviewCount
+      averageRating
+      username
+    }
+  }
 }

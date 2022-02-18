@@ -335,7 +335,11 @@ const Search = () => {
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           onPlay={() => console.log("playing")}
         ></iframe> */}
-        <VStack spacing={10} pt={10}>
+        <VStack
+          spacing={10}
+          pt={10}
+          display={data?.me.merchant ? "none" : "initial"}
+        >
           <Text maxWidth={"500px"} textAlign="center">
             Watch vidoes and learn about new things, and collect tokens when you
             finish them.
@@ -390,6 +394,7 @@ const Search = () => {
             colorScheme={"cyan"}
             variant={videos ? "solid" : "outline"}
             onClick={videoUp}
+            display={data?.me.merchant ? "none" : "initial"}
           >
             Education
           </Badge>

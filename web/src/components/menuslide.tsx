@@ -323,6 +323,7 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
                       ? "teal"
                       : "red"
                   }
+                  isDisabled={data.me.merchant ? true : false}
                   aria-label="Menu"
                   icon={<HiPlus size={"20px"} />}
                   padding={"5px"}
@@ -353,6 +354,7 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
                 pushToReview();
               }}
               leftIcon={<HiPencil />}
+              isDisabled={data?.me.merchant ? true : false}
             >
               Leave a Review
             </Button>

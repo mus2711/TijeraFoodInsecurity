@@ -1,21 +1,36 @@
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
-import React from "react";
+import React, { useState } from "react";
 import {
   Avatar,
   Box,
   Button,
   Heading,
   HStack,
+  IconButton,
   Input,
+  Image,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
+  Table,
+  Tbody,
+  Td,
+  Text,
+  Th,
+  Thead,
+  Tr,
   useDisclosure,
   VStack,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  useNumberInput,
 } from "@chakra-ui/react";
 import { MdPlusOne } from "react-icons/md";
 import { MenuSlide } from "../components/menuslide";
@@ -24,12 +39,15 @@ import { Formik, Form } from "formik";
 import { useRouter } from "next/router";
 import { Inputfield } from "../components/inputfield";
 import {
+  useChangeFoodStockMutation,
   useCreateFoodItemMutation,
+  useDeleteFoodItemMutation,
   useTagsandMeQuery,
 } from "../generated/graphql";
 import { useIsAuthMerchant } from "../../utils/useIsAuthMerchant";
 import { Layout } from "../components/layout";
 import { findMerchantId } from "../functions/findMerchantId";
+import { HiMinus, HiPlay, HiPlus } from "react-icons/hi";
 
 const datalist = [
   {
@@ -84,6 +102,8 @@ const MerchAccount = () => {
   let [image, setImage] = React.useState("");
   let [banner, setBanner] = React.useState<string | undefined>(undefined);
   let [menuPhoto, setMenuPhoto] = React.useState("");
+  const [, deleteFoodItem] = useDeleteFoodItemMutation();
+  const [, changeFoodStock] = useChangeFoodStockMutation();
 
   const onImageChange = (e: any) => {
     console.log(e.target.files[0]);
@@ -137,7 +157,6 @@ const MerchAccount = () => {
 
   let merchantTagSet: string[] = [];
   data?.merchantTags.forEach((e) => merchantTagSet.push(e.tagName));
-  console.log(merchantTagSet);
 
   let body = (
     <VStack spacing={6}>
@@ -166,9 +185,77 @@ const MerchAccount = () => {
 
   let menu = (
     <VStack spacing={6} paddingBottom={"50px"}>
-      {data?.getMenu.map((p) => (
+      {/* {data?.getMenu.map((p) => (
         <Foodslide menulist={p}></Foodslide>
-      ))}
+      ))} */}
+      <Table size="sm" width={"200px"}>
+        <Thead>
+          <Tr>
+            <Th display={["none", "revert"]}>Image</Th>
+            <Th>Item Name</Th>
+            <Th display={["none", "revert"]}>Description</Th>
+            <Th textAlign={"center"}>Stock</Th>
+            <Th isNumeric>Cost</Th>
+            <Th isNumeric>Remove?</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {data?.getMenu.map((p, value) => (
+            <>
+              <Tr>
+                <Td display={["none", "inline-grid"]}>
+                  <Box
+                    maxW="75px"
+                    maxH="75px"
+                    borderWidth="1px"
+                    borderRadius="lg"
+                    overflow="hidden"
+                    width={"85vw"}
+                    height={"85vw"}
+                  >
+                    <Image
+                      maxHeight={"100px"}
+                      width={"20vw"}
+                      fit={"cover"}
+                      src={p.imageUrl}
+                      alt={p.imageAlt}
+                    ></Image>
+                  </Box>
+                </Td>
+                <Td>{p.itemName}</Td>
+                <Td display={["none", "revert"]}>{p.description}</Td>
+                <Td textAlign={"center"}>
+                  {p.stock}
+                  <HStack></HStack>
+                </Td>
+                <Td isNumeric textAlign={"center"}>
+                  {p.cost}
+                </Td>
+                <Td>
+                  {" "}
+                  <HStack alignContent={"center"} justifyContent={"center"}>
+                    <IconButton
+                      colorScheme={"red"}
+                      value={p.itemName}
+                      aria-label="Menu"
+                      icon={<HiMinus size={"15px"} />}
+                      size={"sm"}
+                      // width={"80px"}
+                      // height={"30px"}
+                      padding={"5px"}
+                      variant={"outline"}
+                      onClick={() => {
+                        console.log(value);
+                        deleteFoodItem({ foodItemId: p.id });
+                      }}
+                    />
+                  </HStack>
+                </Td>
+              </Tr>
+            </>
+          ))}
+        </Tbody>
+      </Table>
     </VStack>
   );
   return (
@@ -264,7 +351,6 @@ const MerchAccount = () => {
                             Pick Photo
                           </Button>
                           <Input
-                            // size={"md"}
                             type={"file"}
                             accept="image/*"
                             onClick={() => console.log("yes")}
@@ -274,7 +360,6 @@ const MerchAccount = () => {
                             borderWidth={"0px"}
                             opacity={0}
                             width="120px"
-                            // height={"100px"}
                           />
                         </VStack>
                       </HStack>
@@ -284,7 +369,6 @@ const MerchAccount = () => {
                         width={"100%"}
                         colorScheme="blue"
                         mr={3}
-                        // onClick={() => {}}
                         type="submit"
                         rightIcon={<MdPlusOne />}
                       >
@@ -301,14 +385,6 @@ const MerchAccount = () => {
           <Button colorScheme={"teal"} onClick={onOpen}>
             Add Item
           </Button>
-          {/* <Button
-            colorScheme="green"
-            mr={3}
-            onClick={onClose}
-            rightIcon={<MdPlusOne />}
-          >
-            Save
-          </Button> */}
         </HStack>
         <>{menu}</>
       </VStack>

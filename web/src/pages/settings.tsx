@@ -328,7 +328,7 @@ const Settings = () => {
               </Text>
             </Box>
             <Spacer />
-            <Nextlink href={"/"}>
+            <Nextlink href={"/merchantreviews"}>
               <IconButton
                 size={"md"}
                 colorScheme={"teal"}
