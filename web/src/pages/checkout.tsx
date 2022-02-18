@@ -2,21 +2,23 @@ import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import React, { useState } from "react";
 import {
-  Box,
   Button,
   Flex,
   Heading,
   HStack,
   IconButton,
-  Spacer,
-  Stack,
   Text,
   VStack,
-  Image,
   Stat,
   StatHelpText,
   StatLabel,
   StatNumber,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
 } from "@chakra-ui/react";
 import { Layout } from "../components/layout";
 import { setGlobalState, useGlobalState } from "../state/state";
@@ -80,69 +82,68 @@ const Checkout = () => {
         ) : null}
 
         <VStack pt={10} pb={10}>
-          {currentBasket.map((p, value) => (
-            <HStack>
-              <Box
-                maxW="80px"
-                borderWidth="1px"
-                borderRadius="lg"
-                overflow="hidden"
-                id={String(p.itemID)}
-              >
-                <Image
-                  maxHeight={"80px"}
-                  width={"10vw"}
-                  fit={"cover"}
-                  src={p.imageUrl}
-                ></Image>
-              </Box>
-              <Spacer />
-              <Stack textAlign={"left"}>
-                <Text fontWeight={"bold"} maxWidth={"200px"}>
-                  {p.itemName}
-                </Text>
-                <Text fontSize={"12px"} maxWidth={"200px"}>
-                  {p.description}
-                </Text>
-              </Stack>
-              <Spacer />
-              <Text>${p.cost}</Text>
-              <Spacer />
-              <IconButton
-                colorScheme={"red"}
-                value={p.itemName}
-                aria-label="Menu"
-                icon={<HiMinus size={"20px"} />}
-                padding={"5px"}
-                onClick={() => {
-                  console.log(value);
-                  removeFromBasket(value);
-                }}
-              />
-            </HStack>
-          ))}
+          <Table size="sm">
+            <Thead>
+              <Tr>
+                <Th>Item Name</Th>
+                <Th>Description</Th>
+                <Th isNumeric>Cost</Th>
+                <Th isNumeric>Remove?</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {currentBasket.map((p, value) => (
+                <>
+                  <Tr>
+                    <Td>{p.itemName}</Td>
+                    <Td>{p.description}</Td>
+                    <Td isNumeric>{p.cost}</Td>
+                    <Td>
+                      {" "}
+                      <HStack alignContent={"center"} justifyContent={"center"}>
+                        <IconButton
+                          colorScheme={"red"}
+                          value={p.itemName}
+                          aria-label="Menu"
+                          icon={<HiMinus size={"15px"} />}
+                          size={"sm"}
+                          // width={"80px"}
+                          // height={"30px"}
+                          padding={"5px"}
+                          variant={"outline"}
+                          onClick={() => {
+                            console.log(value);
+                            removeFromBasket(value);
+                          }}
+                        />
+                      </HStack>
+                    </Td>
+                  </Tr>
+                </>
+              ))}
+            </Tbody>
+          </Table>
 
-          {/* <Box pt={5} pb={10}>
-            <Text>Total: $</Text>
-          </Box> */}
-          <Stat pt={5} pb={10}>
+          <Stat pt={5} pb={5}>
             <StatLabel>Total Fees</StatLabel>
             <StatNumber>£{currentPrice}</StatNumber>
             <StatHelpText>from {data?.merchant?.cpname}</StatHelpText>
           </Stat>
-          <Button colorScheme={"teal"} onClick={() => pushCheckout()}>
-            Checkout
-          </Button>
-          <Button
-            colorScheme={"red"}
-            onClick={() => {
-              setGlobalState("userBasket", []);
-              setGlobalState("basketMerchant", 0);
-              setCurrentPrice((currentPrice = 0));
-            }}
-          >
-            Delete All
-          </Button>
+          <HStack>
+            <Button colorScheme={"teal"} onClick={() => pushCheckout()}>
+              Checkout
+            </Button>
+            <Button
+              colorScheme={"red"}
+              onClick={() => {
+                setGlobalState("userBasket", []);
+                setGlobalState("basketMerchant", 0);
+                setCurrentPrice((currentPrice = 0));
+              }}
+            >
+              Delete All
+            </Button>
+          </HStack>
         </VStack>
       </Flex>
     </Layout>
