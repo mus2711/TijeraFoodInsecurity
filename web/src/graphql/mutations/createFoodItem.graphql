@@ -5,6 +5,7 @@ mutation createFoodItem(
   $itemName: String!
   $imageURL: String!
   $imageAlt: String!
+  $idMerchant: Int!
 ) {
   createFoodItem(
     stock: $stock
@@ -13,6 +14,7 @@ mutation createFoodItem(
     itemName: $itemName
     imageUrl: $imageURL
     imageAlt: $imageAlt
+    idMerchant: $idMerchant
   ) {
     description
     id

@@ -1,0 +1,11 @@
+query merchantPersonalMenu {
+  merchantPersonalMenu {
+    itemName
+    description
+    id
+    itemName
+    imageUrl
+    imageAlt
+    cost
+  }
+}

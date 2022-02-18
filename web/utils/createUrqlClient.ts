@@ -8,6 +8,7 @@ import { multipartFetchExchange } from "@urql/exchange-multipart-fetch";
 import { createUploadLink } from "apollo-upload-client";
 import { SSRExchange } from "next-urql";
 import { dedupExchange, fetchExchange } from "urql";
+import { findMerchantId } from "../src/functions/findMerchantId";
 import {
   AddLocationMutation,
   AddReviewMutation,
@@ -182,32 +183,45 @@ export const createUrqlClient = (ssrExchange: SSRExchange, ctx: any) => {
                 }
               );
             },
-            deleteFoodItem: (_result, _, cache, __) => {
+            deleteFoodItem: (_result, args, cache, info) => {
               betterUpdateQuery<DeleteFoodItemMutation, TagsandMeQuery>(
                 cache,
-                { query: TagsandMeDocument },
+                {
+                  query: TagsandMeDocument,
+                  variables: { merchantId: args.idMerchant },
+                },
                 _result,
                 (result, query) => {
+                  console.log("args: ", args.idMerchant);
+                  console.log("cache: ", cache);
+                  console.log("info: ", info);
                   if (result.deleteFoodItem) {
-                    console.log("deleting...");
+                    console.log(result);
+
                     return {
-                      me: query.me,
-                      getMenu: query.getMenu,
+                      getMenu: result.deleteFoodItem,
                     };
                   }
                 }
               );
             },
-            createFoodItem: (_result, _, cache, __) => {
+            createFoodItem: (_result, args, cache, info) => {
               betterUpdateQuery<CreateFoodItemMutation, TagsandMeQuery>(
                 cache,
-                { query: TagsandMeDocument },
+                {
+                  query: TagsandMeDocument,
+                  variables: { merchantId: args.idMerchant },
+                },
                 _result,
                 (result, query) => {
+                  console.log("args: ", args.idMerchant);
+                  console.log("cache: ", cache);
+                  console.log("info: ", info);
                   if (result.createFoodItem) {
-                    console.log("adding...");
+                    console.log(result);
+
                     return {
-                      getMenu: query.getMenu,
+                      getMenu: result.createFoodItem,
                     };
                   }
                 }

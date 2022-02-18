@@ -1,3 +1,10 @@
-mutation deleteFoodItem($foodItemId: Int!) {
-  deleteFoodItem(foodItemId: $foodItemId)
+mutation deleteFoodItem($foodItemId: Int!, $idMerchant: Int!) {
+  deleteFoodItem(foodItemId: $foodItemId, idMerchant: $idMerchant) {
+    itemName
+    stock
+    description
+    imageAlt
+    imageUrl
+    cost
+  }
 }

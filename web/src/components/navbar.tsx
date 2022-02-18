@@ -221,7 +221,7 @@ export const Navbar: React.FC<NavbarProps> = ({ title }) => {
     body = (
       <>
         <Box>
-          <Flex h={10} alignItems={"center"} justifyContent={"space-between"}>
+          <Flex h={10} alignItems={"center"} justifyContent={"space-evenly"}>
             <HStack spacing={"25vw"}>
               <Box>
                 <Menu>

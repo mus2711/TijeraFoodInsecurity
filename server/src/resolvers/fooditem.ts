@@ -40,8 +40,15 @@ export default class FoodItemResolver {
     return FoodItem.find({ merchantId: merchantId });
   }
 
+  @Query(() => [FoodItem])
+  async merchantPersonalMenu(@Ctx() { req }: MyContext): Promise<FoodItem[]> {
+    const merchantId = req.session.merchantId;
+    if (!merchantId) throw new Error("Merchant not logged in.");
+    return FoodItem.find({ merchantId: Number(merchantId) });
+  }
+
   // Creates food item for merchant
-  @Mutation(() => FoodItem)
+  @Mutation(() => [FoodItem])
   async createFoodItem(
     @Ctx() { req }: MyContext,
     @Arg("itemName", () => String) itemName: string,
@@ -49,12 +56,15 @@ export default class FoodItemResolver {
     @Arg("imageAlt", () => String) imageAlt: string,
     @Arg("cost", () => Float) cost: number,
     @Arg("description", () => String) description: string,
-    @Arg("stock", () => Int) stock: number
-  ): Promise<FoodItem> {
+    @Arg("stock", () => Int) stock: number,
+    @Arg("idMerchant", () => Int) idMerchant: number
+  ): Promise<FoodItem[]> {
     const merchantId = req.session.merchantId;
     if (!merchantId) throw new Error("Merchant not logged in.");
 
-    return await FoodItem.create({
+    const id = idMerchant;
+    console.log(id);
+    await FoodItem.create({
       itemName: itemName,
       imageUrl: imageUrl,
       imageAlt: imageAlt,
@@ -63,13 +73,15 @@ export default class FoodItemResolver {
       stock: stock,
       merchantId: parseInt(merchantId),
     }).save();
+    return FoodItem.find({ merchantId: Number(merchantId) });
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => [FoodItem])
   async deleteFoodItem(
     @Ctx() { req }: MyContext,
-    @Arg("foodItemId", () => Int) foodItemId: number
-  ) {
+    @Arg("foodItemId", () => Int) foodItemId: number,
+    @Arg("idMerchant", () => Int) idMerchant: number
+  ): Promise<FoodItem[]> {
     const merchantId = req.session.merchantId;
     if (!merchantId) throw new Error("Merchant not logged in.");
 
@@ -81,7 +93,9 @@ export default class FoodItemResolver {
     }
 
     await foodItem!.remove();
-    return true;
+    const id = idMerchant;
+    console.log(id);
+    return FoodItem.find({ merchantId: Number(merchantId) });
   }
 
   // Mutations for merchant to edit food item

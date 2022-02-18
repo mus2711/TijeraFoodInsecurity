@@ -42,6 +42,7 @@ import {
   useChangeFoodStockMutation,
   useCreateFoodItemMutation,
   useDeleteFoodItemMutation,
+  useMerchantPersonalMenuQuery,
   useTagsandMeQuery,
 } from "../generated/graphql";
 import { useIsAuthMerchant } from "../../utils/useIsAuthMerchant";
@@ -97,6 +98,7 @@ const MerchAccount = () => {
   const [{ data, fetching }] = useTagsandMeQuery({
     variables: { merchantId: findMerchantId() },
   });
+
   const [, createFoodItem] = useCreateFoodItemMutation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   let [image, setImage] = React.useState("");
@@ -126,6 +128,7 @@ const MerchAccount = () => {
     cost: 0,
     imageAlt: "",
     imageURL: "",
+    idMerchant: data?.me.merchant?.id ?? 0,
   };
   const formikInputs = [
     {
@@ -202,7 +205,7 @@ const MerchAccount = () => {
         <Tbody>
           {data?.getMenu.map((p, value) => (
             <>
-              <Tr>
+              <Tr key={value}>
                 <Td display={["none", "inline-grid"]}>
                   <Box
                     maxW="75px"
@@ -245,8 +248,11 @@ const MerchAccount = () => {
                       padding={"5px"}
                       variant={"outline"}
                       onClick={() => {
-                        console.log(value);
-                        deleteFoodItem({ foodItemId: p.id });
+                        console.log("yes");
+                        deleteFoodItem({
+                          foodItemId: p.id,
+                          idMerchant: Number(data.me.merchant?.id),
+                        });
                       }}
                     />
                   </HStack>
@@ -323,6 +329,7 @@ const MerchAccount = () => {
                   console.log(values);
                   values.cost = Number(values.cost);
                   values.stock = Number(values.stock);
+
                   const response = await createFoodItem(values);
                   console.log(response);
                   if (response.data?.createFoodItem.id) {

@@ -112,7 +112,7 @@ export type Mutation = {
   completeOrder: Order;
   createFoodItem: FoodItem;
   createTag: Tag;
-  deleteFoodItem: Scalars['Boolean'];
+  deleteFoodItem: Array<FoodItem>;
   deleteOrder: Scalars['Boolean'];
   deleteReview: Scalars['Boolean'];
   deleteTag: Scalars['Boolean'];
@@ -233,6 +233,7 @@ export type MutationChangePhoneNumberArgs = {
 export type MutationCreateFoodItemArgs = {
   cost: Scalars['Float'];
   description: Scalars['String'];
+  idMerchant: Scalars['Int'];
   imageAlt: Scalars['String'];
   imageUrl: Scalars['String'];
   itemName: Scalars['String'];
@@ -247,6 +248,7 @@ export type MutationCreateTagArgs = {
 
 export type MutationDeleteFoodItemArgs = {
   foodItemId: Scalars['Int'];
+  idMerchant: Scalars['Int'];
 };
 
 
@@ -325,6 +327,7 @@ export type Query = {
   merchant?: Maybe<Merchant>;
   merchantCurrentOrders: Array<OrderResponse>;
   merchantOrders: Array<OrderResponse>;
+  merchantPersonalMenu: Array<FoodItem>;
   merchantTags: Array<Tag>;
   merchants: Array<Merchant>;
   reviews: Array<Review>;
@@ -528,6 +531,7 @@ export type CreateFoodItemMutationVariables = Exact<{
   itemName: Scalars['String'];
   imageURL: Scalars['String'];
   imageAlt: Scalars['String'];
+  idMerchant: Scalars['Int'];
 }>;
 
 
@@ -535,10 +539,11 @@ export type CreateFoodItemMutation = { __typename?: 'Mutation', createFoodItem: 
 
 export type DeleteFoodItemMutationVariables = Exact<{
   foodItemId: Scalars['Int'];
+  idMerchant: Scalars['Int'];
 }>;
 
 
-export type DeleteFoodItemMutation = { __typename?: 'Mutation', deleteFoodItem: boolean };
+export type DeleteFoodItemMutation = { __typename?: 'Mutation', deleteFoodItem: Array<{ __typename?: 'FoodItem', itemName: string, stock: number, description: string, imageAlt: string, imageUrl: string, cost: number }> };
 
 export type LoginMutationVariables = Exact<{
   usernameOrEmail: Scalars['String'];
@@ -622,6 +627,11 @@ export type MerchantOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MerchantOrdersQuery = { __typename?: 'Query', merchantOrders: Array<{ __typename?: 'OrderResponse', orderItems?: Maybe<Array<{ __typename?: 'OrderItem', orderId: number, foodItemId: number, foodItem: { __typename?: 'FoodItem', itemName: string, cost: number, description: string, id: number, imageUrl: string, imageAlt: string, merchantId: number } }>>, order?: Maybe<{ __typename?: 'Order', isComplete: boolean, userId: number, id: number, user: { __typename?: 'User', firstname: string, lastname: string } }> }> };
+
+export type MerchantPersonalMenuQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MerchantPersonalMenuQuery = { __typename?: 'Query', merchantPersonalMenu: Array<{ __typename?: 'FoodItem', itemName: string, description: string, id: number, imageUrl: string, imageAlt: string, cost: number }> };
 
 export type MerchantTagsQueryVariables = Exact<{
   merchantId: Scalars['Int'];
@@ -865,7 +875,7 @@ export function useCompleteOrderMutation() {
   return Urql.useMutation<CompleteOrderMutation, CompleteOrderMutationVariables>(CompleteOrderDocument);
 };
 export const CreateFoodItemDocument = gql`
-    mutation createFoodItem($stock: Int!, $cost: Float!, $description: String!, $itemName: String!, $imageURL: String!, $imageAlt: String!) {
+    mutation createFoodItem($stock: Int!, $cost: Float!, $description: String!, $itemName: String!, $imageURL: String!, $imageAlt: String!, $idMerchant: Int!) {
   createFoodItem(
     stock: $stock
     cost: $cost
@@ -873,6 +883,7 @@ export const CreateFoodItemDocument = gql`
     itemName: $itemName
     imageUrl: $imageURL
     imageAlt: $imageAlt
+    idMerchant: $idMerchant
   ) {
     description
     id
@@ -889,8 +900,15 @@ export function useCreateFoodItemMutation() {
   return Urql.useMutation<CreateFoodItemMutation, CreateFoodItemMutationVariables>(CreateFoodItemDocument);
 };
 export const DeleteFoodItemDocument = gql`
-    mutation deleteFoodItem($foodItemId: Int!) {
-  deleteFoodItem(foodItemId: $foodItemId)
+    mutation deleteFoodItem($foodItemId: Int!, $idMerchant: Int!) {
+  deleteFoodItem(foodItemId: $foodItemId, idMerchant: $idMerchant) {
+    itemName
+    stock
+    description
+    imageAlt
+    imageUrl
+    cost
+  }
 }
     `;
 
@@ -1132,6 +1150,23 @@ export const MerchantOrdersDocument = gql`
 
 export function useMerchantOrdersQuery(options: Omit<Urql.UseQueryArgs<MerchantOrdersQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MerchantOrdersQuery>({ query: MerchantOrdersDocument, ...options });
+};
+export const MerchantPersonalMenuDocument = gql`
+    query merchantPersonalMenu {
+  merchantPersonalMenu {
+    itemName
+    description
+    id
+    itemName
+    imageUrl
+    imageAlt
+    cost
+  }
+}
+    `;
+
+export function useMerchantPersonalMenuQuery(options: Omit<Urql.UseQueryArgs<MerchantPersonalMenuQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<MerchantPersonalMenuQuery>({ query: MerchantPersonalMenuDocument, ...options });
 };
 export const MerchantTagsDocument = gql`
     query MerchantTags($merchantId: Int!) {
