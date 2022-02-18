@@ -7,6 +7,7 @@ import {
   Button,
   Divider,
   Flex,
+  Grid,
   HStack,
   IconButton,
   Tag,
@@ -217,20 +218,22 @@ const Search = () => {
           </HStack>
         </VStack>
 
-        <HStack p={"20px"}>
-          {tags.map((tagName) => (
-            <Tag
-              size={"md"}
-              variant="subtle"
-              colorScheme="green"
-              // onClick={setTags([""])}
-            >
-              <TagLeftIcon boxSize="12px" as={AddIcon} />
-              <TagLabel>{tagName}</TagLabel>
-            </Tag>
-          ))}
+        <VStack pt={5} pb={5}>
+          <Grid templateColumns="repeat(3, 1fr)" gap={6} maxW={"300px"}>
+            {tags.map((tagName) => (
+              <Tag
+                size={"md"}
+                variant="subtle"
+                colorScheme="green"
+                maxW={"120px"}
+              >
+                <TagLeftIcon boxSize="12px" as={AddIcon} />
+                <TagLabel>{tagName}</TagLabel>
+              </Tag>
+            ))}
+          </Grid>
           {rmbutton}
-        </HStack>
+        </VStack>
         <VStack spacing={6}>
           {data?.merchants.map(function (p) {
             // console.log(p.id);

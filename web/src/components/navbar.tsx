@@ -307,7 +307,9 @@ export const Navbar: React.FC<NavbarProps> = ({ title }) => {
               >
                 Log In
               </Button> */}
-              <Box></Box>
+              <Box>
+                <Badge colorScheme={"black"}>Current Tokens: %</Badge>
+              </Box>
             </HStack>
           </Flex>
         </Box>
