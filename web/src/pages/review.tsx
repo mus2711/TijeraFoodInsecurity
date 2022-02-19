@@ -40,7 +40,7 @@ const review = ({}) => {
       label: "Comment",
     },
   ];
-
+  console.log(menuProps);
   return (
     <Layout title="Leave a Review">
       <VStack spacing={12} paddingBottom={"40px"}>
@@ -64,7 +64,7 @@ const review = ({}) => {
               console.log(values);
               const response = await addReview({
                 comment: values.comment,
-                merchantId: menuProps?.merchantID ?? 0,
+                merchantId: menuProps?.id ?? 0,
                 rating: star,
               });
               console.log(response);

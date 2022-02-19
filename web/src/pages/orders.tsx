@@ -1,14 +1,9 @@
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
-import {
-  useMerchantCurrentOrdersQuery,
-  useMerchantOrdersQuery,
-} from "../generated/graphql";
+import { useMerchantOrdersQuery } from "../generated/graphql";
 import React from "react";
 import { Badge, Box, Divider, HStack, VStack } from "@chakra-ui/react";
 import { Layout } from "../components/layout";
-import { findMerchantId } from "../functions/findMerchantId";
-import { findUserId } from "../functions/findUserId";
 
 const orders = () => {
   const [{ data }] = useMerchantOrdersQuery();

@@ -1,14 +1,7 @@
-import {
-  Cache,
-  cacheExchange,
-  query,
-  QueryInput,
-} from "@urql/exchange-graphcache";
+import { Cache, cacheExchange, QueryInput } from "@urql/exchange-graphcache";
 import { multipartFetchExchange } from "@urql/exchange-multipart-fetch";
-import { createUploadLink } from "apollo-upload-client";
 import { SSRExchange } from "next-urql";
-import { dedupExchange, fetchExchange } from "urql";
-import { findMerchantId } from "../src/functions/findMerchantId";
+import { dedupExchange } from "urql";
 import {
   AddLocationMutation,
   AddReviewMutation,

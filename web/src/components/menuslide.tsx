@@ -109,6 +109,7 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
   };
 
   const pushToReview = () => {
+    console.log(merchantID);
     setGlobalState("reviewRes", {
       imageUrl: imageUrl,
       imageAlt: imageAlt,
