@@ -294,123 +294,126 @@ const Search = () => {
           spacing={10}
           pt={10}
           display={data?.me.merchant ? "none" : "initial"}
+          justifyContent={"center"}
         >
-          <Text maxWidth={"500px"} textAlign="center">
-            Watch vidoes and learn about new things, and collect tokens when you
-            finish them.
-          </Text>
-          <Box>
-            <Heading size={"sm"} textAlign={"left"} pb={2}>
-              Learn Python
-            </Heading>
+          <VStack>
+            <Text maxWidth={"300px"} textAlign="center">
+              Watch vidoes and learn about new things, and collect tokens when
+              you finish them.
+            </Text>
+            <Box>
+              <Heading size={"sm"} textAlign={"left"} pb={2}>
+                Learn Python
+              </Heading>
 
-            <ReactPlayer
-              width={"500px"}
-              url="https://www.youtube.com/embed/I2wURDqiXdM"
-              light={true}
-              key={1}
-              config={{
-                youtube: {
-                  playerVars: { showinfo: 1 },
-                },
-              }}
-              onEnded={() => {
-                setWatchedState((watchedState = true));
-              }}
-            />
-            <Button
-              isDisabled={watchedState ? false : true}
-              colorScheme={"cyan"}
-              size={"sm"}
-              mt={2}
-              onClick={() =>
-                toast({
-                  title: "Tokens Claimed.",
-                  description: "Congrats! You should now have more tokens.",
-                  status: "success",
-                  duration: 9000,
-                  isClosable: true,
-                })
-              }
-            >
-              Claim Tokens
-            </Button>
-          </Box>
+              <ReactPlayer
+                width={"400px"}
+                url="https://www.youtube.com/embed/I2wURDqiXdM"
+                light={true}
+                key={1}
+                config={{
+                  youtube: {
+                    playerVars: { showinfo: 1 },
+                  },
+                }}
+                onEnded={() => {
+                  setWatchedState((watchedState = true));
+                }}
+              />
+              <Button
+                isDisabled={watchedState ? false : true}
+                colorScheme={"cyan"}
+                size={"sm"}
+                mt={2}
+                onClick={() =>
+                  toast({
+                    title: "Tokens Claimed.",
+                    description: "Congrats! You should now have more tokens.",
+                    status: "success",
+                    duration: 9000,
+                    isClosable: true,
+                  })
+                }
+              >
+                Claim Tokens
+              </Button>
+            </Box>
 
-          <Box>
-            <Heading size={"sm"} textAlign={"left"} pb={2}>
-              How to Manage Your Money
-            </Heading>
+            <Box>
+              <Heading size={"sm"} textAlign={"left"} pb={2}>
+                How to Manage Your Money
+              </Heading>
 
-            <ReactPlayer
-              width={"500px"}
-              url="https://www.youtube.com/watch?v=HQzoZfc3GwQ"
-              light={true}
-              key={1}
-              config={{
-                youtube: {
-                  playerVars: { showinfo: 1 },
-                },
-              }}
-              onEnded={() => {
-                setWatchedState2((watchedState2 = true));
-              }}
-            />
-            <Button
-              isDisabled={watchedState ? false : true}
-              colorScheme={"cyan"}
-              size={"sm"}
-              mt={2}
-              onClick={() =>
-                toast({
-                  title: "Tokens Claimed.",
-                  description: "Congrats! You should now have more tokens.",
-                  status: "success",
-                  duration: 9000,
-                  isClosable: true,
-                })
-              }
-            >
-              Claim Tokens
-            </Button>
-          </Box>
-          <Box>
-            <Heading size={"sm"} textAlign={"left"} pb={2}>
-              Gordon's Quick & Simple Recipes | Gordon Ramsay
-            </Heading>
+              <ReactPlayer
+                width={"400px"}
+                url="https://www.youtube.com/watch?v=HQzoZfc3GwQ"
+                light={true}
+                key={1}
+                config={{
+                  youtube: {
+                    playerVars: { showinfo: 1 },
+                  },
+                }}
+                onEnded={() => {
+                  setWatchedState2((watchedState2 = true));
+                }}
+              />
+              <Button
+                isDisabled={watchedState ? false : true}
+                colorScheme={"cyan"}
+                size={"sm"}
+                mt={2}
+                onClick={() =>
+                  toast({
+                    title: "Tokens Claimed.",
+                    description: "Congrats! You should now have more tokens.",
+                    status: "success",
+                    duration: 9000,
+                    isClosable: true,
+                  })
+                }
+              >
+                Claim Tokens
+              </Button>
+            </Box>
+            <Box>
+              <Heading size={"sm"} textAlign={"left"} pb={2}>
+                Gordon's Quick & Simple Recipes | Gordon Ramsay
+              </Heading>
 
-            <ReactPlayer
-              width={"500px"}
-              url="https://www.youtube.com/watch?v=mhDJNfV7hjk"
-              light={true}
-              key={1}
-              config={{
-                youtube: {
-                  playerVars: { showinfo: 1 },
-                },
-              }}
-              onEnded={() => {
-                setWatchedState3((watchedState3 = true));
-              }}
-            />
-            <Button
-              isDisabled={watchedState ? false : true}
-              colorScheme={"cyan"}
-              size={"sm"}
-              mt={2}
-              onClick={() =>
-                toast({
-                  title: "Tokens Claimed.",
-                  description: "Congrats! You should now have more tokens.",
-                  status: "success",
-                  duration: 9000,
-                  isClosable: true,
-                })
-              }
-            >
-              Claim Tokens
-            </Button>
-          </Box>
+              <ReactPlayer
+                width={"400px"}
+                url="https://www.youtube.com/watch?v=mhDJNfV7hjk"
+                light={true}
+                key={1}
+                config={{
+                  youtube: {
+                    playerVars: { showinfo: 1 },
+                  },
+                }}
+                onEnded={() => {
+                  setWatchedState3((watchedState3 = true));
+                }}
+              />
+              <Button
+                isDisabled={watchedState ? false : true}
+                colorScheme={"cyan"}
+                size={"sm"}
+                mt={2}
+                onClick={() =>
+                  toast({
+                    title: "Tokens Claimed.",
+                    description: "Congrats! You should now have more tokens.",
+                    status: "success",
+                    duration: 9000,
+                    isClosable: true,
+                  })
+                }
+              >
+                Claim Tokens
+              </Button>
+            </Box>
+          </VStack>
         </VStack>
       </>
     );

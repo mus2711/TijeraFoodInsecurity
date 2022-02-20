@@ -282,12 +282,16 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
                 <Text>You are currently ordering from another Store: </Text>
                 <Button
                   colorScheme={"red"}
+                  size={"sm"}
+                  pl={5}
+                  pr={5}
                   onClick={() => {
                     setGlobalState("userBasket", []);
                     setGlobalState("basketMerchant", 0);
+                    setBasketLength(0);
                   }}
                 >
-                  New Basket
+                  Clear Basket
                 </Button>
               </HStack>
             )}
@@ -326,7 +330,12 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
                       ? "teal"
                       : "red"
                   }
-                  isDisabled={data.me.merchant ? true : false}
+                  isDisabled={
+                    (!data.me.merchant && id == currentMerchant) ||
+                    (!data.me.merchant && currentMerchant == 0)
+                      ? false
+                      : true
+                  }
                   aria-label="Menu"
                   icon={<HiPlus size={"20px"} />}
                   padding={"5px"}
@@ -356,6 +365,9 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
               onClick={() => {
                 pushToReview();
               }}
+              size={"sm"}
+              pl={5}
+              pr={5}
               leftIcon={<HiPencil />}
               isDisabled={data?.me.merchant ? true : false}
             >
@@ -365,10 +377,14 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
               width={"100%"}
               colorScheme="blue"
               mr={3}
+              size={"sm"}
+              pl={5}
+              pr={5}
               onClick={() => {
                 router.push("/checkout");
               }}
               rightIcon={<MdShoppingBasket />}
+              isDisabled={data?.me.merchant ? true : false}
             >
               Basket ({basketLength})
             </Button>
