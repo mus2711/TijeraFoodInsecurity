@@ -34,13 +34,13 @@ Go to pgAdmin
 Create a database called `tijera`:
 
 <p align="center">
- <img height="400px" src="https://github.com/mus2711/tijera_dev_master/blob/main/assets/Screenshot%202022-02-20%20at%2014.53.19.png">
+ <img height="400px" src="https://github.com/mus2711/tijera_dev_master/blob/main/assets/Screenshot%202022-02-20%20at%2015.05.28.png">
 </p>
 <p align="center">
- <img height="400px" src="https://github.com/mus2711/tijera_dev_master/blob/main/assets/Screenshot%202022-02-20%20at%2014.53.29.png">
+ <img height="400px" src="https://github.com/mus2711/tijera_dev_master/blob/main/assets/Screenshot%202022-02-20%20at%2015.05.53.png">
 </p>
 <p align="center">
- <img height="400px" src="https://github.com/mus2711/tijera_dev_master/blob/main/assets/Screenshot%202022-02-20%20at%2014.53.29.png">
+ <img height="400px" src="https://github.com/mus2711/tijera_dev_master/blob/main/assets/Screenshot%202022-02-20%20at%2015.05.57.png">
 </p>
 
 <!-- ```console
