@@ -1,6 +1,6 @@
 # Tijera MVP
 
-Developed by `Mustafa Al Quraishi` and `Arun Suhas`, managed by `Oliwia Orgodniczek` for Imperial Junior Solutions.
+Developed by `Mustafa Al Quraishi` and `Arun Suhas`, managed by `Oliwia Orgodniczek` under Imperial Junior Solutions for Tijera Consultantcy.
 
 <div or>
 <p align="center">
