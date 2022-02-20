@@ -1,6 +1,14 @@
-# tijera MVP
+# Tijera MVP
 
-<!-- <img src="https://user-images.githubusercontent.com/43412083/122988795-bbecba80-d3bf-11eb-8f20-ab1b0c451588.png" width="250" hspace="5" vspace="20"> <img src="https://user-images.githubusercontent.com/43412083/122988809-bee7ab00-d3bf-11eb-9f29-fd46f3b99c23.png" width="250" hspace="5" vspace="20"> <img src="https://user-images.githubusercontent.com/43412083/122988820-c14a0500-d3bf-11eb-9a3a-64276f5641e5.png" width="250" hspace="5" vspace="20"> -->
+Developed by `Mustafa Al Quraishi` and `Arun Suhas`, managed by `Oliwia Orgodniczek` for Imperial Junior Solutions
+
+<p align="center">
+ <img height="400px" src="https://github.com/mus2711/fullstack-dev-challenge/blob/master/screenshots/Screenshot%202022-01-28%20at%2011.30.24.png">
+</p>
+
+<p align="center">
+ <img height="400px" src="https://github.com/mus2711/fullstack-dev-challenge/blob/master/screenshots/Screenshot%202022-01-28%20at%2011.30.34.png">
+</p>
 
 ---
 
