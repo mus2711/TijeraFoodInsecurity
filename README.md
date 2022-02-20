@@ -79,7 +79,7 @@ yarn build
 yarn dev
 ```
 
-```You will now find the website running at `http://localhost:3000````
+You will now find the website running at `http://localhost:3000`
 
 ```
 
