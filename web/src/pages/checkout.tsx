@@ -19,6 +19,7 @@ import {
   Th,
   Thead,
   Tr,
+  useToast,
 } from "@chakra-ui/react";
 import { Layout } from "../components/layout";
 import { setGlobalState, useGlobalState } from "../state/state";
@@ -35,7 +36,7 @@ const Checkout = () => {
   const [currentMerchant] = useGlobalState("basketMerchant");
   const [, addToOrder] = useAddToOrderMutation();
   const [{ data }] = useMerchantQuery({ variables: { id: currentMerchant } });
-
+  const toast = useToast();
   function totalPrice() {
     let totalPr = 0;
     currentBasket.map((p) => {
@@ -126,11 +127,24 @@ const Checkout = () => {
 
           <Stat pt={5} pb={5}>
             <StatLabel>Total Fees</StatLabel>
-            <StatNumber>£{currentPrice}</StatNumber>
+            <StatNumber>£{currentPrice.toPrecision(4)}</StatNumber>
             <StatHelpText>from {data?.merchant?.cpname}</StatHelpText>
           </Stat>
           <HStack>
-            <Button colorScheme={"teal"} onClick={() => pushCheckout()}>
+            <Button
+              colorScheme={"teal"}
+              onClick={() => {
+                pushCheckout().then(() =>
+                  toast({
+                    title: "Delivery placed.",
+                    description: `Thank you for your order, you can go and pick up your order at ${data?.merchant?.cpname} at ${data?.merchant?.location}.`,
+                    status: "success",
+                    duration: 9000,
+                    isClosable: true,
+                  })
+                );
+              }}
+            >
               Checkout
             </Button>
             <Button

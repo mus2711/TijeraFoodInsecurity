@@ -1,5 +1,6 @@
 query Merchant($id: Int!) {
   merchant(id: $id) {
     cpname
+    location
   }
 }

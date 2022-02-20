@@ -110,7 +110,7 @@ export type Mutation = {
   changeLastName: User;
   changePhoneNumber: User;
   completeOrder: Order;
-  createFoodItem: FoodItem;
+  createFoodItem: Array<FoodItem>;
   createTag: Tag;
   deleteFoodItem: Array<FoodItem>;
   deleteOrder: Scalars['Boolean'];
@@ -535,7 +535,7 @@ export type CreateFoodItemMutationVariables = Exact<{
 }>;
 
 
-export type CreateFoodItemMutation = { __typename?: 'Mutation', createFoodItem: { __typename?: 'FoodItem', description: string, id: number, itemName: string, merchantId: number, merchant: { __typename?: 'Merchant', cpname: string } } };
+export type CreateFoodItemMutation = { __typename?: 'Mutation', createFoodItem: Array<{ __typename?: 'FoodItem', description: string, id: number, itemName: string, merchantId: number, merchant: { __typename?: 'Merchant', cpname: string } }> };
 
 export type DeleteFoodItemMutationVariables = Exact<{
   foodItemId: Scalars['Int'];
@@ -616,7 +616,7 @@ export type MerchantQueryVariables = Exact<{
 }>;
 
 
-export type MerchantQuery = { __typename?: 'Query', merchant?: Maybe<{ __typename?: 'Merchant', cpname: string }> };
+export type MerchantQuery = { __typename?: 'Query', merchant?: Maybe<{ __typename?: 'Merchant', cpname: string, location?: Maybe<string> }> };
 
 export type MerchantCurrentOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1080,6 +1080,7 @@ export const MerchantDocument = gql`
     query Merchant($id: Int!) {
   merchant(id: $id) {
     cpname
+    location
   }
 }
     `;
