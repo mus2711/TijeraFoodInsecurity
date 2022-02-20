@@ -2,6 +2,7 @@
 
 Developed by `Mustafa Al Quraishi` and `Arun Suhas`, managed by `Oliwia Orgodniczek` under Imperial Junior Solutions for Tijera Consultantcy.
 
+<div or>
 <p align="center">
  <img height="400px" src="https://github.com/mus2711/tijera_dev_master/blob/main/assets/Screenshot%202022-02-20%20at%2014.52.08.png">
 </p>
@@ -80,13 +81,9 @@ yarn dev
 
 You will now find the website running at `http://localhost:3000`
 
-```
-
 [1]: https://nodejs.org/en/
 [2]: https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable
 [3]: https://code.visualstudio.com
 [4]: https://www.postgresql.org/download/
 [5]: https://redis.io
 [6]: https://www.pgadmin.org
-
-```
