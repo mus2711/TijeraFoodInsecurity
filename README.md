@@ -2,7 +2,6 @@
 
 Developed by `Mustafa Al Quraishi` and `Arun Suhas`, managed by `Oliwia Orgodniczek` under Imperial Junior Solutions for Tijera Consultantcy.
 
-<div or>
 <p align="center">
  <img height="400px" src="https://github.com/mus2711/tijera_dev_master/blob/main/assets/Screenshot%202022-02-20%20at%2014.52.08.png">
 </p>
