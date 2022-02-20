@@ -1,6 +1,6 @@
 # Tijera MVP
 
-Developed by `Mustafa Al Quraishi` and `Arun Suhas`, managed by `Oliwia Orgodniczek` for Imperial Junior Solutions
+Developed by `Mustafa Al Quraishi` and `Arun Suhas`, managed by `Oliwia Orgodniczek` for Imperial Junior Solutions.
 
 <div or>
 <p align="center">
@@ -24,7 +24,7 @@ Developed by `Mustafa Al Quraishi` and `Arun Suhas`, managed by `Oliwia Orgodnic
 You will need to have [Node][1] and [Yarn][2] installed on your computer.
 We recommend using an IDE code editor to run this, we used [VS Code][3].
 You will need [PostgreSQL][4] and [Redis][5].
-In order to run a 'PostgreSQL' server we recommend using a GUI such as [pgAdmin][6]
+In order to run a 'PostgreSQL' server we recommend using a GUI such as [pgAdmin][6].
 
 ### Server
 
@@ -79,7 +79,9 @@ yarn build
 yarn dev
 ```
 
-## You will now find the website running at `http://localhost:3000`
+```You will now find the website running at `http://localhost:3000`
+
+```
 
 [1]: https://nodejs.org/en/
 [2]: https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable
@@ -87,3 +89,4 @@ yarn dev
 [4]: https://www.postgresql.org/download/
 [5]: https://redis.io
 [6]: https://www.pgadmin.org
+```
