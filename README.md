@@ -21,17 +21,33 @@ Developed by `Mustafa Al Quraishi` and `Arun Suhas`, managed by `Oliwia Orgodnic
 
 ## How to deploy
 
+You will need to have [Node][1] and [Yarn][2] installed on your computer.
+We recommend using an IDE code editor to run this, we used [VS Code][3].
+You will need [PostgreSQL][4] and [Redis][5].
+In order to run a 'PostgreSQL' server we recommend using a GUI such as [pgAdmin][6]
+
 ### Server
 
 Setup postgresql
 
+Go to pgAdmin
 Create a database called `tijera`:
 
-```console
-createdb -U postgres tijera
-```
+<p align="center">
+ <img height="400px" src="https://github.com/mus2711/tijera_dev_master/blob/main/assets/Screenshot%202022-02-20%20at%2014.53.19.png">
+</p>
+<p align="center">
+ <img height="400px" src="https://github.com/mus2711/tijera_dev_master/blob/main/assets/Screenshot%202022-02-20%20at%2014.53.29.png">
+</p>
+<p align="center">
+ <img height="400px" src="https://github.com/mus2711/tijera_dev_master/blob/main/assets/Screenshot%202022-02-20%20at%2014.53.29.png">
+</p>
 
-Then, in the root project directory, run the following:
+<!-- ```console
+createdb -U postgres tijera
+``` -->
+
+Then, in the go to the root project directory in your terminal, run the following:
 
 ```console
 cd server
@@ -60,37 +76,14 @@ Edit the variables as needed, and then run
 ```console
 yarn
 yarn build
-yarn start
+yarn dev
 ```
 
----
+## You will now find the website running at `http://localhost:3000`
 
-## Development setup
-
-### Backend
-
-Setup postgresql: here's guides for [Ubuntu][2] and [Manjaro/Arch][3].
-
-Create a database called `tijera`, and another called `tijera-test`:
-
-```console
-createdb -U postgres tijera
-createdb -U postgres tijera-test
-```
-
-Run `yarn watch` in one terminal window, and `yarn dev` in the other.
-
-You get hot reload and database auto-synchronization enabled by default.
-
-Testing: run `yarn test`
-
-### Frontend
-
-Run `yarn dev` to start the next server in development mode.
-
-Testing: run `yarn test:frontend` in the `server` folder and `yarn test` in the
-`web` folder.
-
-[1]: https://www.youtube.com/watch?v=I6ypD7qv3Z8
-[2]: https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-20-04
-[3]: https://dev.to/tusharsadhwani/how-to-setup-postgresql-on-manjaro-linux-arch-412l
+[1]: https://nodejs.org/en/
+[2]: https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable
+[3]: https://code.visualstudio.com
+[4]: https://www.postgresql.org/download/
+[5]: https://redis.io
+[6]: https://www.pgadmin.org
