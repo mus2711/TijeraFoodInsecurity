@@ -331,19 +331,6 @@ export default class MerchantResolver {
   }
 
   @Mutation(() => Merchant)
-  async addLocation(
-    @Ctx() { req }: MyContext,
-    @Arg("location", () => String) location: string
-  ): Promise<Merchant> {
-    if (!req.session.merchantId) throw new Error("Merchant not Logged in");
-    const merchant = await Merchant.findOne(req.session.merchantId);
-    if (!merchant) throw new Error("Merchant not found");
-
-    merchant.location = location;
-    return await merchant.save();
-  }
-
-  @Mutation(() => Merchant)
   async changeCpname(
     @Ctx() { req }: MyContext,
     @Arg("cpname", () => String) cpname: string
@@ -467,5 +454,41 @@ export default class MerchantResolver {
     }
 
     return tags;
+  }
+
+  @Mutation(() => User)
+  async addMerchantCoordinates(
+    @Ctx() { req }: MyContext,
+    @Arg("latitude", () => Float) latitude: number,
+    @Arg("longitude", () => Float) longitude: number
+  ): Promise<Merchant> {
+    if (!req.session.merchantId) throw new Error("Merchant not Logged in");
+    const merchant = await Merchant.findOne(req.session.merchantId);
+    if (!merchant) throw new Error("Merchant not found");
+
+    merchant.latitude = latitude;
+    merchant.longitude = longitude;
+    return await merchant.save();
+  }
+
+  @Mutation(() => User)
+  async changeMerchantAddress(
+    @Ctx() { req }: MyContext,
+    @Arg("address1", () => String) address1: string,
+    @Arg("address2", () => String) address2: string,
+    @Arg("city", () => String) city: string,
+    @Arg("postcode", () => String) postcode: string,
+    @Arg("country", () => String) country: string
+  ) {
+    if (!req.session.merchantId) throw new Error("Merchant not Logged in");
+    const merchant = await Merchant.findOne(req.session.merchantId);
+    if (!merchant) throw new Error("Merchant not found");
+
+    merchant.address1 = address1;
+    merchant.address2 = address2;
+    merchant.city = city;
+    merchant.postcode = postcode;
+    merchant.country = country;
+    return await merchant.save();
   }
 }

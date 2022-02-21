@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from "type-graphql";
+import { Field, Float, Int, ObjectType } from "type-graphql";
 import {
   BaseEntity,
   Column,
@@ -41,15 +41,39 @@ export class Merchant extends BaseEntity {
 
   @Column({ nullable: true })
   @Field({ nullable: true })
-  location?: string;
-
-  @Column({ nullable: true })
-  @Field({ nullable: true })
   imageUrl?: string;
 
   @Column({ nullable: true })
   @Field({ nullable: true })
   imageAlt?: string;
+
+  @Column("float", { nullable: true })
+  @Field(() => Float, { nullable: true })
+  latitude?: number;
+
+  @Column("float", { nullable: true })
+  @Field(() => Float, { nullable: true })
+  longitude?: number;
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  address1?: string;
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  address2?: string;
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  city?: string;
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  postcode?: string;
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  country?: string;
 
   @OneToMany(() => Review, (review) => review.user)
   reviews!: Review[];
