@@ -13,6 +13,7 @@ import {
   TagLabel,
   TagLeftIcon,
   Text,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { Layout } from "../components/layout";
@@ -30,6 +31,7 @@ const review = ({}) => {
   const router = useRouter();
   // useIsAuth();
   let [star, setStar] = useState(1);
+  const toast = useToast();
   const [menuProps] = useGlobalState("reviewRes");
   const [, addReview] = useAddReviewMutation();
   const [, addTokens] = useAddTokensMutation();
@@ -76,6 +78,13 @@ const review = ({}) => {
 
               if (response.data?.addReview.comment) {
                 addTokens({ tokens: 5 });
+                toast({
+                  title: "Tokens Claimed.",
+                  description: "Congrats! You should now have more tokens.",
+                  status: "success",
+                  duration: 9000,
+                  isClosable: true,
+                });
                 router.push("/search");
               }
             }}
