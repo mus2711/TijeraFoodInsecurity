@@ -3,6 +3,9 @@ query userOrders($userId: Int!) {
     order {
       merchantId
       isComplete
+      merchant {
+        cpname
+      }
     }
     orderItems {
       orderId

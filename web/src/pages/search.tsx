@@ -21,7 +21,11 @@ import {
 import { Layout } from "../components/layout";
 import { MenuSlide } from "../components/menuslide";
 import { AddLocationIcon, Combobox, RemoveIcon } from "evergreen-ui";
-import { MerchantsQuery, useMerchantsQuery } from "../generated/graphql";
+import {
+  MerchantsQuery,
+  useAddTokensMutation,
+  useMerchantsQuery,
+} from "../generated/graphql";
 import { AddIcon } from "@chakra-ui/icons";
 import ReactPlayer from "react-player/lazy";
 
@@ -115,6 +119,8 @@ const Search = () => {
   let [watchedState, setWatchedState] = useState(false);
   let [watchedState2, setWatchedState2] = useState(false);
   let [watchedState3, setWatchedState3] = useState(false);
+  const [, addTokens] = useAddTokensMutation();
+  const [located, setLocated] = useState(false);
   const toast = useToast();
 
   // map of tags to their index
@@ -134,7 +140,6 @@ const Search = () => {
   };
 
   populateTags(mapTags, data);
-  // console.log(mapTags);
 
   let merchantTagIDs: Map<number, number[]> = new Map();
   let populateMerchantTagsIDs = (
@@ -241,20 +246,15 @@ const Search = () => {
               }
             });
 
-            // console.log(merchantTags);
             if (found(merchantTags, tags)) {
               return (
                 <>
                   <MenuSlide
-                    // imageUrl={p.imageUrl}
-                    // imageAlt={p.imageAlt}
                     name={p.cpname}
                     reviewCount={p.reviewCount}
                     rating={p.averageRating ? p.averageRating : undefined}
                     cuisine={merchantTags}
-                    // menulist={p.menulist}
                     location={p.location ? p.location : undefined}
-                    // avatarlogo={p.avatarlogo}
                     key={p.id}
                     id={p.id}
                   />
@@ -265,15 +265,11 @@ const Search = () => {
               return (
                 <>
                   <MenuSlide
-                    // imageUrl={p.imageUrl}
-                    // imageAlt={p.imageAlt}
                     name={p.cpname}
                     reviewCount={p.reviewCount}
                     rating={p.averageRating ? p.averageRating : undefined}
                     cuisine={merchantTags}
-                    // menulist={p.menulist}
                     location={p.location ? p.location : undefined}
-                    // avatarlogo={p.avatarlogo}
                     key={p.id}
                     id={p.id}
                   />
@@ -325,15 +321,16 @@ const Search = () => {
                 colorScheme={"cyan"}
                 size={"sm"}
                 mt={2}
-                onClick={() =>
+                onClick={() => {
+                  addTokens({ tokens: 5 });
                   toast({
                     title: "Tokens Claimed.",
                     description: "Congrats! You should now have more tokens.",
                     status: "success",
                     duration: 9000,
                     isClosable: true,
-                  })
-                }
+                  });
+                }}
               >
                 Claim Tokens
               </Button>
@@ -363,15 +360,16 @@ const Search = () => {
                 colorScheme={"cyan"}
                 size={"sm"}
                 mt={2}
-                onClick={() =>
+                onClick={() => {
+                  addTokens({ tokens: 5 });
                   toast({
                     title: "Tokens Claimed.",
                     description: "Congrats! You should now have more tokens.",
                     status: "success",
                     duration: 9000,
                     isClosable: true,
-                  })
-                }
+                  });
+                }}
               >
                 Claim Tokens
               </Button>
@@ -400,15 +398,16 @@ const Search = () => {
                 colorScheme={"cyan"}
                 size={"sm"}
                 mt={2}
-                onClick={() =>
+                onClick={() => {
+                  addTokens({ tokens: 5 });
                   toast({
                     title: "Tokens Claimed.",
                     description: "Congrats! You should now have more tokens.",
                     status: "success",
                     duration: 9000,
                     isClosable: true,
-                  })
-                }
+                  });
+                }}
               >
                 Claim Tokens
               </Button>

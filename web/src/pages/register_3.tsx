@@ -1,27 +1,19 @@
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import {
-  useMeQuery,
+  useInitialiseUserTokensMutation,
   useRegisterMutation,
   useRegisterUserFinalMutation,
 } from "../generated/graphql";
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Avatar,
-  AvatarBadge,
   Box,
   Flex,
   Heading,
-  HStack,
-  IconButton,
   Input,
   InputGroup,
   InputLeftElement,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
   Select,
   Stack,
   Text,
@@ -29,20 +21,15 @@ import {
 import NextLink from "next/link";
 import { Layout } from "../components/layout";
 import { useState } from "react";
-import { MdLocationOn, MdDateRange, MdPhone } from "react-icons/md";
-import { HiOutlineUserGroup } from "react-icons/hi";
-import { Formik, Form } from "formik";
+import { MdDateRange, MdPhone } from "react-icons/md";
 import { useRouter } from "next/router";
-import { toErrorMap } from "../../utils/toErrorMap";
 import { DblStandardButton } from "../components/DblStandardButton";
 import { SliderInput } from "../components/SliderInput";
-import { constant } from "lodash";
 
 const bl = "#5998A0";
 
 const Register_3 = () => {
   const router = useRouter();
-  const [, register] = useRegisterMutation();
   const [lat, setLat] = useState(0);
   const [lng, setLng] = useState(0);
   const [status, setStatus] = useState("");
@@ -53,7 +40,7 @@ const Register_3 = () => {
   const [DOB, setDOB] = useState("00/00/00");
   const [phone, setPhone] = useState("+0");
   const [gender, setGender] = useState<String | null>(null);
-  const [address, setAddress] = useState<String | null>(null);
+  const [, initialiseUserTokens] = useInitialiseUserTokensMutation();
 
   const [, registerUserFinal] = useRegisterUserFinalMutation();
   var date_regex =
@@ -83,6 +70,15 @@ const Register_3 = () => {
     setImage((image = URL.createObjectURL(e.target.files[0])));
   };
 
+  function delay(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  const initialiseTokens = async () => {
+    delay(1000);
+    initialiseUserTokens();
+  };
+
   const onRegisterUser = () => {
     if (date_regex.test(DOB)) {
       registerUserFinal({
@@ -95,6 +91,7 @@ const Register_3 = () => {
         gender: String(gender) ?? "",
         phoneNumber: phone,
       });
+      initialiseTokens();
       router.push("/search");
     }
   };
@@ -146,7 +143,7 @@ const Register_3 = () => {
               <option value="BRB">Barbados</option>
             </Select>
           </InputGroup>
-          <HStack spacing={1}>
+          {/* <HStack spacing={1}>
             <InputGroup>
               <InputLeftElement
                 pointerEvents="none"
@@ -174,7 +171,7 @@ const Register_3 = () => {
             >
               <MdLocationOn size={"30px"} color="black" />
             </IconButton>
-          </HStack>
+          </HStack> */}
           <InputGroup>
             <InputLeftElement
               pointerEvents="none"

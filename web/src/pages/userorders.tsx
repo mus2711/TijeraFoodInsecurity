@@ -41,6 +41,9 @@ const userorders = () => {
         {data?.userOrders.reverse().map((p, value) => (
           <>
             <VStack>
+              <Badge size={"md"} colorScheme={"pink"}>
+                {p.order?.merchant.cpname}
+              </Badge>
               <HStack>
                 {p.orderItems
                   ? p.orderItems.map((p) => (

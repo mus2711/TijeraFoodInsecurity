@@ -34,6 +34,7 @@ export type FieldMerchantError = {
 export type FoodItem = {
   __typename?: 'FoodItem';
   cost: Scalars['Float'];
+  createdAt: Scalars['String'];
   description: Scalars['String'];
   id: Scalars['Int'];
   imageAlt: Scalars['String'];
@@ -42,6 +43,7 @@ export type FoodItem = {
   merchant: Merchant;
   merchantId: Scalars['Float'];
   stock: Scalars['Float'];
+  updatedAt: Scalars['String'];
 };
 
 export type LoginInput = {
@@ -84,8 +86,10 @@ export type MerchantResponse = {
 
 export type MerchantTag = {
   __typename?: 'MerchantTag';
+  createdAt: Scalars['String'];
   merchantId: Scalars['Int'];
   tagId: Scalars['Int'];
+  updatedAt: Scalars['String'];
 };
 
 export type Mutation = {
@@ -96,6 +100,7 @@ export type Mutation = {
   addMerchantTag: Scalars['Boolean'];
   addReview: Review;
   addToOrder: OrderItem;
+  addTokens: User;
   changeCountry: User;
   changeCpname: Merchant;
   changeDOB: User;
@@ -109,6 +114,7 @@ export type Mutation = {
   changeIncome: User;
   changeLastName: User;
   changePhoneNumber: User;
+  changeUserMaxTokens: User;
   completeOrder: Order;
   createFoodItem: Array<FoodItem>;
   createTag: Tag;
@@ -116,6 +122,7 @@ export type Mutation = {
   deleteOrder: Scalars['Boolean'];
   deleteReview: Scalars['Boolean'];
   deleteTag: Scalars['Boolean'];
+  initialiseUserTokens: User;
   login: UserResponse;
   loginm: MerchantResponse;
   logout: Scalars['Boolean'];
@@ -124,6 +131,7 @@ export type Mutation = {
   registerm: MerchantResponse;
   removeFromOrder: Scalars['Boolean'];
   removeMerchantTag: Scalars['Boolean'];
+  removeTokens: User;
 };
 
 
@@ -156,6 +164,11 @@ export type MutationAddReviewArgs = {
 
 export type MutationAddToOrderArgs = {
   foodItemId: Scalars['Int'];
+};
+
+
+export type MutationAddTokensArgs = {
+  tokens: Scalars['Int'];
 };
 
 
@@ -230,6 +243,11 @@ export type MutationChangePhoneNumberArgs = {
 };
 
 
+export type MutationChangeUserMaxTokensArgs = {
+  maxTokens: Scalars['Int'];
+};
+
+
 export type MutationCreateFoodItemArgs = {
   cost: Scalars['Float'];
   description: Scalars['String'];
@@ -292,24 +310,33 @@ export type MutationRemoveMerchantTagArgs = {
   tagId: Scalars['Int'];
 };
 
+
+export type MutationRemoveTokensArgs = {
+  tokens: Scalars['Int'];
+};
+
 export type Order = {
   __typename?: 'Order';
   cost?: Maybe<Scalars['Float']>;
+  createdAt: Scalars['String'];
   id: Scalars['Int'];
   isComplete: Scalars['Boolean'];
   merchant: Merchant;
   merchantId: Scalars['Float'];
+  updatedAt: Scalars['String'];
   user: User;
   userId: Scalars['Float'];
 };
 
 export type OrderItem = {
   __typename?: 'OrderItem';
+  createdAt: Scalars['String'];
   foodItem: FoodItem;
   foodItemId: Scalars['Float'];
   order: Order;
   orderId: Scalars['Float'];
   quantity: Scalars['Float'];
+  updatedAt: Scalars['String'];
 };
 
 export type OrderResponse = {
@@ -397,8 +424,10 @@ export type RegisterMerchantInput = {
 export type Review = {
   __typename?: 'Review';
   comment: Scalars['String'];
+  createdAt: Scalars['String'];
   merchant: Merchant;
   rating: Scalars['Float'];
+  updatedAt: Scalars['String'];
   user: User;
 };
 
@@ -415,6 +444,7 @@ export type User = {
   __typename?: 'User';
   country?: Maybe<Scalars['String']>;
   createdAt: Scalars['String'];
+  currentTokens?: Maybe<Scalars['Float']>;
   dependents?: Maybe<Scalars['Float']>;
   dob?: Maybe<Scalars['DateTime']>;
   email: Scalars['String'];
@@ -423,6 +453,7 @@ export type User = {
   id: Scalars['Int'];
   income?: Maybe<Scalars['Float']>;
   lastname: Scalars['String'];
+  maxTokens?: Maybe<Scalars['Float']>;
   phoneNumber?: Maybe<Scalars['String']>;
   updatedAt: Scalars['String'];
   username: Scalars['String'];
@@ -482,6 +513,13 @@ export type AddToOrderMutationVariables = Exact<{
 
 
 export type AddToOrderMutation = { __typename?: 'Mutation', addToOrder: { __typename?: 'OrderItem', orderId: number, order: { __typename?: 'Order', cost?: Maybe<number>, userId: number, merchantId: number }, foodItem: { __typename?: 'FoodItem', itemName: string } } };
+
+export type AddTokensMutationVariables = Exact<{
+  tokens: Scalars['Int'];
+}>;
+
+
+export type AddTokensMutation = { __typename?: 'Mutation', addTokens: { __typename?: 'User', currentTokens?: Maybe<number>, maxTokens?: Maybe<number>, username: string } };
 
 export type RegisterUserFinalMutationVariables = Exact<{
   year: Scalars['Int'];
@@ -545,6 +583,11 @@ export type DeleteFoodItemMutationVariables = Exact<{
 
 export type DeleteFoodItemMutation = { __typename?: 'Mutation', deleteFoodItem: Array<{ __typename?: 'FoodItem', itemName: string, stock: number, description: string, imageAlt: string, imageUrl: string, cost: number }> };
 
+export type InitialiseUserTokensMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type InitialiseUserTokensMutation = { __typename?: 'Mutation', initialiseUserTokens: { __typename?: 'User', username: string, currentTokens?: Maybe<number>, maxTokens?: Maybe<number> } };
+
 export type LoginMutationVariables = Exact<{
   usernameOrEmail: Scalars['String'];
   password: Scalars['String'];
@@ -592,6 +635,13 @@ export type RegistermMutationVariables = Exact<{
 
 export type RegistermMutation = { __typename?: 'Mutation', registerm: { __typename?: 'MerchantResponse', errors?: Maybe<Array<{ __typename?: 'FieldMerchantError', field: string, merchantmsg: string }>>, merchant?: Maybe<{ __typename?: 'Merchant', id: number, cpname: string, imageUrl?: Maybe<string>, imageAlt?: Maybe<string>, cplogo?: Maybe<string>, username: string, location?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number> }> } };
 
+export type RemoveTokensMutationVariables = Exact<{
+  tokens: Scalars['Int'];
+}>;
+
+
+export type RemoveTokensMutation = { __typename?: 'Mutation', removeTokens: { __typename?: 'User', currentTokens?: Maybe<number>, maxTokens?: Maybe<number>, username: string } };
+
 export type TagsandMeQueryVariables = Exact<{
   merchantId: Scalars['Int'];
 }>;
@@ -609,7 +659,7 @@ export type GetMenuQuery = { __typename?: 'Query', getMenu: Array<{ __typename?:
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'MeResponse', merchant?: Maybe<{ __typename?: 'Merchant', id: number, cpname: string, cplogo?: Maybe<string>, imageUrl?: Maybe<string>, location?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number>, username: string }>, user?: Maybe<{ __typename?: 'User', id: number, firstname: string, lastname: string, username: string, email: string }> } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'MeResponse', merchant?: Maybe<{ __typename?: 'Merchant', id: number, cpname: string, cplogo?: Maybe<string>, imageUrl?: Maybe<string>, location?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number>, username: string }>, user?: Maybe<{ __typename?: 'User', id: number, firstname: string, lastname: string, username: string, email: string, currentTokens?: Maybe<number>, maxTokens?: Maybe<number> }> } };
 
 export type MerchantQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -669,7 +719,7 @@ export type UserOrdersQueryVariables = Exact<{
 }>;
 
 
-export type UserOrdersQuery = { __typename?: 'Query', userOrders: Array<{ __typename?: 'OrderResponse', order?: Maybe<{ __typename?: 'Order', merchantId: number, isComplete: boolean }>, orderItems?: Maybe<Array<{ __typename?: 'OrderItem', orderId: number, quantity: number, foodItemId: number, foodItem: { __typename?: 'FoodItem', stock: number, cost: number, itemName: string, imageUrl: string, imageAlt: string, description: string } }>> }> };
+export type UserOrdersQuery = { __typename?: 'Query', userOrders: Array<{ __typename?: 'OrderResponse', order?: Maybe<{ __typename?: 'Order', merchantId: number, isComplete: boolean, merchant: { __typename?: 'Merchant', cpname: string } }>, orderItems?: Maybe<Array<{ __typename?: 'OrderItem', orderId: number, quantity: number, foodItemId: number, foodItem: { __typename?: 'FoodItem', stock: number, cost: number, itemName: string, imageUrl: string, imageAlt: string, description: string } }>> }> };
 
 export const RegularMerchantErrorFragmentDoc = gql`
     fragment RegularMerchantError on FieldMerchantError {
@@ -793,6 +843,19 @@ export const AddToOrderDocument = gql`
 export function useAddToOrderMutation() {
   return Urql.useMutation<AddToOrderMutation, AddToOrderMutationVariables>(AddToOrderDocument);
 };
+export const AddTokensDocument = gql`
+    mutation addTokens($tokens: Int!) {
+  addTokens(tokens: $tokens) {
+    currentTokens
+    maxTokens
+    username
+  }
+}
+    `;
+
+export function useAddTokensMutation() {
+  return Urql.useMutation<AddTokensMutation, AddTokensMutationVariables>(AddTokensDocument);
+};
 export const RegisterUserFinalDocument = gql`
     mutation registerUserFinal($year: Int!, $month: Int!, $day: Int!, $income: Int!, $dependents: Int!, $country: String!, $gender: String!, $phoneNumber: String!) {
   changeDOB(year: $year, month: $month, day: $day) {
@@ -915,6 +978,19 @@ export const DeleteFoodItemDocument = gql`
 export function useDeleteFoodItemMutation() {
   return Urql.useMutation<DeleteFoodItemMutation, DeleteFoodItemMutationVariables>(DeleteFoodItemDocument);
 };
+export const InitialiseUserTokensDocument = gql`
+    mutation initialiseUserTokens {
+  initialiseUserTokens {
+    username
+    currentTokens
+    maxTokens
+  }
+}
+    `;
+
+export function useInitialiseUserTokensMutation() {
+  return Urql.useMutation<InitialiseUserTokensMutation, InitialiseUserTokensMutationVariables>(InitialiseUserTokensDocument);
+};
 export const LoginDocument = gql`
     mutation Login($usernameOrEmail: String!, $password: String!) {
   login(options: {usernameOrEmail: $usernameOrEmail, password: $password}) {
@@ -980,6 +1056,19 @@ export const RegistermDocument = gql`
 
 export function useRegistermMutation() {
   return Urql.useMutation<RegistermMutation, RegistermMutationVariables>(RegistermDocument);
+};
+export const RemoveTokensDocument = gql`
+    mutation removeTokens($tokens: Int!) {
+  removeTokens(tokens: $tokens) {
+    currentTokens
+    maxTokens
+    username
+  }
+}
+    `;
+
+export function useRemoveTokensMutation() {
+  return Urql.useMutation<RemoveTokensMutation, RemoveTokensMutationVariables>(RemoveTokensDocument);
 };
 export const TagsandMeDocument = gql`
     query TagsandMe($merchantId: Int!) {
@@ -1068,6 +1157,8 @@ export const MeDocument = gql`
       lastname
       username
       email
+      currentTokens
+      maxTokens
     }
   }
 }
@@ -1283,6 +1374,9 @@ export const UserOrdersDocument = gql`
     order {
       merchantId
       isComplete
+      merchant {
+        cpname
+      }
     }
     orderItems {
       orderId

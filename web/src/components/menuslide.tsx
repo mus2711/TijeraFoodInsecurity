@@ -210,7 +210,7 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
                 </Stack>
 
                 <Spacer />
-                <Text>${p.price}</Text>
+                <Text>{p.price} Tokens</Text>
                 <IconButton
                   colorScheme={"teal"}
                   aria-label="Menu"
@@ -323,7 +323,7 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
                 </Stack>
 
                 <Spacer />
-                <Text>${p.cost}</Text>
+                <Text>{p.cost} Tokens</Text>
                 <IconButton
                   colorScheme={
                     id == currentMerchant || currentMerchant == 0

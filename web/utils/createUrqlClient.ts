@@ -18,6 +18,7 @@ import {
   MerchantsDocument,
   MerchantsQuery,
   RegisterMutation,
+  RemoveTokensMutation,
   TagsandMeDocument,
   TagsandMeQuery,
 } from "../src/generated/graphql";
@@ -215,6 +216,27 @@ export const createUrqlClient = (ssrExchange: SSRExchange, ctx: any) => {
 
                     return {
                       getMenu: result.createFoodItem,
+                    };
+                  }
+                }
+              );
+            },
+            removeTokens: (_result, args, cache, info) => {
+              betterUpdateQuery<RemoveTokensMutation, MeQuery>(
+                cache,
+                {
+                  query: MeDocument,
+                  variables: { merchantId: args.tokens },
+                },
+                _result,
+                (result, query) => {
+                  console.log("args: ", args.tokens);
+                  console.log("cache: ", cache);
+                  console.log("info: ", info);
+                  if (result.removeTokens) {
+                    console.log(result);
+                    return {
+                      me: result.removeTokens.currentTokens,
                     };
                   }
                 }

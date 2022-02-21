@@ -1,6 +1,10 @@
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
-import { useAddReviewMutation, useMeQuery } from "../generated/graphql";
+import {
+  useAddReviewMutation,
+  useAddTokensMutation,
+  useMeQuery,
+} from "../generated/graphql";
 import React, { useEffect, useState } from "react";
 import {
   Box,
@@ -28,6 +32,7 @@ const review = ({}) => {
   let [star, setStar] = useState(1);
   const [menuProps] = useGlobalState("reviewRes");
   const [, addReview] = useAddReviewMutation();
+  const [, addTokens] = useAddTokensMutation();
   const initialInputs = {
     comment: "",
     // merchantId: 1,
@@ -68,12 +73,9 @@ const review = ({}) => {
                 rating: star,
               });
               console.log(response);
-              // if (response.data?.addReview.errors) {
-              //   setErrors(toErrorMap(response.data.addReview.errors));
-              // } else if (response.data?.addReview.user) {
-              //   router.push("/search");
-              // }
+
               if (response.data?.addReview.comment) {
+                addTokens({ tokens: 5 });
                 router.push("/search");
               }
             }}
@@ -113,7 +115,7 @@ const review = ({}) => {
                   <Box paddingTop={"10px"}>
                     <Tag size={"md"} variant="subtle" colorScheme="teal">
                       <TagLeftIcon boxSize="12px" as={AddIcon} />
-                      <TagLabel>5% Bonus</TagLabel>
+                      <TagLabel>5 Token Bonus</TagLabel>
                     </Tag>
                   </Box>
                 </Box>

@@ -28,6 +28,7 @@ import {
   useAddToOrderMutation,
   useCompleteOrderMutation,
   useMerchantQuery,
+  useRemoveTokensMutation,
 } from "../generated/graphql";
 
 const Checkout = () => {
@@ -35,6 +36,7 @@ const Checkout = () => {
   const [, completeOrder] = useCompleteOrderMutation();
   const [currentMerchant] = useGlobalState("basketMerchant");
   const [, addToOrder] = useAddToOrderMutation();
+  const [, removeTokens] = useRemoveTokensMutation();
   const [{ data }] = useMerchantQuery({ variables: { id: currentMerchant } });
   const toast = useToast();
   function totalPrice() {
@@ -57,6 +59,12 @@ const Checkout = () => {
     }
     await delay(100);
     completeOrder();
+    await delay(1000);
+    removeTokens({ tokens: Number(Math.round(currentPrice)) });
+
+    setGlobalState("userBasket", []);
+    setGlobalState("basketMerchant", 0);
+    setCurrentPrice((currentPrice = 0));
   };
 
   let [currentPrice, setCurrentPrice] = useState(totalPrice());
@@ -127,7 +135,9 @@ const Checkout = () => {
 
           <Stat pt={5} pb={5}>
             <StatLabel>Total Fees</StatLabel>
-            <StatNumber>£{currentPrice.toPrecision(4)}</StatNumber>
+            <StatNumber>
+              {currentPrice.toPrecision(currentPrice == 0 ? 1 : 4)} Tokens
+            </StatNumber>
             <StatHelpText>from {data?.merchant?.cpname}</StatHelpText>
           </Stat>
           <HStack>

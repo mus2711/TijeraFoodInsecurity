@@ -9,7 +9,6 @@ import {
   MenuList,
   useDisclosure,
   Badge,
-  Text,
   Button,
 } from "@chakra-ui/react";
 import React from "react";
@@ -93,12 +92,7 @@ export const Navbar: React.FC<NavbarProps> = ({ title }) => {
             <Box m={0} fontWeight={"bold"} maxWidth={"40px"}>
               <img src="https://i.ibb.co/C8bKrfp/tijera.png"></img>
             </Box>
-            {/* 
-            <NextLink href={"/"}>
-              <Box maxWidth={"55px"}>
-                <img src="https://i.ibb.co/H7stfJf/200e0beeccb5598b2d3dc83db38f3c52.png"></img>
-              </Box>
-            </NextLink> */}
+
             <Button
               variant={"outline"}
               color="black"
@@ -197,21 +191,7 @@ export const Navbar: React.FC<NavbarProps> = ({ title }) => {
             <Box m={0} fontWeight={"bold"} maxWidth={"40px"}>
               <img src="https://i.ibb.co/C8bKrfp/tijera.png"></img>
             </Box>
-            {/* 
-            <NextLink href={"/"}>
-              <Box maxWidth={"55px"}>
-                <img src="https://i.ibb.co/H7stfJf/200e0beeccb5598b2d3dc83db38f3c52.png"></img>
-              </Box>
-            </NextLink> */}
-            {/* <Button
-              variant={"outline"}
-              color="black"
-              colorScheme={"cyan"}
-              borderRadius={20}
-              borderWidth={1}
-            >
-              {data.me.merchant.username} (Logout)
-            </Button> */}
+
             <Box></Box>
           </HStack>
         </Flex>
@@ -292,23 +272,19 @@ export const Navbar: React.FC<NavbarProps> = ({ title }) => {
               <Box m={0} fontWeight={"bold"} maxWidth={"40px"}>
                 <img src="https://i.ibb.co/C8bKrfp/tijera.png"></img>
               </Box>
-              {/* 
-            <NextLink href={"/"}>
-              <Box maxWidth={"55px"}>
-                <img src="https://i.ibb.co/H7stfJf/200e0beeccb5598b2d3dc83db38f3c52.png"></img>
-              </Box>
-            </NextLink> */}
-              {/* <Button
-                variant={"outline"}
-                color="black"
-                colorScheme={"cyan"}
-                borderRadius={20}
-                borderWidth={1}
-              >
-                Log In
-              </Button> */}
+
               <Box>
-                <Badge colorScheme={"black"}>Current Tokens: %</Badge>
+                <Badge colorScheme={"black"}>
+                  Current Tokens:
+                  {data.me.user.currentTokens && data.me.user.maxTokens
+                    ? " " +
+                      (
+                        (data?.me?.user?.currentTokens * 100) /
+                        data?.me?.user?.maxTokens
+                      ).toPrecision(2) +
+                      "%"
+                    : "NaN"}
+                </Badge>
               </Box>
             </HStack>
           </Flex>

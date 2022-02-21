@@ -1,0 +1,7 @@
+mutation initialiseUserTokens {
+  initialiseUserTokens {
+    username
+    currentTokens
+    maxTokens
+  }
+}

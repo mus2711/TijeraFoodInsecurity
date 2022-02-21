@@ -1,0 +1,7 @@
+mutation removeTokens($tokens: Int!) {
+  removeTokens(tokens: $tokens) {
+    currentTokens
+    maxTokens
+    username
+  }
+}
