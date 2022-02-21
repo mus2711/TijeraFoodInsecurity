@@ -138,7 +138,7 @@ const MerchAccount = () => {
     },
     {
       name: "description",
-      placeholder: "Ingredients:...",
+      placeholder: "Ingredients: ...",
       label: "Description",
     },
     {
@@ -188,9 +188,6 @@ const MerchAccount = () => {
 
   let menu = (
     <VStack spacing={6} paddingBottom={"50px"}>
-      {/* {data?.getMenu.map((p) => (
-        <Foodslide menulist={p}></Foodslide>
-      ))} */}
       <Table size="sm" width={"200px"}>
         <Thead>
           <Tr>
@@ -320,7 +317,13 @@ const MerchAccount = () => {
             borderRadius="lg"
             bg={"white"}
           >
-            <ModalHeader>Add Item</ModalHeader>
+            <ModalHeader>
+              Add Item{" "}
+              <Text fontWeight={300} fontSize={"13px"}>
+                For the price of your item please just list the dollar amount,
+                as 1 Token = $1.
+              </Text>
+            </ModalHeader>
             <ModalCloseButton />
             <ModalBody>
               <Formik
