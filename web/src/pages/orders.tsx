@@ -10,7 +10,10 @@ import { Layout } from "../components/layout";
 
 const orders = () => {
   const [{ data }] = useMerchantOrdersQuery();
-  const rData: any[] = [...data?.merchantOrders].reverse();
+  let rData: any[] = [];
+  if (data?.merchantOrders) {
+    rData = [...data?.merchantOrders].reverse();
+  }
 
   return (
     <Layout title="Review History">

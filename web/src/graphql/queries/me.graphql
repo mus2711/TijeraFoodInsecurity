@@ -6,7 +6,10 @@ query Me {
       cplogo
       imageUrl
       imageUrl
-      location
+      city
+      address1
+      address2
+      postcode
       reviewCount
       averageRating
       username

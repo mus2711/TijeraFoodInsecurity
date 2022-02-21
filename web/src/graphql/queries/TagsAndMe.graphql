@@ -10,7 +10,10 @@ query TagsandMe($merchantId: Int!) {
       cplogo
       imageUrl
       imageUrl
-      location
+      city
+      address1
+      address2
+      postcode
       reviewCount
       averageRating
       username
@@ -41,6 +44,9 @@ query TagsandMe($merchantId: Int!) {
   }
   merchant(id: $merchantId) {
     cpname
-    location
+    city
+    address1
+    address2
+    postcode
   }
 }

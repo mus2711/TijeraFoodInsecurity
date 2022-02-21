@@ -264,6 +264,27 @@ export const createUrqlClient = (ssrExchange: SSRExchange, ctx: any) => {
                 }
               );
             },
+            getLocation: (_result, args, cache, info) => {
+              betterUpdateQuery<AddTokensMutation, MeQuery>(
+                cache,
+                {
+                  query: MeDocument,
+                  variables: { merchantId: args.tokens },
+                },
+                _result,
+                (result, query) => {
+                  console.log("args: ", args.tokens);
+                  console.log("cache: ", cache);
+                  console.log("info: ", info);
+                  if (result.addTokens) {
+                    console.log(result);
+                    return {
+                      me: result.addTokens.currentTokens,
+                    };
+                  }
+                }
+              );
+            },
           },
         },
       }),

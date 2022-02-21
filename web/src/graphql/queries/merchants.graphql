@@ -5,9 +5,14 @@ query Merchants {
     imageUrl
     imageAlt
     cplogo
-    location
+    city
+    address1
+    address2
+    postcode
     reviewCount
     averageRating
+    latitude
+    longitude
   }
   allMerchantTags {
     merchantId
@@ -24,10 +29,15 @@ query Merchants {
       cplogo
       imageUrl
       imageUrl
-      location
+      city
+      address1
+      address2
+      postcode
       reviewCount
       averageRating
       username
+      latitude
+      longitude
     }
   }
 }

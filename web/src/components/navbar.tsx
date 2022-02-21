@@ -281,7 +281,7 @@ export const Navbar: React.FC<NavbarProps> = ({ title }) => {
                       (
                         (data?.me?.user?.currentTokens * 100) /
                         data?.me?.user?.maxTokens
-                      ).toPrecision(2) +
+                      ).toPrecision(3) +
                       "%"
                     : "NaN"}
                 </Badge>

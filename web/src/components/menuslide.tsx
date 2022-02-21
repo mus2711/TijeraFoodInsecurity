@@ -17,17 +17,16 @@ import {
   IconButton,
   Spacer,
   Stack,
-  Heading,
   Icon,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { HiLocationMarker, HiPencil, HiPlus } from "react-icons/hi";
+import { HiPencil, HiPlus } from "react-icons/hi";
 import { MdOutlineMyLocation, MdShoppingBasket } from "react-icons/md";
-import { TiLocation } from "react-icons/ti";
 
 import { useTagsandMeQuery } from "../generated/graphql";
 import { setGlobalState, useGlobalState } from "../state/state";
+import { getDistance } from "geolib";
 
 enum Nothing {
   Nothing = "Nothing",
@@ -35,6 +34,10 @@ enum Nothing {
 enum Url {
   Url = "Url",
 }
+type locProp = {
+  latitude: any;
+  longitude: any;
+};
 
 interface MenuSlideProps {
   imageUrl?: string;
@@ -60,6 +63,9 @@ interface MenuSlideProps {
   badge?: string;
   scrt?: boolean;
   id: number;
+  inputdist?: locProp;
+  lat?: any;
+  lng?: any;
 }
 let theBasket = [] as {
   imageUrl: string;
@@ -83,6 +89,9 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
   badge = "New",
   scrt = false,
   id,
+  inputdist,
+  lng,
+  lat,
 }) => {
   const [currentBasket] = useGlobalState("userBasket");
   const [currentMerchant] = useGlobalState("basketMerchant");
@@ -272,7 +281,7 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
           <ModalHeader>
             {data?.merchant?.cpname}'s Food Menu{" "}
             <Text fontWeight={300} fontSize={"13px"}>
-              {data?.merchant?.location}
+              {data?.merchant?.city}
             </Text>
           </ModalHeader>
           <ModalCloseButton />
@@ -307,8 +316,8 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
                     maxHeight={"80px"}
                     width={"10vw"}
                     fit={"cover"}
-                    src={p.imageUrl}
-                    alt={p.imageAlt}
+                    src={p.imageUrl || "hi"}
+                    alt={p.imageAlt || "hi"}
                   ></Image>
                 </Box>
 
@@ -343,7 +352,7 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
                     if (id == currentMerchant || currentMerchant == 0) {
                       addToBasket({
                         merchantId: id,
-                        imageUrl: p.imageUrl,
+                        imageUrl: p.imageUrl || "hi",
                         itemName: p.itemName,
                         description: p.description,
                         cost: p.cost,
@@ -472,12 +481,27 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
             </Box>
           </Box>
           <Box>
-            <HStack>
-              <Icon as={MdOutlineMyLocation} />
-              <Text color="gray.600" fontSize="sm">
-                2.0 miles
-              </Text>
-            </HStack>
+            {inputdist?.latitude !== 0 &&
+            inputdist?.longitude !== 0 &&
+            lat &&
+            lng ? (
+              <HStack>
+                <Icon as={MdOutlineMyLocation} />
+                <Text color="gray.600" fontSize="sm">
+                  {Number(
+                    getDistance(
+                      {
+                        latitude: inputdist?.latitude,
+                        longitude: inputdist?.longitude,
+                      },
+                      { latitude: String(lat), longitude: String(lng) },
+                      100
+                    ) * 0.001
+                  ).toPrecision(4)}{" "}
+                  km
+                </Text>
+              </HStack>
+            ) : undefined}
           </Box>
 
           <Box display="flex" mt="2" alignItems="center">

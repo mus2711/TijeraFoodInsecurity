@@ -5,7 +5,10 @@ fragment RegularMerchant on Merchant {
   imageAlt
   cplogo
   username
-  location
+  city
+  address1
+  address2
+  postcode
   reviewCount
   averageRating
 }

@@ -2,10 +2,8 @@ import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import {
   TagsandMeQuery,
-  useAddLocationMutation,
   useAddMerchantLogoMutation,
   useAddMerchantTagMutation,
-  useMeQuery,
   useTagsandMeQuery,
 } from "../generated/graphql";
 import React, { useCallback, useState } from "react";
@@ -32,8 +30,6 @@ import { Layout } from "../components/layout";
 import { findMerchantId } from "../functions/findMerchantId";
 import { MenuSlide } from "../components/menuslide";
 import { useDropzone } from "react-dropzone";
-import { FileUpload, GraphQLUpload } from "graphql-upload";
-import { ReadStream } from "fs";
 
 const merchant_3 = () => {
   const [{ data, fetching }] = useTagsandMeQuery({
@@ -42,13 +38,16 @@ const merchant_3 = () => {
 
   let [tags, setTags] = useState([] as string[]);
   const router = useRouter();
-  const [, addLocation] = useAddLocationMutation();
+
   const [, addMerchantTag] = useAddMerchantTagMutation();
   let [image, setImage] = React.useState("");
   let [banner, setBanner] = React.useState<string | undefined>(undefined);
 
   const initialInputs = {
-    location: "",
+    address1: "",
+    address2: "",
+    city: "",
+    postcode: "",
   };
   //// /////
 
@@ -130,9 +129,24 @@ const merchant_3 = () => {
 
   const formikInputs = [
     {
-      name: "location",
-      placeholder: "TS Food Security St.",
-      label: "Location",
+      name: "address1",
+      placeholder: "32 TS Food Security St.",
+      label: "Address 1",
+    },
+    {
+      name: "address2",
+      placeholder: "Marylebone",
+      label: "Address w",
+    },
+    {
+      name: "city",
+      placeholder: "London",
+      label: "City/Town",
+    },
+    {
+      name: "postcode",
+      placeholder: "E3 8CH",
+      label: "Postcode",
     },
   ];
 
@@ -212,12 +226,12 @@ const merchant_3 = () => {
             initialValues={initialInputs}
             onSubmit={async (values, { setErrors }) => {
               console.log(values);
-              const response = await addLocation(values);
-              console.log(response);
+              // const response = await addLocation(values);
+              // console.log(response);
 
-              if (response.data?.addLocation.id) {
-                router.push("/");
-              }
+              // if (response.data?.addLocation.id) {
+              //   router.push("/");
+              // }
             }}
           >
             {({ isSubmitting }) => (

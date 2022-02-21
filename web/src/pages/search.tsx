@@ -24,10 +24,12 @@ import { AddLocationIcon, Combobox, RemoveIcon } from "evergreen-ui";
 import {
   MerchantsQuery,
   useAddTokensMutation,
+  useAddUserCoordinatesMutation,
   useMerchantsQuery,
 } from "../generated/graphql";
 import { AddIcon } from "@chakra-ui/icons";
 import ReactPlayer from "react-player/lazy";
+import { getDistance, orderByDistance } from "geolib";
 
 const datalist = [
   {
@@ -119,10 +121,47 @@ const Search = () => {
   let [watchedState, setWatchedState] = useState(false);
   let [watchedState2, setWatchedState2] = useState(false);
   let [watchedState3, setWatchedState3] = useState(false);
+  const [lat, setLat] = useState<number>(0);
+  const [lng, setLng] = useState<number>(0);
   const [, addTokens] = useAddTokensMutation();
   const [located, setLocated] = useState(false);
+  const [locationLoad, setLocationLoad] = useState(false);
+  const [, addUserCoordinates] = useAddUserCoordinatesMutation();
+  const [status, setStatus] = useState("");
   const toast = useToast();
 
+  const getLocation = () => {
+    if (!navigator.geolocation) {
+      setStatus("Geolocation is not supported by your browser");
+    } else {
+      setStatus("Locating...");
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setStatus("");
+          setLat(position.coords.latitude);
+          setLng(position.coords.longitude);
+          setLocationLoad(true);
+          // toast({
+          //   title: "We found somewhere close!",
+          //   description: "{} is {} km from you.",
+          //   status: "info",
+          //   duration: 9000,
+          //   isClosable: true,
+          // });
+        },
+        () => {
+          setStatus("Unable to retrieve your location");
+        }
+      );
+    }
+  };
+
+  const currDist = getDistance(
+    { latitude: lat, longitude: lng },
+    { latitude: 51.5103, longitude: 7.49347 },
+    100
+  );
+  console.log(currDist * 0.000621371);
   // map of tags to their index
   let mapTags: Map<number, string> = new Map();
   let tagArr: string[] = [];
@@ -209,12 +248,13 @@ const Search = () => {
             justifyContent="center"
           />
           <HStack>
-            <Text>Search your nearest vendors: </Text>
+            <Text>Find which vendors are nearest to you: </Text>
             <IconButton
               size={"md"}
               colorScheme={"teal"}
               children={<AddLocationIcon />}
               aria-label={"location"}
+              onClick={getLocation}
             />
           </HStack>
         </VStack>
@@ -254,9 +294,12 @@ const Search = () => {
                     reviewCount={p.reviewCount}
                     rating={p.averageRating ? p.averageRating : undefined}
                     cuisine={merchantTags}
-                    location={p.location ? p.location : undefined}
+                    location={p.city ? p.city : undefined}
                     key={p.id}
                     id={p.id}
+                    lat={p.latitude}
+                    lng={p.longitude}
+                    inputdist={{ latitude: lat, longitude: lng }}
                   />
                   <Divider />
                 </>
@@ -269,9 +312,12 @@ const Search = () => {
                     reviewCount={p.reviewCount}
                     rating={p.averageRating ? p.averageRating : undefined}
                     cuisine={merchantTags}
-                    location={p.location ? p.location : undefined}
+                    location={p.city ? p.city : undefined}
                     key={p.id}
                     id={p.id}
+                    lat={p.latitude}
+                    lng={p.longitude}
+                    inputdist={{ latitude: lat, longitude: lng }}
                   />
                   <Divider />
                 </>

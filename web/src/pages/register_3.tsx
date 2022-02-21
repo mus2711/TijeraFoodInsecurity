@@ -1,6 +1,7 @@
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import {
+  useAddUserCoordinatesMutation,
   useInitialiseUserTokensMutation,
   useRegisterMutation,
   useRegisterUserFinalMutation,
@@ -11,17 +12,20 @@ import {
   Box,
   Flex,
   Heading,
+  HStack,
+  IconButton,
   Input,
   InputGroup,
   InputLeftElement,
   Select,
   Stack,
   Text,
+  VStack,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { Layout } from "../components/layout";
 import { useState } from "react";
-import { MdDateRange, MdPhone } from "react-icons/md";
+import { MdDateRange, MdLocationOn, MdPhone } from "react-icons/md";
 import { useRouter } from "next/router";
 import { DblStandardButton } from "../components/DblStandardButton";
 import { SliderInput } from "../components/SliderInput";
@@ -30,8 +34,8 @@ const bl = "#5998A0";
 
 const Register_3 = () => {
   const router = useRouter();
-  const [lat, setLat] = useState(0);
-  const [lng, setLng] = useState(0);
+  const [lat, setLat] = useState<number>(0);
+  const [lng, setLng] = useState<number>(0);
   const [status, setStatus] = useState("");
   let [image, setImage] = React.useState("");
   const [initialValue, setInitialValue] = useState(10000);
@@ -41,10 +45,17 @@ const Register_3 = () => {
   const [phone, setPhone] = useState("+0");
   const [gender, setGender] = useState<String | null>(null);
   const [, initialiseUserTokens] = useInitialiseUserTokensMutation();
+  const [, addUserCoordinates] = useAddUserCoordinatesMutation();
+
+  const [locationLoad, setLocationLoad] = useState(false);
 
   const [, registerUserFinal] = useRegisterUserFinalMutation();
   var date_regex =
     /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+
+  function delay(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
 
   const getLocation = () => {
     if (!navigator.geolocation) {
@@ -56,8 +67,7 @@ const Register_3 = () => {
           setStatus("");
           setLat(position.coords.latitude);
           setLng(position.coords.longitude);
-          console.log("Lat: ", lat);
-          console.log("Lng: ", lng);
+          setLocationLoad(true);
         },
         () => {
           setStatus("Unable to retrieve your location");
@@ -70,16 +80,12 @@ const Register_3 = () => {
     setImage((image = URL.createObjectURL(e.target.files[0])));
   };
 
-  function delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
   const initialiseTokens = async () => {
     delay(1000);
     initialiseUserTokens();
   };
 
-  const onRegisterUser = () => {
+  const onRegisterUser = async () => {
     if (date_regex.test(DOB)) {
       registerUserFinal({
         year: Number(DOB.slice(6, 10)),
@@ -91,8 +97,10 @@ const Register_3 = () => {
         gender: String(gender) ?? "",
         phoneNumber: phone,
       });
-      initialiseTokens();
-      router.push("/search");
+
+      await addUserCoordinates({ latitude: lat, longitude: lng }).then(() =>
+        initialiseTokens().then(() => router.push("/search"))
+      );
     }
   };
   return (
@@ -143,35 +151,7 @@ const Register_3 = () => {
               <option value="BRB">Barbados</option>
             </Select>
           </InputGroup>
-          {/* <HStack spacing={1}>
-            <InputGroup>
-              <InputLeftElement
-                pointerEvents="none"
-                color="gray.300"
-                fontSize="1.2em"
-                children={<MdLocationOn color="gray.300" />}
-              />
-              <Input
-                name="address"
-                placeholder="Address"
-                label="Address"
-                width={"75vw"}
-                maxWidth={"300px"}
-                onChange={(e) => {
-                  setAddress(e.target.value);
-                }}
-              />
-            </InputGroup>
-            <IconButton
-              aria-label={"findlocation"}
-              colorScheme={"cyan"}
-              width={"50px"}
-              height={"40px"}
-              onClick={getLocation}
-            >
-              <MdLocationOn size={"30px"} color="black" />
-            </IconButton>
-          </HStack> */}
+
           <InputGroup>
             <InputLeftElement
               pointerEvents="none"
@@ -190,48 +170,7 @@ const Register_3 = () => {
               onChange={(e) => setDOB(e.target.value)}
             />
           </InputGroup>
-          {/* <HStack>
-            <NumberInput
-              step={1}
-              defaultValue={15}
-              min={0o0}
-              max={31}
-              maxWidth={"116px"}
-            >
-              <NumberInputField />
-              <NumberInputStepper>
-                <NumberIncrementStepper color={"black"} />
-                <NumberDecrementStepper color={"black"} />
-              </NumberInputStepper>
-            </NumberInput>
-            <NumberInput
-              step={1}
-              defaultValue={15}
-              min={0o0}
-              max={31}
-              size={"md"}
-              maxWidth={"116px"}
-            >
-              <NumberInputField />
-              <NumberInputStepper>
-                <NumberIncrementStepper color={"black"} />
-                <NumberDecrementStepper color={"black"} />
-              </NumberInputStepper>
-            </NumberInput>
-            <NumberInput
-              step={1}
-              defaultValue={15}
-              min={0o0}
-              max={31}
-              maxWidth={"116px"}
-            >
-              <NumberInputField />
-              <NumberInputStepper>
-                <NumberIncrementStepper color={"black"} />
-                <NumberDecrementStepper color={"black"} />
-              </NumberInputStepper>
-            </NumberInput>
-          </HStack> */}
+
           <InputGroup>
             <InputLeftElement
               pointerEvents="none"
@@ -290,6 +229,20 @@ const Register_3 = () => {
             key={"2"}
           />
         </Stack>
+        <VStack>
+          <HStack spacing={6}>
+            <Text>Set your location:</Text>
+            <IconButton
+              aria-label={"findlocation"}
+              colorScheme={locationLoad ? "green" : "cyan"}
+              width={"40px"}
+              height={"40px"}
+              onClick={getLocation}
+            >
+              <MdLocationOn size={"30px"} color="black" />
+            </IconButton>
+          </HStack>
+        </VStack>
       </Flex>
       <Flex
         paddingTop={"20px"}

@@ -3,8 +3,8 @@ mutation createFoodItem(
   $cost: Float!
   $description: String!
   $itemName: String!
-  $imageURL: String!
-  $imageAlt: String!
+  # $imageURL: String!
+  # $imageAlt: String!
   $idMerchant: Int!
 ) {
   createFoodItem(
@@ -12,8 +12,8 @@ mutation createFoodItem(
     cost: $cost
     description: $description
     itemName: $itemName
-    imageUrl: $imageURL
-    imageAlt: $imageAlt
+    # imageUrl: $imageURL
+    # imageAlt: $imageAlt
     idMerchant: $idMerchant
   ) {
     description

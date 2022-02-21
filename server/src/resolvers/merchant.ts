@@ -456,7 +456,7 @@ export default class MerchantResolver {
     return tags;
   }
 
-  @Mutation(() => User)
+  @Mutation(() => Merchant)
   async addMerchantCoordinates(
     @Ctx() { req }: MyContext,
     @Arg("latitude", () => Float) latitude: number,
