@@ -676,7 +676,7 @@ export type MerchantCurrentOrdersQuery = { __typename?: 'Query', merchantCurrent
 export type MerchantOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MerchantOrdersQuery = { __typename?: 'Query', merchantOrders: Array<{ __typename?: 'OrderResponse', orderItems?: Maybe<Array<{ __typename?: 'OrderItem', orderId: number, foodItemId: number, foodItem: { __typename?: 'FoodItem', itemName: string, cost: number, description: string, id: number, imageUrl: string, imageAlt: string, merchantId: number } }>>, order?: Maybe<{ __typename?: 'Order', isComplete: boolean, userId: number, id: number, user: { __typename?: 'User', firstname: string, lastname: string } }> }> };
+export type MerchantOrdersQuery = { __typename?: 'Query', merchantOrders: Array<{ __typename?: 'OrderResponse', orderItems?: Maybe<Array<{ __typename?: 'OrderItem', orderId: number, foodItemId: number, foodItem: { __typename?: 'FoodItem', itemName: string, cost: number, description: string, id: number, imageUrl: string, imageAlt: string, merchantId: number } }>>, order?: Maybe<{ __typename?: 'Order', createdAt: string, isComplete: boolean, userId: number, id: number, user: { __typename?: 'User', firstname: string, lastname: string } }> }> };
 
 export type MerchantPersonalMenuQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1236,6 +1236,7 @@ export const MerchantOrdersDocument = gql`
       }
     }
     order {
+      createdAt
       user {
         firstname
         lastname

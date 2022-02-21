@@ -1,17 +1,17 @@
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
-import { useMerchantOrdersQuery } from "../generated/graphql";
+import {
+  MerchantOrdersQuery,
+  useMerchantOrdersQuery,
+} from "../generated/graphql";
 import React from "react";
 import { Badge, Box, Divider, HStack, VStack } from "@chakra-ui/react";
 import { Layout } from "../components/layout";
 
 const orders = () => {
   const [{ data }] = useMerchantOrdersQuery();
-  const orders = () => {
-    console.log("merchant orders: ", data?.merchantOrders);
-  };
+  const rData: any[] = [...data?.merchantOrders].reverse();
 
-  orders();
   return (
     <Layout title="Review History">
       <VStack spacing={12} paddingBottom={"40px"} borderColor={"grey"}>
@@ -19,12 +19,12 @@ const orders = () => {
           {data?.merchantOrders ? data?.merchantOrders.length : "NaN"} Orders
         </Box>
 
-        {data?.merchantOrders.map((p) => (
+        {rData?.map((p) => (
           <>
             <VStack>
               <HStack>
                 {p.orderItems
-                  ? p.orderItems.map((p) => (
+                  ? p.orderItems.map((p: any) => (
                       <>
                         <VStack
                         //   hidden={
@@ -58,6 +58,9 @@ const orders = () => {
               <Badge colorScheme={"orange"}>
                 Customer Name: {p.order?.user.firstname}{" "}
                 {p.order?.user.lastname}
+              </Badge>
+              <Badge colorScheme={"red"}>
+                {String(new Date(Number(p.order?.createdAt))).substring(0, 21)}
               </Badge>
               <Divider colorScheme={"blue"} variant="dashed"></Divider>
             </VStack>
