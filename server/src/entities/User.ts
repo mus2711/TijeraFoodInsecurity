@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from "type-graphql";
+import { Field, Float, Int, ObjectType } from "type-graphql";
 import {
   BaseEntity,
   Column,
@@ -76,6 +76,14 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   @Field({ nullable: true })
   imageAlt?: string;
+
+  @Column("float", { nullable: true })
+  @Field(() => Float, { nullable: true })
+  latitude?: number;
+
+  @Column("float", { nullable: true })
+  @Field(() => Float, { nullable: true })
+  longitude?: number;
 
   @OneToMany(() => Review, (review) => review.user)
   reviews!: Review[];

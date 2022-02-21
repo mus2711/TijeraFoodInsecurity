@@ -4,6 +4,7 @@ import {
   Arg,
   Ctx,
   Field,
+  Float,
   InputType,
   Int,
   Mutation,
@@ -460,6 +461,21 @@ export default class UserResolver {
     if (user.currentTokens - tokens < 0) throw new Error("Insufficient tokens");
 
     user.currentTokens -= tokens;
+    return await user.save();
+  }
+
+  @Mutation(() => User)
+  async addUserCoordinates(
+    @Ctx() { req }: MyContext,
+    @Arg("latitude", () => Float) latitude: number,
+    @Arg("longitude", () => Float) longitude: number
+  ) {
+    if (!req.session.userId) throw new Error("User not logged in");
+    const user = await User.findOne(req.session.userId);
+    if (!user) throw new Error("User not found");
+
+    user.latitude = latitude;
+    user.longitude = longitude;
     return await user.save();
   }
 }
