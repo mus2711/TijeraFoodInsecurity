@@ -600,7 +600,15 @@ const Settings = () => {
           >
             <Box>
               <Text fontSize={"md"} paddingLeft={"10px"}>
-                70% of Tokens Remaining
+                {data.me.user.currentTokens && data.me.user.maxTokens
+                  ? " " +
+                    (
+                      (data?.me?.user?.currentTokens * 100) /
+                      data?.me?.user?.maxTokens
+                    ).toPrecision(2) +
+                    "%"
+                  : "NaN"}{" "}
+                of Tokens Remaining
               </Text>
             </Box>
           </HStack>

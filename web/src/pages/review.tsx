@@ -148,7 +148,7 @@ const review = ({}) => {
                   colorScheme={"teal"}
                   width={"75vw"}
                   maxWidth={"350px"}
-                  isDisabled={reviewed ? "none" : "initial"}
+                  isDisabled={reviewed}
                 >
                   Submit Review
                 </Button>
