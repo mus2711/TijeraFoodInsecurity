@@ -1,5 +1,13 @@
 import { Field, ObjectType } from "type-graphql";
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import { Merchant } from "./Merchant";
 import { User } from "./User";
 
@@ -27,4 +35,12 @@ export class Review extends BaseEntity {
   @Column()
   @Field()
   rating!: number;
+
+  @CreateDateColumn()
+  @Field(() => String)
+  createdAt!: Date;
+
+  @UpdateDateColumn()
+  @Field(() => String)
+  updatedAt!: Date;
 }

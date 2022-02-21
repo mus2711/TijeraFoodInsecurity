@@ -61,6 +61,14 @@ export class User extends BaseEntity {
   @Field({ nullable: true })
   phoneNumber?: string;
 
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  maxTokens?: number;
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  currentTokens?: number;
+
   @OneToMany(() => Review, (review) => review.user)
   reviews!: Review[];
 

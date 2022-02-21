@@ -1,5 +1,13 @@
 import { Field, ObjectType } from "type-graphql";
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import { FoodItem } from "./FoodItem";
 import { Order } from "./Order";
 
@@ -27,4 +35,12 @@ export class OrderItem extends BaseEntity {
   })
   @Field(() => FoodItem)
   foodItem!: FoodItem;
+
+  @CreateDateColumn()
+  @Field(() => String)
+  createdAt!: Date;
+
+  @UpdateDateColumn()
+  @Field(() => String)
+  updatedAt!: Date;
 }

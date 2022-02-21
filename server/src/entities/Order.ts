@@ -2,10 +2,12 @@ import { Field, Int, ObjectType } from "type-graphql";
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { Merchant } from "./Merchant";
 import { OrderItem } from "./OrderItem";
@@ -44,4 +46,12 @@ export class Order extends BaseEntity {
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order)
   orderItems!: OrderItem[];
+
+  @CreateDateColumn()
+  @Field(() => String)
+  createdAt!: Date;
+
+  @UpdateDateColumn()
+  @Field(() => String)
+  updatedAt!: Date;
 }

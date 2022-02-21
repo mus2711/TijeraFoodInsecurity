@@ -1,10 +1,12 @@
 import { Field, Int, ObjectType } from "type-graphql";
 import {
   BaseEntity,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { Merchant } from "./Merchant";
 import { Tag } from "./Tag";
@@ -32,4 +34,12 @@ export class MerchantTag extends BaseEntity {
   })
   @JoinColumn({ name: "tagId" })
   tag!: Promise<Tag>;
+
+  @CreateDateColumn()
+  @Field(() => String)
+  createdAt!: Date;
+
+  @UpdateDateColumn()
+  @Field(() => String)
+  updatedAt!: Date;
 }

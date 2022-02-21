@@ -14,6 +14,8 @@ import { Merchant } from "../entities/Merchant";
 import { OrderItem } from "../entities/OrderItem";
 import { MyContext } from "../types";
 import { Order } from "../entities/Order";
+import { TOKEN_CONVERSION_RATE } from "../constants";
+import { User } from "../entities/User";
 // import { FileUpload, GraphQLUpload } from "graphql-upload";
 // import { FOODITEM_IMAGES_PATH } from "../constants";
 // import path from "path";
@@ -68,7 +70,7 @@ export default class FoodItemResolver {
       itemName: itemName,
       imageUrl: imageUrl,
       imageAlt: imageAlt,
-      cost: cost,
+      cost: cost * TOKEN_CONVERSION_RATE,
       description: description,
       stock: stock,
       merchantId: parseInt(merchantId),
@@ -231,10 +233,18 @@ export default class FoodItemResolver {
 
     if (foodItem.stock <= 0) throw new Error("Food item out of stock.");
 
+    let user = await User.findOne({ id: parseInt(userId) });
+    if (!user) throw new Error("User not found.");
+
+    if (!user.currentTokens || foodItem.cost > user?.currentTokens) {
+      throw new Error("User cannot afford item.");
+    }
+
     let order = await Order.findOne({
       userId: parseInt(userId),
       isComplete: false,
     });
+
     if (!order) {
       order = await Order.create({
         userId: parseInt(userId),

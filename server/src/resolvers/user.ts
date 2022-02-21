@@ -69,6 +69,13 @@ class FieldError {
   message!: string;
 }
 
+function calculateMaxTokens(dependents: number, income: number): number {
+  return (
+    Math.floor(Math.max(0, 50000 - income) / 500) *
+    Math.ceil(Math.max(1, dependents) / 2)
+  );
+}
+
 @Resolver(User)
 export default class UserResolver {
   @Query(() => [User])
@@ -351,6 +358,72 @@ export default class UserResolver {
     if (!user) throw new Error("User not found");
 
     user.phoneNumber = phoneNumber;
+    return await user.save();
+  }
+
+  // Calculates user's max tokens using income and dependents
+  @Mutation(() => User)
+  async initialiseUserTokens(@Ctx() { req }: MyContext) {
+    if (!req.session.userId) throw new Error("User not logged in");
+    const user = await User.findOne(req.session.userId);
+    if (!user) throw new Error("User not found");
+
+    if (user.dependents == null) throw new Error("User dependents not found");
+    if (user.income == null) throw new Error("User income not found");
+
+    const tokens = calculateMaxTokens(user.dependents, user.income);
+    user.maxTokens = tokens;
+    user.currentTokens = tokens;
+    return await user.save();
+  }
+
+  // Manually updates user's max tokens
+  @Mutation(() => User)
+  async changeUserMaxTokens(
+    @Ctx() { req }: MyContext,
+    @Arg("maxTokens", () => Int) maxTokens: number
+  ) {
+    if (!req.session.userId) throw new Error("User not logged in");
+    const user = await User.findOne(req.session.userId);
+    if (!user) throw new Error("User not found");
+
+    user.maxTokens = maxTokens;
+    return await user.save();
+  }
+
+  @Mutation(() => User)
+  async addTokens(
+    @Ctx() { req }: MyContext,
+    @Arg("tokens", () => Int) tokens: number
+  ): Promise<User> {
+    if (!req.session.userId) throw new Error("User not logged in");
+    const user = await User.findOne(req.session.userId);
+    if (!user) throw new Error("User not found");
+
+    if (user.currentTokens == null || user.maxTokens == null) {
+      throw new Error("User tokens not initialised.");
+    }
+
+    user.currentTokens = Math.min(user.currentTokens + tokens, user.maxTokens);
+    return await user.save();
+  }
+
+  @Mutation(() => User)
+  async removeTokens(
+    @Ctx() { req }: MyContext,
+    @Arg("tokens", () => Int) tokens: number
+  ): Promise<User> {
+    if (!req.session.userId) throw new Error("User not logged in");
+    const user = await User.findOne(req.session.userId);
+    if (!user) throw new Error("User not found");
+
+    if (user.currentTokens == null || user.maxTokens == null) {
+      throw new Error("User tokens not initialised.");
+    }
+
+    if (user.currentTokens - tokens < 0) throw new Error("Insufficient tokens");
+
+    user.currentTokens -= tokens;
     return await user.save();
   }
 }
