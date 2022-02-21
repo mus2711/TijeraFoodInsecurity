@@ -69,6 +69,14 @@ export class User extends BaseEntity {
   @Field({ nullable: true })
   currentTokens?: number;
 
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  imageUrl?: string;
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  imageAlt?: string;
+
   @OneToMany(() => Review, (review) => review.user)
   reviews!: Review[];
 

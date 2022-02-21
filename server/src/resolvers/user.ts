@@ -11,9 +11,17 @@ import {
   Query,
   Resolver,
 } from "type-graphql";
-import { COOKIE_NAME, EMAIL_REGEX, USERNAME_REGEX } from "../constants";
+import {
+  COOKIE_NAME,
+  EMAIL_REGEX,
+  USERNAME_REGEX,
+  USER_IMAGES_PATH,
+} from "../constants";
 import { User } from "../entities/User";
 import { MyContext } from "../types";
+import { FileUpload, GraphQLUpload } from "graphql-upload";
+import path from "path";
+import { createWriteStream } from "fs";
 
 @InputType()
 class RegisterInput {
@@ -254,6 +262,34 @@ export default class UserResolver {
   }
 
   // Functions to change user's properties:
+
+  @Mutation(() => Boolean)
+  async addUserImage(
+    @Ctx() { req }: MyContext,
+    @Arg("image", () => GraphQLUpload)
+    { createReadStream, filename }: FileUpload
+  ): Promise<Boolean> {
+    const userId = req.session.userId;
+    if (!userId) throw new Error("User not Logged in");
+    const user = await User.findOne(userId);
+    if (!user) throw new Error("User not found");
+
+    const extension = path.extname(filename);
+    const imageUrl = path.join(__dirname, USER_IMAGES_PATH, userId + extension);
+
+    return await new Promise(async (resolve, reject) =>
+      createReadStream()
+        .pipe(createWriteStream(imageUrl))
+        .on("finish", async () => {
+          user.imageUrl = imageUrl;
+          user.imageAlt = user.username;
+          await user.save();
+          resolve(true);
+        })
+
+        .on("error", reject)
+    );
+  }
 
   @Mutation(() => User)
   async changeFirstname(
