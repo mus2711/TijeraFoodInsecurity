@@ -719,7 +719,15 @@ export type UserOrdersQueryVariables = Exact<{
 }>;
 
 
-export type UserOrdersQuery = { __typename?: 'Query', userOrders: Array<{ __typename?: 'OrderResponse', order?: Maybe<{ __typename?: 'Order', merchantId: number, isComplete: boolean, merchant: { __typename?: 'Merchant', cpname: string } }>, orderItems?: Maybe<Array<{ __typename?: 'OrderItem', orderId: number, quantity: number, foodItemId: number, foodItem: { __typename?: 'FoodItem', stock: number, cost: number, itemName: string, imageUrl: string, imageAlt: string, description: string } }>> }> };
+export type UserOrdersQuery = { __typename?: 'Query', userOrders: Array<{ __typename?: 'OrderResponse', order?: Maybe<{ __typename?: 'Order', merchantId: number, isComplete: boolean, createdAt: string, merchant: { __typename?: 'Merchant', cpname: string } }>, orderItems?: Maybe<Array<{ __typename?: 'OrderItem', orderId: number, quantity: number, foodItemId: number, foodItem: { __typename?: 'FoodItem', stock: number, cost: number, itemName: string, imageUrl: string, imageAlt: string, description: string } }>> }> };
+
+export type UserReviewsQueryVariables = Exact<{
+  merchantId: Scalars['Int'];
+  userId: Scalars['Int'];
+}>;
+
+
+export type UserReviewsQuery = { __typename?: 'Query', userOrders: Array<{ __typename?: 'OrderResponse', order?: Maybe<{ __typename?: 'Order', merchantId: number, isComplete: boolean, createdAt: string, merchant: { __typename?: 'Merchant', cpname: string } }>, orderItems?: Maybe<Array<{ __typename?: 'OrderItem', orderId: number, quantity: number, foodItemId: number, foodItem: { __typename?: 'FoodItem', stock: number, cost: number, itemName: string, imageUrl: string, imageAlt: string, description: string } }>> }>, reviews: Array<{ __typename?: 'Review', comment: string, rating: number, user: { __typename?: 'User', username: string, firstname: string, lastname: string }, merchant: { __typename?: 'Merchant', cpname: string, id: number } }>, me: { __typename?: 'MeResponse', user?: Maybe<{ __typename?: 'User', id: number, firstname: string, lastname: string, username: string, email: string, currentTokens?: Maybe<number>, maxTokens?: Maybe<number> }> } };
 
 export const RegularMerchantErrorFragmentDoc = gql`
     fragment RegularMerchantError on FieldMerchantError {
@@ -1385,6 +1393,7 @@ export const UserOrdersDocument = gql`
     order {
       merchantId
       isComplete
+      createdAt
       merchant {
         cpname
       }
@@ -1408,4 +1417,59 @@ export const UserOrdersDocument = gql`
 
 export function useUserOrdersQuery(options: Omit<Urql.UseQueryArgs<UserOrdersQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<UserOrdersQuery>({ query: UserOrdersDocument, ...options });
+};
+export const UserReviewsDocument = gql`
+    query userReviews($merchantId: Int!, $userId: Int!) {
+  userOrders(userId: $userId) {
+    order {
+      merchantId
+      isComplete
+      createdAt
+      merchant {
+        cpname
+      }
+    }
+    orderItems {
+      orderId
+      quantity
+      foodItemId
+      foodItem {
+        stock
+        cost
+        itemName
+        imageUrl
+        imageAlt
+        description
+      }
+    }
+  }
+  reviews(merchantId: $merchantId) {
+    user {
+      username
+      firstname
+      lastname
+    }
+    merchant {
+      cpname
+      id
+    }
+    comment
+    rating
+  }
+  me {
+    user {
+      id
+      firstname
+      lastname
+      username
+      email
+      currentTokens
+      maxTokens
+    }
+  }
+}
+    `;
+
+export function useUserReviewsQuery(options: Omit<Urql.UseQueryArgs<UserReviewsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<UserReviewsQuery>({ query: UserReviewsDocument, ...options });
 };

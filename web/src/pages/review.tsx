@@ -5,6 +5,7 @@ import {
   useAddTokensMutation,
   useMeQuery,
   useReviewsQuery,
+  useUserReviewsQuery,
 } from "../generated/graphql";
 import React, { useEffect, useState } from "react";
 import {
@@ -25,6 +26,7 @@ import { useGlobalState } from "../state/state";
 import { MenuSlide } from "../components/menuslide";
 import { AddIcon, StarIcon } from "evergreen-ui";
 import { useIsAuth } from "../../utils/useIsAuth";
+import { findUserId } from "../functions/findUserId";
 
 interface reviewProps {}
 
@@ -37,15 +39,26 @@ const review = ({}) => {
   const [, addReview] = useAddReviewMutation();
   const [, addTokens] = useAddTokensMutation();
   let [reviewed, setReviewed] = useState(false);
-  const [{ data, fetching }] = useReviewsQuery({
-    variables: { merchantId: menuProps.id },
+  let [bought, setBought] = useState(false);
+  const [{ data }] = useUserReviewsQuery({
+    variables: { merchantId: menuProps.id, userId: findUserId() },
   });
-  // console.log(data?.reviews[0].user.username);
+  console.log(data?.userOrders);
   if (data?.reviews && !reviewed) {
     for (let i = 0; i < data?.reviews.length; i++) {
       if (data.reviews[i].user.username === data.me.user?.username) {
         setReviewed((reviewed = true));
-        console.log("yes");
+        console.log("already reviewed");
+        // break;
+      }
+    }
+  }
+
+  if (data?.reviews && !bought) {
+    for (let i = 0; i < data?.reviews.length; i++) {
+      if (menuProps.name === data.userOrders[i].order?.merchant.cpname) {
+        setBought((bought = true));
+        console.log("bought");
         // break;
       }
     }
@@ -148,7 +161,7 @@ const review = ({}) => {
                   colorScheme={"teal"}
                   width={"75vw"}
                   maxWidth={"350px"}
-                  isDisabled={reviewed}
+                  isDisabled={reviewed || !bought}
                 >
                   Submit Review
                 </Button>

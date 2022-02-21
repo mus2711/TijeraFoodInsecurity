@@ -13,13 +13,23 @@ const userorders = () => {
   const [{ data }] = useUserOrdersQuery({
     variables: { userId: findUserId() },
   });
+  // let datastamps: string[] = [];
+  // if (data?.userOrders) {
+  //   for (let i = 0; i < data?.userOrders.length; i++) {
+  //     var date = new Date(Number(data.userOrders[i].order?.createdAt) * 1000);
+  //     // Hours part from the timestamp
+  //     var hours = date.getHours();
+  //     // Minutes part from the timestamp
+  //     var minutes = "0" + date.getMinutes();
+  //     // Seconds part from the timestamp
+  //     var seconds = "0" + date.getSeconds();
 
-  const [, completeOrder] = useCompleteOrderMutation();
-  const orders = () => {
-    console.log("user orders: ", data?.userOrders);
-  };
-  // console.log(data.userOrders[0].order.isComplete);
-  // orders();
+  //     // Will display time in 10:30:23 format
+  //     var formattedTime =
+  //       hours + ":" + minutes.substr(-2) + ":" + seconds.substr(-2);
+  //     datastamps.push(formattedTime);
+  //   }
+  // }
   return (
     <Layout title="Review History">
       <VStack spacing={12} paddingBottom={"40px"} borderColor={"grey"}>
@@ -29,21 +39,14 @@ const userorders = () => {
         <Badge size={"xl"} colorScheme={"black"} pt={-5}>
           Your User Id: {findUserId()}
         </Badge>
-        {/* <Button
-          colorScheme={"cyan"}
-          size={"sm"}
-          onClick={() => {
-            completeOrder();
-          }}
-        >
-          Receievd your Orders?
-        </Button> */}
+
         {data?.userOrders.reverse().map((p, value) => (
           <>
             <VStack>
               <Badge size={"md"} colorScheme={"pink"}>
                 {p.order?.merchant.cpname}
               </Badge>
+              {/* <Badge colorScheme={"red"}>{datastamps[value]}</Badge> */}
               <HStack>
                 {p.orderItems
                   ? p.orderItems.map((p) => (
@@ -78,9 +81,7 @@ const userorders = () => {
               >
                 Order Complete: {String(p.order?.isComplete)}
               </Badge>
-              {/* <Badge colorScheme={"green"}>
-                User Id: {String(p.order?.userId)}
-              </Badge> */}
+
               <Divider colorScheme={"blue"} variant="dashed"></Divider>
             </VStack>
           </>

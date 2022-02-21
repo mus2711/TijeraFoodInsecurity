@@ -1,0 +1,49 @@
+query userReviews($merchantId: Int!, $userId: Int!) {
+  userOrders(userId: $userId) {
+    order {
+      merchantId
+      isComplete
+      createdAt
+      merchant {
+        cpname
+      }
+    }
+    orderItems {
+      orderId
+      quantity
+      foodItemId
+      foodItem {
+        stock
+        cost
+        itemName
+        imageUrl
+        imageAlt
+        description
+      }
+    }
+  }
+  reviews(merchantId: $merchantId) {
+    user {
+      username
+      firstname
+      lastname
+    }
+    merchant {
+      cpname
+      id
+    }
+    comment
+    rating
+  }
+  me {
+    user {
+      id
+      firstname
+      lastname
+      username
+      email
+      currentTokens
+      maxTokens
+    }
+  }
+}
