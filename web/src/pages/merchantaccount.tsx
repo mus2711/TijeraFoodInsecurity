@@ -335,9 +335,6 @@ const MerchAccount = () => {
 
                   const response = await createFoodItem(values);
                   console.log(response);
-                  if (response.data?.createFoodItem.id) {
-                    console.log(response.data?.createFoodItem.id);
-                  }
                 }}
               >
                 {({ isSubmitting }) => (
