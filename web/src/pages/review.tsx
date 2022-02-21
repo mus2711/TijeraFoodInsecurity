@@ -4,6 +4,7 @@ import {
   useAddReviewMutation,
   useAddTokensMutation,
   useMeQuery,
+  useReviewsQuery,
 } from "../generated/graphql";
 import React, { useEffect, useState } from "react";
 import {
@@ -35,6 +36,20 @@ const review = ({}) => {
   const [menuProps] = useGlobalState("reviewRes");
   const [, addReview] = useAddReviewMutation();
   const [, addTokens] = useAddTokensMutation();
+  let [reviewed, setReviewed] = useState(false);
+  const [{ data, fetching }] = useReviewsQuery({
+    variables: { merchantId: menuProps.id },
+  });
+  // console.log(data?.reviews[0].user.username);
+  if (data?.reviews && !reviewed) {
+    for (let i = 0; i < data?.reviews.length; i++) {
+      if (data.reviews[i].user.username === data.me.user?.username) {
+        setReviewed((reviewed = true));
+        console.log("yes");
+        // break;
+      }
+    }
+  }
   const initialInputs = {
     comment: "",
     // merchantId: 1,
@@ -133,6 +148,7 @@ const review = ({}) => {
                   colorScheme={"teal"}
                   width={"75vw"}
                   maxWidth={"350px"}
+                  isDisabled={reviewed ? "none" : "initial"}
                 >
                   Submit Review
                 </Button>

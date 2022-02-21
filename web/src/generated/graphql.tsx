@@ -700,7 +700,7 @@ export type ReviewsQueryVariables = Exact<{
 }>;
 
 
-export type ReviewsQuery = { __typename?: 'Query', reviews: Array<{ __typename?: 'Review', comment: string, rating: number, user: { __typename?: 'User', username: string, firstname: string, lastname: string }, merchant: { __typename?: 'Merchant', cpname: string, id: number } }> };
+export type ReviewsQuery = { __typename?: 'Query', reviews: Array<{ __typename?: 'Review', comment: string, rating: number, user: { __typename?: 'User', username: string, firstname: string, lastname: string }, merchant: { __typename?: 'Merchant', cpname: string, id: number } }>, me: { __typename?: 'MeResponse', user?: Maybe<{ __typename?: 'User', id: number, firstname: string, lastname: string, username: string, email: string, currentTokens?: Maybe<number>, maxTokens?: Maybe<number> }> } };
 
 export type TagsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1325,6 +1325,17 @@ export const ReviewsDocument = gql`
     }
     comment
     rating
+  }
+  me {
+    user {
+      id
+      firstname
+      lastname
+      username
+      email
+      currentTokens
+      maxTokens
+    }
   }
 }
     `;

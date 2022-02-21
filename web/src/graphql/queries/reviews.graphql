@@ -12,4 +12,15 @@ query Reviews($merchantId: Int!) {
     comment
     rating
   }
+  me {
+    user {
+      id
+      firstname
+      lastname
+      username
+      email
+      currentTokens
+      maxTokens
+    }
+  }
 }

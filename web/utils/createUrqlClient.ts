@@ -5,6 +5,7 @@ import { dedupExchange } from "urql";
 import {
   AddLocationMutation,
   AddReviewMutation,
+  AddTokensMutation,
   ChangeFirstnameMutation,
   ChangeLastNameMutation,
   CreateFoodItemMutation,
@@ -237,6 +238,27 @@ export const createUrqlClient = (ssrExchange: SSRExchange, ctx: any) => {
                     console.log(result);
                     return {
                       me: result.removeTokens.currentTokens,
+                    };
+                  }
+                }
+              );
+            },
+            addTokens: (_result, args, cache, info) => {
+              betterUpdateQuery<AddTokensMutation, MeQuery>(
+                cache,
+                {
+                  query: MeDocument,
+                  variables: { merchantId: args.tokens },
+                },
+                _result,
+                (result, query) => {
+                  console.log("args: ", args.tokens);
+                  console.log("cache: ", cache);
+                  console.log("info: ", info);
+                  if (result.addTokens) {
+                    console.log(result);
+                    return {
+                      me: result.addTokens.currentTokens,
                     };
                   }
                 }
