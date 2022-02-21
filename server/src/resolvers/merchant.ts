@@ -491,4 +491,15 @@ export default class MerchantResolver {
     merchant.country = country;
     return await merchant.save();
   }
+
+  @Query(() => [[Float]])
+  async getAllMerchantCoords(): Promise<number[][]> {
+    const merchants = await Merchant.find();
+    const coords = [];
+    for (const merchant of merchants) {
+      if (merchant.latitude && merchant.longitude)
+        coords.push([merchant.latitude, merchant.longitude]);
+    }
+    return coords;
+  }
 }
