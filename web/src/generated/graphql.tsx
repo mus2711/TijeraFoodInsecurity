@@ -719,7 +719,7 @@ export type UserOrdersQueryVariables = Exact<{
 }>;
 
 
-export type UserOrdersQuery = { __typename?: 'Query', userOrders: Array<{ __typename?: 'OrderResponse', order?: Maybe<{ __typename?: 'Order', merchantId: number, isComplete: boolean, createdAt: string, merchant: { __typename?: 'Merchant', cpname: string } }>, orderItems?: Maybe<Array<{ __typename?: 'OrderItem', orderId: number, quantity: number, foodItemId: number, foodItem: { __typename?: 'FoodItem', stock: number, cost: number, itemName: string, imageUrl: string, imageAlt: string, description: string } }>> }> };
+export type UserOrdersQuery = { __typename?: 'Query', userOrders: Array<{ __typename?: 'OrderResponse', order?: Maybe<{ __typename?: 'Order', merchantId: number, isComplete: boolean, createdAt: string, merchant: { __typename?: 'Merchant', cpname: string } }>, orderItems?: Maybe<Array<{ __typename?: 'OrderItem', createdAt: string, orderId: number, quantity: number, foodItemId: number, foodItem: { __typename?: 'FoodItem', stock: number, cost: number, itemName: string, imageUrl: string, imageAlt: string, description: string, createdAt: string } }>> }> };
 
 export type UserReviewsQueryVariables = Exact<{
   merchantId: Scalars['Int'];
@@ -1399,6 +1399,7 @@ export const UserOrdersDocument = gql`
       }
     }
     orderItems {
+      createdAt
       orderId
       quantity
       foodItemId
@@ -1409,6 +1410,7 @@ export const UserOrdersDocument = gql`
         imageUrl
         imageAlt
         description
+        createdAt
       }
     }
   }

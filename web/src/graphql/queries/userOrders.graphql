@@ -9,6 +9,7 @@ query userOrders($userId: Int!) {
       }
     }
     orderItems {
+      createdAt
       orderId
       quantity
       foodItemId
@@ -19,6 +20,7 @@ query userOrders($userId: Int!) {
         imageUrl
         imageAlt
         description
+        createdAt
       }
     }
   }

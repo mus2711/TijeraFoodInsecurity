@@ -13,23 +13,7 @@ const userorders = () => {
   const [{ data }] = useUserOrdersQuery({
     variables: { userId: findUserId() },
   });
-  // let datastamps: string[] = [];
-  // if (data?.userOrders) {
-  //   for (let i = 0; i < data?.userOrders.length; i++) {
-  //     var date = new Date(Number(data.userOrders[i].order?.createdAt) * 1000);
-  //     // Hours part from the timestamp
-  //     var hours = date.getHours();
-  //     // Minutes part from the timestamp
-  //     var minutes = "0" + date.getMinutes();
-  //     // Seconds part from the timestamp
-  //     var seconds = "0" + date.getSeconds();
 
-  //     // Will display time in 10:30:23 format
-  //     var formattedTime =
-  //       hours + ":" + minutes.substr(-2) + ":" + seconds.substr(-2);
-  //     datastamps.push(formattedTime);
-  //   }
-  // }
   return (
     <Layout title="Review History">
       <VStack spacing={12} paddingBottom={"40px"} borderColor={"grey"}>
@@ -46,7 +30,10 @@ const userorders = () => {
               <Badge size={"md"} colorScheme={"pink"}>
                 {p.order?.merchant.cpname}
               </Badge>
-              {/* <Badge colorScheme={"red"}>{datastamps[value]}</Badge> */}
+              <Badge colorScheme={"red"}>
+                {String(new Date(Number(p.order?.createdAt))).substring(0, 21)}
+              </Badge>
+
               <HStack>
                 {p.orderItems
                   ? p.orderItems.map((p) => (

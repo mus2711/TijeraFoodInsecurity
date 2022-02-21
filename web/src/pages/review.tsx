@@ -32,7 +32,7 @@ interface reviewProps {}
 
 const review = ({}) => {
   const router = useRouter();
-  // useIsAuth();
+
   let [star, setStar] = useState(1);
   const toast = useToast();
   const [menuProps] = useGlobalState("reviewRes");
@@ -43,13 +43,12 @@ const review = ({}) => {
   const [{ data }] = useUserReviewsQuery({
     variables: { merchantId: menuProps.id, userId: findUserId() },
   });
-  console.log(data?.userOrders);
+
   if (data?.reviews && !reviewed) {
     for (let i = 0; i < data?.reviews.length; i++) {
       if (data.reviews[i].user.username === data.me.user?.username) {
         setReviewed((reviewed = true));
         console.log("already reviewed");
-        // break;
       }
     }
   }
@@ -59,14 +58,11 @@ const review = ({}) => {
       if (menuProps.name === data.userOrders[i].order?.merchant.cpname) {
         setBought((bought = true));
         console.log("bought");
-        // break;
       }
     }
   }
   const initialInputs = {
     comment: "",
-    // merchantId: 1,
-    // rating: star,
   };
   const formikInputs = [
     {
