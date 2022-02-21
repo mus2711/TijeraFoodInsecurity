@@ -23,13 +23,13 @@ export class FoodItem extends BaseEntity {
   @Field()
   itemName!: string;
 
-  @Column()
-  @Field()
-  imageUrl!: string;
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  imageUrl?: string;
 
-  @Column()
-  @Field()
-  imageAlt!: string;
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  imageAlt?: string;
 
   @Column("float")
   @Field(() => Float)

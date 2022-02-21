@@ -16,10 +16,10 @@ import { MyContext } from "../types";
 import { Order } from "../entities/Order";
 import { TOKEN_CONVERSION_RATE } from "../constants";
 import { User } from "../entities/User";
-// import { FileUpload, GraphQLUpload } from "graphql-upload";
-// import { FOODITEM_IMAGES_PATH } from "../constants";
-// import path from "path";
-// import { createWriteStream } from "fs";
+import { FileUpload, GraphQLUpload } from "graphql-upload";
+import { FOODITEM_IMAGES_PATH } from "../constants";
+import path from "path";
+import { createWriteStream } from "fs";
 
 @Resolver(FoodItem)
 export default class FoodItemResolver {
@@ -54,8 +54,6 @@ export default class FoodItemResolver {
   async createFoodItem(
     @Ctx() { req }: MyContext,
     @Arg("itemName", () => String) itemName: string,
-    @Arg("imageUrl", () => String) imageUrl: string,
-    @Arg("imageAlt", () => String) imageAlt: string,
     @Arg("cost", () => Float) cost: number,
     @Arg("description", () => String) description: string,
     @Arg("stock", () => Int) stock: number,
@@ -68,8 +66,6 @@ export default class FoodItemResolver {
     console.log(id);
     await FoodItem.create({
       itemName: itemName,
-      imageUrl: imageUrl,
-      imageAlt: imageAlt,
       cost: cost * TOKEN_CONVERSION_RATE,
       description: description,
       stock: stock,
@@ -122,42 +118,44 @@ export default class FoodItemResolver {
     return await foodItem.save();
   }
 
-  // @Mutation(() => Boolean)
-  // async changeFoodImage(
-  //   // @Ctx() { req }: MyContext,
-  //   @Arg("image", () => GraphQLUpload) { createReadStream }: FileUpload,
-  //   @Arg("foodItemId", () => Int) foodItemId: number
-  // ): Promise<Boolean> {
-  //   console.log(foodItemId);
-  //   // const merchantId = req.session.merchantId;
-  //   // if (!merchantId) throw new Error("Merchant not logged in.");
+  @Mutation(() => Boolean)
+  async addFoodImage(
+    @Ctx() { req }: MyContext,
+    @Arg("image", () => GraphQLUpload)
+    { createReadStream, filename }: FileUpload,
+    @Arg("foodItemId", () => Int) foodItemId: number
+  ): Promise<Boolean> {
+    console.log(foodItemId);
+    const merchantId = req.session.merchantId;
+    if (!merchantId) throw new Error("Merchant not logged in.");
 
-  //   const foodItem = await FoodItem.findOne({ id: foodItemId });
-  //   if (!foodItem) throw new Error("Food item not found");
+    const foodItem = await FoodItem.findOne({ id: foodItemId });
+    if (!foodItem) throw new Error("Food item not found");
 
-  //   // if (foodItem.merchantId != parseInt(merchantId)) {
-  //   // throw new Error("Food item does not belong to current merchant.");
-  //   // }
+    if (foodItem.merchantId != parseInt(merchantId)) {
+      throw new Error("Food item does not belong to current merchant.");
+    }
 
-  //   const imageUrl = path.join(
-  //     __dirname,
-  //     FOODITEM_IMAGES_PATH,
-  //     foodItemId.toString()
-  //   );
+    const extension = path.extname(filename);
+    const imageUrl = path.join(
+      __dirname,
+      FOODITEM_IMAGES_PATH,
+      foodItemId.toString() + extension
+    );
 
-  //   return await new Promise(async (resolve, reject) =>
-  //     createReadStream()
-  //       .pipe(createWriteStream(imageUrl))
-  //       .on("finish", async () => {
-  //         foodItem.imageUrl = imageUrl;
-  //         foodItem.imageAlt = foodItem.itemName;
-  //         console.log(imageUrl);
-  //         await foodItem.save();
-  //         resolve(true);
-  //       })
-  //       .on("error", reject)
-  //   );
-  // }
+    return await new Promise(async (resolve, reject) =>
+      createReadStream()
+        .pipe(createWriteStream(imageUrl))
+        .on("finish", async () => {
+          foodItem.imageUrl = imageUrl;
+          foodItem.imageAlt = foodItem.itemName;
+          console.log(imageUrl);
+          await foodItem.save();
+          resolve(true);
+        })
+        .on("error", reject)
+    );
+  }
 
   @Mutation(() => FoodItem)
   async changeFoodCost(
