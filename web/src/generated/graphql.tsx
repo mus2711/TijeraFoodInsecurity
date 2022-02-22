@@ -602,6 +602,14 @@ export type AddToOrderMutationVariables = Exact<{
 
 export type AddToOrderMutation = { __typename?: 'Mutation', addToOrder: { __typename?: 'OrderItem', orderId: number, order: { __typename?: 'Order', cost?: Maybe<number>, userId: number, merchantId: number }, foodItem: { __typename?: 'FoodItem', itemName: string } } };
 
+export type AddTokensandWatchVideoMutationVariables = Exact<{
+  tokens: Scalars['Int'];
+  videoId: Scalars['Int'];
+}>;
+
+
+export type AddTokensandWatchVideoMutation = { __typename?: 'Mutation', addTokens: { __typename?: 'User', currentTokens?: Maybe<number>, maxTokens?: Maybe<number>, username: string }, watchVideo: { __typename?: 'UserVideo', userId: number, videoId: number } };
+
 export type AddTokensMutationVariables = Exact<{
   tokens: Scalars['Int'];
 }>;
@@ -623,6 +631,15 @@ export type AddUserImageMutationVariables = Exact<{
 
 
 export type AddUserImageMutation = { __typename?: 'Mutation', addUserImage: boolean };
+
+export type AddVideoMutationVariables = Exact<{
+  videoUrl: Scalars['String'];
+  title: Scalars['String'];
+  tokens: Scalars['Int'];
+}>;
+
+
+export type AddVideoMutation = { __typename?: 'Mutation', addVideo: { __typename?: 'Video', id: number, videoUrl: string, title: string, tokens: number } };
 
 export type RegisterUserFinalMutationVariables = Exact<{
   year: Scalars['Int'];
@@ -805,7 +822,7 @@ export type MerchantTagsQuery = { __typename?: 'Query', merchantTags: Array<{ __
 export type MerchantsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MerchantsQuery = { __typename?: 'Query', merchants: Array<{ __typename?: 'Merchant', id: number, cpname: string, imageUrl?: Maybe<string>, imageAlt?: Maybe<string>, cplogo?: Maybe<string>, city?: Maybe<string>, address1?: Maybe<string>, address2?: Maybe<string>, postcode?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number>, latitude?: Maybe<number>, longitude?: Maybe<number> }>, allMerchantTags: Array<{ __typename?: 'MerchantTag', merchantId: number, tagId: number }>, tags: Array<{ __typename?: 'Tag', tagName: string, id: number }>, me: { __typename?: 'MeResponse', merchant?: Maybe<{ __typename?: 'Merchant', id: number, cpname: string, cplogo?: Maybe<string>, imageUrl?: Maybe<string>, city?: Maybe<string>, address1?: Maybe<string>, address2?: Maybe<string>, postcode?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number>, username: string, latitude?: Maybe<number>, longitude?: Maybe<number> }> } };
+export type MerchantsQuery = { __typename?: 'Query', merchants: Array<{ __typename?: 'Merchant', id: number, cpname: string, imageUrl?: Maybe<string>, imageAlt?: Maybe<string>, cplogo?: Maybe<string>, city?: Maybe<string>, address1?: Maybe<string>, address2?: Maybe<string>, postcode?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number>, latitude?: Maybe<number>, longitude?: Maybe<number> }>, allMerchantTags: Array<{ __typename?: 'MerchantTag', merchantId: number, tagId: number }>, tags: Array<{ __typename?: 'Tag', tagName: string, id: number }>, me: { __typename?: 'MeResponse', merchant?: Maybe<{ __typename?: 'Merchant', id: number, cpname: string, cplogo?: Maybe<string>, imageUrl?: Maybe<string>, city?: Maybe<string>, address1?: Maybe<string>, address2?: Maybe<string>, postcode?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number>, username: string, latitude?: Maybe<number>, longitude?: Maybe<number> }> }, videos: Array<{ __typename?: 'Video', id: number, title: string, tokens: number, videoUrl: string }>, userWatchedVideos: Array<{ __typename?: 'Video', id: number }> };
 
 export type ReviewsQueryVariables = Exact<{
   merchantId: Scalars['Int'];
@@ -840,6 +857,16 @@ export type UserReviewsQueryVariables = Exact<{
 
 
 export type UserReviewsQuery = { __typename?: 'Query', userOrders: Array<{ __typename?: 'OrderResponse', order?: Maybe<{ __typename?: 'Order', merchantId: number, isComplete: boolean, createdAt: string, merchant: { __typename?: 'Merchant', cpname: string } }>, orderItems?: Maybe<Array<{ __typename?: 'OrderItem', orderId: number, quantity: number, foodItemId: number, foodItem: { __typename?: 'FoodItem', stock: number, cost: number, itemName: string, imageUrl?: Maybe<string>, imageAlt?: Maybe<string>, description: string } }>> }>, reviews: Array<{ __typename?: 'Review', comment: string, rating: number, user: { __typename?: 'User', username: string, firstname: string, lastname: string }, merchant: { __typename?: 'Merchant', cpname: string, id: number } }>, me: { __typename?: 'MeResponse', user?: Maybe<{ __typename?: 'User', id: number, firstname: string, lastname: string, username: string, email: string, currentTokens?: Maybe<number>, maxTokens?: Maybe<number> }> } };
+
+export type UserWatchedVideosQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserWatchedVideosQuery = { __typename?: 'Query', userWatchedVideos: Array<{ __typename?: 'Video', id: number, title: string, videoUrl: string }> };
+
+export type VideosQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type VideosQuery = { __typename?: 'Query', videos: Array<{ __typename?: 'Video', id: number, title: string, tokens: number, videoUrl: string }> };
 
 export const RegularMerchantErrorFragmentDoc = gql`
     fragment RegularMerchantError on FieldMerchantError {
@@ -973,6 +1000,23 @@ export const AddToOrderDocument = gql`
 export function useAddToOrderMutation() {
   return Urql.useMutation<AddToOrderMutation, AddToOrderMutationVariables>(AddToOrderDocument);
 };
+export const AddTokensandWatchVideoDocument = gql`
+    mutation addTokensandWatchVideo($tokens: Int!, $videoId: Int!) {
+  addTokens(tokens: $tokens) {
+    currentTokens
+    maxTokens
+    username
+  }
+  watchVideo(videoId: $videoId) {
+    userId
+    videoId
+  }
+}
+    `;
+
+export function useAddTokensandWatchVideoMutation() {
+  return Urql.useMutation<AddTokensandWatchVideoMutation, AddTokensandWatchVideoMutationVariables>(AddTokensandWatchVideoDocument);
+};
 export const AddTokensDocument = gql`
     mutation addTokens($tokens: Int!) {
   addTokens(tokens: $tokens) {
@@ -1006,6 +1050,20 @@ export const AddUserImageDocument = gql`
 
 export function useAddUserImageMutation() {
   return Urql.useMutation<AddUserImageMutation, AddUserImageMutationVariables>(AddUserImageDocument);
+};
+export const AddVideoDocument = gql`
+    mutation addVideo($videoUrl: String!, $title: String!, $tokens: Int!) {
+  addVideo(videoUrl: $videoUrl, title: $title, tokens: $tokens) {
+    id
+    videoUrl
+    title
+    tokens
+  }
+}
+    `;
+
+export function useAddVideoMutation() {
+  return Urql.useMutation<AddVideoMutation, AddVideoMutationVariables>(AddVideoDocument);
 };
 export const RegisterUserFinalDocument = gql`
     mutation registerUserFinal($year: Int!, $month: Int!, $day: Int!, $income: Int!, $dependents: Int!, $country: String!, $gender: String!, $phoneNumber: String!) {
@@ -1499,6 +1557,15 @@ export const MerchantsDocument = gql`
       longitude
     }
   }
+  videos {
+    id
+    title
+    tokens
+    videoUrl
+  }
+  userWatchedVideos {
+    id
+  }
 }
     `;
 
@@ -1660,4 +1727,31 @@ export const UserReviewsDocument = gql`
 
 export function useUserReviewsQuery(options: Omit<Urql.UseQueryArgs<UserReviewsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<UserReviewsQuery>({ query: UserReviewsDocument, ...options });
+};
+export const UserWatchedVideosDocument = gql`
+    query userWatchedVideos {
+  userWatchedVideos {
+    id
+    title
+    videoUrl
+  }
+}
+    `;
+
+export function useUserWatchedVideosQuery(options: Omit<Urql.UseQueryArgs<UserWatchedVideosQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<UserWatchedVideosQuery>({ query: UserWatchedVideosDocument, ...options });
+};
+export const VideosDocument = gql`
+    query Videos {
+  videos {
+    id
+    title
+    tokens
+    videoUrl
+  }
+}
+    `;
+
+export function useVideosQuery(options: Omit<Urql.UseQueryArgs<VideosQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<VideosQuery>({ query: VideosDocument, ...options });
 };

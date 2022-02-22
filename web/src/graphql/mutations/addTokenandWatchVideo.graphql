@@ -1,0 +1,11 @@
+mutation addTokensandWatchVideo($tokens: Int!, $videoId: Int!) {
+  addTokens(tokens: $tokens) {
+    currentTokens
+    maxTokens
+    username
+  }
+  watchVideo(videoId: $videoId) {
+    userId
+    videoId
+  }
+}

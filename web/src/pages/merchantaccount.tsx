@@ -25,6 +25,7 @@ import {
   Tr,
   useDisclosure,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
 import { MdPlusOne } from "react-icons/md";
 import { MenuSlide } from "../components/menuslide";
@@ -95,6 +96,7 @@ const MerchAccount = () => {
   const [{ data, fetching }] = useTagsandMeQuery({
     variables: { merchantId: findMerchantId() },
   });
+  const toast = useToast();
 
   const [, createFoodItem] = useCreateFoodItemMutation();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -279,7 +281,17 @@ const MerchAccount = () => {
 
               addMerchantLogo({
                 image: logoSrc,
-              }).then((response) => console.log(response));
+              })
+                .then((response) => console.log(response))
+                .then(() =>
+                  toast({
+                    title: "Logo Changed.",
+                    description: "Logo changed, refresh to see the change.",
+                    status: "success",
+                    duration: 9000,
+                    isClosable: true,
+                  })
+                );
             }}
             multiple={false}
           >
@@ -295,9 +307,17 @@ const MerchAccount = () => {
             onDrop={async ([file]) => {
               let imageDataUrl: any = await readFile(file);
               setImageSrc((imageSrc = imageDataUrl));
-              addMerchantImage({ image: imageSrc }).then((response) =>
-                console.log(response)
-              );
+              addMerchantImage({ image: imageSrc })
+                .then((response) => console.log(response))
+                .then(() =>
+                  toast({
+                    title: "Image Changed.",
+                    description: "Image changed, refresh to see the change.",
+                    status: "success",
+                    duration: 9000,
+                    isClosable: true,
+                  })
+                );
             }}
             multiple={false}
           >

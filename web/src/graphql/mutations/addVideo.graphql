@@ -1,0 +1,8 @@
+mutation addVideo($videoUrl: String!, $title: String!, $tokens: Int!) {
+  addVideo(videoUrl: $videoUrl, title: $title, tokens: $tokens) {
+    id
+    videoUrl
+    title
+    tokens
+  }
+}

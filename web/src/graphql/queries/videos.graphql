@@ -1,0 +1,8 @@
+query Videos {
+  videos {
+    id
+    title
+    tokens
+    videoUrl
+  }
+}

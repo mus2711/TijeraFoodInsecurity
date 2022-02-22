@@ -20,9 +20,15 @@ import {
 } from "@chakra-ui/react";
 import { Layout } from "../components/layout";
 import { MenuSlide } from "../components/menuslide";
-import { AddLocationIcon, Combobox, RemoveIcon } from "evergreen-ui";
+import {
+  AddLocationIcon,
+  Combobox,
+  ConsoleIcon,
+  RemoveIcon,
+} from "evergreen-ui";
 import {
   MerchantsQuery,
+  useAddTokensandWatchVideoMutation,
   useAddTokensMutation,
   useAddUserCoordinatesMutation,
   useMerchantsQuery,
@@ -117,13 +123,11 @@ const datalist = [
 
 const Search = () => {
   const [{ data }] = useMerchantsQuery();
-  const [played, setPlayed] = useState(0);
-  let [watchedState, setWatchedState] = useState(false);
-  let [watchedState2, setWatchedState2] = useState(false);
-  let [watchedState3, setWatchedState3] = useState(false);
+
   const [lat, setLat] = useState<number>(0);
   const [lng, setLng] = useState<number>(0);
   const [, addTokens] = useAddTokensMutation();
+  const [, addTokenandWatchVideo] = useAddTokensandWatchVideoMutation();
   const [located, setLocated] = useState(false);
   const [locationLoad, setLocationLoad] = useState(false);
   const [, addUserCoordinates] = useAddUserCoordinatesMutation();
@@ -135,6 +139,8 @@ const Search = () => {
     undefined
   );
   const toast = useToast();
+
+  const watchedVid = data?.userWatchedVideos.map((val) => val.id);
 
   let merchantDistance: number[][] = [];
   const merchToCoord: any[] = [];
@@ -388,133 +394,58 @@ const Search = () => {
   if (videos == true) {
     body = (
       <>
-        <VStack
-          spacing={10}
-          pt={10}
-          display={data?.me.merchant ? "none" : "initial"}
-          justifyContent={"center"}
-        >
-          <VStack>
-            <Text maxWidth={"300px"} textAlign="center">
-              Watch vidoes and learn about new things, and collect tokens when
-              you finish them.
-            </Text>
-            <Box>
-              <Heading size={"sm"} textAlign={"left"} pb={2}>
-                Learn Python
-              </Heading>
+        <VStack spacing={6}>
+          <Text maxWidth={"300px"} textAlign="center">
+            Watch vidoes and learn about new things, and collect tokens when you
+            finish them.
+          </Text>
+          {data?.videos.map(function (p) {
+            return (
+              <>
+                <Box>
+                  <Heading size={"sm"} textAlign={"left"} pb={2}>
+                    {p.title}
+                  </Heading>
 
-              <ReactPlayer
-                width={"400px"}
-                url="https://www.youtube.com/embed/I2wURDqiXdM"
-                light={true}
-                key={1}
-                config={{
-                  youtube: {
-                    playerVars: { showinfo: 1 },
-                  },
-                }}
-                onEnded={() => {
-                  setWatchedState((watchedState = true));
-                }}
-              />
-              <Button
-                isDisabled={watchedState ? false : true}
-                colorScheme={"cyan"}
-                size={"sm"}
-                mt={2}
-                onClick={() => {
-                  addTokens({ tokens: 5 });
-                  toast({
-                    title: "Tokens Claimed.",
-                    description: "Congrats! You should now have more tokens.",
-                    status: "success",
-                    duration: 9000,
-                    isClosable: true,
-                  });
-                }}
-              >
-                Claim Tokens
-              </Button>
-            </Box>
-
-            <Box>
-              <Heading size={"sm"} textAlign={"left"} pb={2}>
-                How to Manage Your Money
-              </Heading>
-
-              <ReactPlayer
-                width={"400px"}
-                url="https://www.youtube.com/watch?v=HQzoZfc3GwQ"
-                light={true}
-                key={1}
-                config={{
-                  youtube: {
-                    playerVars: { showinfo: 1 },
-                  },
-                }}
-                onEnded={() => {
-                  setWatchedState2((watchedState2 = true));
-                }}
-              />
-              <Button
-                isDisabled={watchedState ? false : true}
-                colorScheme={"cyan"}
-                size={"sm"}
-                mt={2}
-                onClick={() => {
-                  addTokens({ tokens: 5 });
-                  toast({
-                    title: "Tokens Claimed.",
-                    description: "Congrats! You should now have more tokens.",
-                    status: "success",
-                    duration: 9000,
-                    isClosable: true,
-                  });
-                }}
-              >
-                Claim Tokens
-              </Button>
-            </Box>
-            <Box>
-              <Heading size={"sm"} textAlign={"left"} pb={2}>
-                Gordon's Quick & Simple Recipes | Gordon Ramsay
-              </Heading>
-
-              <ReactPlayer
-                width={"400px"}
-                url="https://www.youtube.com/watch?v=mhDJNfV7hjk"
-                light={true}
-                key={1}
-                config={{
-                  youtube: {
-                    playerVars: { showinfo: 1 },
-                  },
-                }}
-                onEnded={() => {
-                  setWatchedState3((watchedState3 = true));
-                }}
-              />
-              <Button
-                isDisabled={watchedState ? false : true}
-                colorScheme={"cyan"}
-                size={"sm"}
-                mt={2}
-                onClick={() => {
-                  addTokens({ tokens: 5 });
-                  toast({
-                    title: "Tokens Claimed.",
-                    description: "Congrats! You should now have more tokens.",
-                    status: "success",
-                    duration: 9000,
-                    isClosable: true,
-                  });
-                }}
-              >
-                Claim Tokens
-              </Button>
-            </Box>
-          </VStack>
+                  <ReactPlayer
+                    width={"400px"}
+                    url={p.videoUrl ? p.videoUrl : undefined}
+                    light={true}
+                    key={1}
+                    config={{
+                      youtube: {
+                        playerVars: { showinfo: 1 },
+                      },
+                    }}
+                    onEnded={() => {
+                      if (!watchedVid?.includes(p.id)) {
+                        addTokenandWatchVideo({
+                          tokens: p.tokens,
+                          videoId: p.id,
+                        });
+                        toast({
+                          title: "Tokens Claimed.",
+                          description:
+                            "Congrats! You should now have more tokens.",
+                          status: "success",
+                          duration: 9000,
+                          isClosable: true,
+                        });
+                      } else {
+                        toast({
+                          title: "Tokens not claimed",
+                          description: "You've already watched this video.",
+                          status: "info",
+                          duration: 9000,
+                          isClosable: true,
+                        });
+                      }
+                    }}
+                  />
+                </Box>
+              </>
+            );
+          })}
         </VStack>
       </>
     );

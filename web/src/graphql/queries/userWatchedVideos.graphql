@@ -1,0 +1,7 @@
+query userWatchedVideos {
+  userWatchedVideos {
+    id
+    title
+    videoUrl
+  }
+}

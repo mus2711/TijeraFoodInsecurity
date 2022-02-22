@@ -163,9 +163,7 @@ const merchant_3 = () => {
             <Dropzone
               onDrop={async ([file]) => {
                 let imageDataUrl: any = await readFile(file);
-
                 setImageSrc((imageSrc = imageDataUrl));
-
                 addMerchantImage({ image: imageSrc }).then((response) =>
                   console.log(response)
                 );
