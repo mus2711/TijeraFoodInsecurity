@@ -16,13 +16,13 @@ import {
   COOKIE_NAME,
   EMAIL_REGEX,
   USERNAME_REGEX,
-  USER_IMAGES_PATH,
+  // USER_IMAGES_PATH,
 } from "../constants";
 import { User } from "../entities/User";
 import { MyContext } from "../types";
-import { FileUpload, GraphQLUpload } from "graphql-upload";
-import path from "path";
-import { createWriteStream } from "fs";
+// import { FileUpload, GraphQLUpload } from "graphql-upload";
+// import path from "path";
+// import { createWriteStream } from "fs";
 
 @InputType()
 class RegisterInput {

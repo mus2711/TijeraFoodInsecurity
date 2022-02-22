@@ -268,66 +268,99 @@ export default class MerchantResolver {
     );
   }
 
+  // @Mutation(() => Boolean)
+  // async addMerchantImage(
+  //   @Ctx() { req }: MyContext,
+  //   @Arg("image", () => GraphQLUpload)
+  //   { createReadStream, filename }: FileUpload
+  // ): Promise<Boolean> {
+  //   const merchantId = req.session.merchantId;
+  //   if (!merchantId) throw new Error("Merchant not Logged in");
+  //   const merchant = await Merchant.findOne(merchantId);
+  //   if (!merchant) throw new Error("Merchant not found");
+
+  //   const extension = path.extname(filename);
+  //   const imageUrl = path.join(
+  //     __dirname,
+  //     MERCHANT_IMAGES_PATH,
+  //     merchantId + extension
+  //   );
+
+  //   return await new Promise(async (resolve, reject) =>
+  //     createReadStream()
+  //       .pipe(createWriteStream(imageUrl))
+  //       .on("finish", async () => {
+  //         merchant.imageUrl = imageUrl;
+  //         merchant.imageAlt = merchant.cpname;
+  //         await merchant.save();
+  //         resolve(true);
+  //       })
+
+  //       .on("error", reject)
+  //   );
+  // }
+
+  // @Mutation(() => Boolean)
+  // async addMerchantLogo(
+  //   @Ctx() { req }: MyContext,
+  //   @Arg("image", () => GraphQLUpload)
+  //   { createReadStream, filename }: FileUpload
+  // ): Promise<Boolean> {
+  //   const merchantId = req.session.merchantId;
+  //   if (!merchantId) throw new Error("Merchant not Logged in");
+  //   const merchant = await Merchant.findOne(merchantId);
+  //   if (!merchant) throw new Error("Merchant not found");
+
+  //   const extension = path.extname(filename);
+  //   const imageUrl = path.join(
+  //     __dirname,
+  //     MERCHANT_LOGOS_PATH,
+  //     merchantId + extension
+  //   );
+
+  //   return await new Promise(async (resolve, reject) =>
+  //     createReadStream()
+  //       .pipe(createWriteStream(imageUrl))
+  //       .on("finish", async () => {
+  //         merchant.cplogo = imageUrl;
+  //         await merchant.save();
+  //         resolve(true);
+  //       })
+  //       .on("error", reject)
+  //   );
+  // }
+
   @Mutation(() => Boolean)
   async addMerchantImage(
     @Ctx() { req }: MyContext,
-    @Arg("image", () => GraphQLUpload)
-    { createReadStream, filename }: FileUpload
-  ): Promise<Boolean> {
+    @Arg("image", () => String) image: string
+  ) {
     const merchantId = req.session.merchantId;
     if (!merchantId) throw new Error("Merchant not Logged in");
     const merchant = await Merchant.findOne(merchantId);
     if (!merchant) throw new Error("Merchant not found");
 
-    const extension = path.extname(filename);
-    const imageUrl = path.join(
-      __dirname,
-      MERCHANT_IMAGES_PATH,
-      merchantId + extension
-    );
+    merchant.imageUrl = image;
+    merchant.imageAlt = merchant.cpname;
 
-    return await new Promise(async (resolve, reject) =>
-      createReadStream()
-        .pipe(createWriteStream(imageUrl))
-        .on("finish", async () => {
-          merchant.imageUrl = imageUrl;
-          merchant.imageAlt = merchant.cpname;
-          await merchant.save();
-          resolve(true);
-        })
-
-        .on("error", reject)
-    );
+    await merchant.save();
+    return true;
   }
 
   @Mutation(() => Boolean)
   async addMerchantLogo(
     @Ctx() { req }: MyContext,
-    @Arg("image", () => GraphQLUpload)
-    { createReadStream, filename }: FileUpload
-  ): Promise<Boolean> {
+    @Arg("image", () => String) image: string
+  ) {
     const merchantId = req.session.merchantId;
     if (!merchantId) throw new Error("Merchant not Logged in");
     const merchant = await Merchant.findOne(merchantId);
     if (!merchant) throw new Error("Merchant not found");
 
-    const extension = path.extname(filename);
-    const imageUrl = path.join(
-      __dirname,
-      MERCHANT_LOGOS_PATH,
-      merchantId + extension
-    );
+    merchant.cplogo = image;
 
-    return await new Promise(async (resolve, reject) =>
-      createReadStream()
-        .pipe(createWriteStream(imageUrl))
-        .on("finish", async () => {
-          merchant.cplogo = imageUrl;
-          await merchant.save();
-          resolve(true);
-        })
-        .on("error", reject)
-    );
+    await merchant.save();
+    return true;
   }
 
   @Mutation(() => Merchant)

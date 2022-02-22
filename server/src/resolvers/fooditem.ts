@@ -118,14 +118,51 @@ export default class FoodItemResolver {
     return await foodItem.save();
   }
 
+  // @Mutation(() => Boolean)
+  // async addFoodImage(
+  //   @Ctx() { req }: MyContext,
+  //   @Arg("image", () => GraphQLUpload)
+  //   { createReadStream, filename }: FileUpload,
+  //   @Arg("foodItemId", () => Int) foodItemId: number
+  // ): Promise<Boolean> {
+  //   console.log(foodItemId);
+  //   const merchantId = req.session.merchantId;
+  //   if (!merchantId) throw new Error("Merchant not logged in.");
+
+  //   const foodItem = await FoodItem.findOne({ id: foodItemId });
+  //   if (!foodItem) throw new Error("Food item not found");
+
+  //   if (foodItem.merchantId != parseInt(merchantId)) {
+  //     throw new Error("Food item does not belong to current merchant.");
+  //   }
+
+  //   const extension = path.extname(filename);
+  //   const imageUrl = path.join(
+  //     __dirname,
+  //     FOODITEM_IMAGES_PATH,
+  //     foodItemId.toString() + extension
+  //   );
+
+  //   return await new Promise(async (resolve, reject) =>
+  //     createReadStream()
+  //       .pipe(createWriteStream(imageUrl))
+  //       .on("finish", async () => {
+  //         foodItem.imageUrl = imageUrl;
+  //         foodItem.imageAlt = foodItem.itemName;
+  //         console.log(imageUrl);
+  //         await foodItem.save();
+  //         resolve(true);
+  //       })
+  //       .on("error", reject)
+  //   );
+  // }
+
   @Mutation(() => Boolean)
   async addFoodImage(
     @Ctx() { req }: MyContext,
-    @Arg("image", () => GraphQLUpload)
-    { createReadStream, filename }: FileUpload,
+    @Arg("image", () => String) image: string,
     @Arg("foodItemId", () => Int) foodItemId: number
-  ): Promise<Boolean> {
-    console.log(foodItemId);
+  ) {
     const merchantId = req.session.merchantId;
     if (!merchantId) throw new Error("Merchant not logged in.");
 
@@ -136,25 +173,11 @@ export default class FoodItemResolver {
       throw new Error("Food item does not belong to current merchant.");
     }
 
-    const extension = path.extname(filename);
-    const imageUrl = path.join(
-      __dirname,
-      FOODITEM_IMAGES_PATH,
-      foodItemId.toString() + extension
-    );
+    foodItem.imageUrl = image;
+    foodItem.imageAlt = foodItem.itemName;
 
-    return await new Promise(async (resolve, reject) =>
-      createReadStream()
-        .pipe(createWriteStream(imageUrl))
-        .on("finish", async () => {
-          foodItem.imageUrl = imageUrl;
-          foodItem.imageAlt = foodItem.itemName;
-          console.log(imageUrl);
-          await foodItem.save();
-          resolve(true);
-        })
-        .on("error", reject)
-    );
+    await foodItem.save();
+    return true;
   }
 
   @Mutation(() => FoodItem)
