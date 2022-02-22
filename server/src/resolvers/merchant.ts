@@ -471,7 +471,7 @@ export default class MerchantResolver {
     return await merchant.save();
   }
 
-  @Mutation(() => User)
+  @Mutation(() => Merchant)
   async changeMerchantAddress(
     @Ctx() { req }: MyContext,
     @Arg("address1", () => String) address1: string,

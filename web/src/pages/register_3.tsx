@@ -2,11 +2,12 @@ import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import {
   useAddUserCoordinatesMutation,
+  useAddUserImageMutation,
   useInitialiseUserTokensMutation,
   useRegisterMutation,
   useRegisterUserFinalMutation,
 } from "../generated/graphql";
-import React from "react";
+import React, { useCallback } from "react";
 import {
   Avatar,
   Box,
@@ -29,6 +30,7 @@ import { MdDateRange, MdLocationOn, MdPhone } from "react-icons/md";
 import { useRouter } from "next/router";
 import { DblStandardButton } from "../components/DblStandardButton";
 import { SliderInput } from "../components/SliderInput";
+import { useDropzone } from "react-dropzone";
 
 const bl = "#5998A0";
 
@@ -46,6 +48,52 @@ const Register_3 = () => {
   const [gender, setGender] = useState<String | null>(null);
   const [, initialiseUserTokens] = useInitialiseUserTokensMutation();
   const [, addUserCoordinates] = useAddUserCoordinatesMutation();
+  const [, addUserImage] = useAddUserImageMutation();
+
+  let [fileToUpload, setFileToUpload] = useState<File>();
+  let [imageSrc, setImageSrc] = useState("");
+
+  const readFile = (file: File) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => resolve(reader.result), false);
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const onDrop = useCallback(
+    async ([file]) => {
+      console.log("arr file: ", [file]);
+      console.log("single file", file);
+      console.log("file 0:", file[0]);
+      let imageDataUrl: any = await readFile(file);
+
+      setImageSrc((imageSrc = imageDataUrl));
+      console.log("img_data: ", imageSrc);
+      setFileToUpload((fileToUpload = file));
+
+      addUserImage({
+        image: imageSrc.substring(0, 10),
+      }).then((response) => console.log(response));
+    },
+    [addUserImage]
+  );
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
+  const InputDrop = () => {
+    if (fileToUpload) {
+      return <Text>📷 ✅</Text>;
+    } else if (isDragActive) {
+      return <Text>Drop thed image here</Text>;
+    } else {
+      return (
+        <Text>
+          Drag 'n' drop your image here, or just click to select an image🍎
+        </Text>
+      );
+    }
+  };
+  // ///////
 
   const [locationLoad, setLocationLoad] = useState(false);
 
@@ -117,6 +165,10 @@ const Register_3 = () => {
           >
             {/* <AvatarBadge boxSize="1.25em" bg="green.500" /> */}
           </Avatar>
+          <div {...getRootProps()}>
+            <input accept="image/*" {...getInputProps()} />
+            <InputDrop></InputDrop>
+          </div>
           <Input
             type={"file"}
             accept="image/*"

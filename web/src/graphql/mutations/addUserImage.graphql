@@ -1,0 +1,3 @@
+mutation addUserImage($image: String!) {
+  addUserImage(image: $image)
+}

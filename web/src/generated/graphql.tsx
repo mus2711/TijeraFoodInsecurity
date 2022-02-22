@@ -122,7 +122,7 @@ export type Mutation = {
   changeGender: User;
   changeIncome: User;
   changeLastName: User;
-  changeMerchantAddress: User;
+  changeMerchantAddress: Merchant;
   changePhoneNumber: User;
   changeUserMaxTokens: User;
   completeOrder: Order;
@@ -196,7 +196,7 @@ export type MutationAddUserCoordinatesArgs = {
 
 
 export type MutationAddUserImageArgs = {
-  image: Scalars['Upload'];
+  image: Scalars['String'];
 };
 
 
@@ -562,6 +562,13 @@ export type AddUserCoordinatesMutationVariables = Exact<{
 
 export type AddUserCoordinatesMutation = { __typename?: 'Mutation', addUserCoordinates: { __typename?: 'User', latitude?: Maybe<number>, longitude?: Maybe<number> } };
 
+export type AddUserImageMutationVariables = Exact<{
+  image: Scalars['String'];
+}>;
+
+
+export type AddUserImageMutation = { __typename?: 'Mutation', addUserImage: boolean };
+
 export type RegisterUserFinalMutationVariables = Exact<{
   year: Scalars['Int'];
   month: Scalars['Int'];
@@ -597,6 +604,17 @@ export type ChangeLastNameMutationVariables = Exact<{
 
 
 export type ChangeLastNameMutation = { __typename?: 'Mutation', changeLastName: { __typename?: 'User', firstname: string, lastname: string } };
+
+export type ChangeMerchantAddressMutationVariables = Exact<{
+  country: Scalars['String'];
+  address1: Scalars['String'];
+  address2: Scalars['String'];
+  postcode: Scalars['String'];
+  city: Scalars['String'];
+}>;
+
+
+export type ChangeMerchantAddressMutation = { __typename?: 'Mutation', changeMerchantAddress: { __typename?: 'Merchant', address1?: Maybe<string>, address2?: Maybe<string>, city?: Maybe<string>, country?: Maybe<string>, postcode?: Maybe<string>, cpname: string } };
 
 export type CompleteOrderMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -907,6 +925,15 @@ export const AddUserCoordinatesDocument = gql`
 export function useAddUserCoordinatesMutation() {
   return Urql.useMutation<AddUserCoordinatesMutation, AddUserCoordinatesMutationVariables>(AddUserCoordinatesDocument);
 };
+export const AddUserImageDocument = gql`
+    mutation addUserImage($image: String!) {
+  addUserImage(image: $image)
+}
+    `;
+
+export function useAddUserImageMutation() {
+  return Urql.useMutation<AddUserImageMutation, AddUserImageMutationVariables>(AddUserImageDocument);
+};
 export const RegisterUserFinalDocument = gql`
     mutation registerUserFinal($year: Int!, $month: Int!, $day: Int!, $income: Int!, $dependents: Int!, $country: String!, $gender: String!, $phoneNumber: String!) {
   changeDOB(year: $year, month: $month, day: $day) {
@@ -974,6 +1001,28 @@ export const ChangeLastNameDocument = gql`
 
 export function useChangeLastNameMutation() {
   return Urql.useMutation<ChangeLastNameMutation, ChangeLastNameMutationVariables>(ChangeLastNameDocument);
+};
+export const ChangeMerchantAddressDocument = gql`
+    mutation changeMerchantAddress($country: String!, $address1: String!, $address2: String!, $postcode: String!, $city: String!) {
+  changeMerchantAddress(
+    country: $country
+    address1: $address1
+    address2: $address2
+    city: $city
+    postcode: $postcode
+  ) {
+    address1
+    address2
+    city
+    country
+    postcode
+    cpname
+  }
+}
+    `;
+
+export function useChangeMerchantAddressMutation() {
+  return Urql.useMutation<ChangeMerchantAddressMutation, ChangeMerchantAddressMutationVariables>(ChangeMerchantAddressDocument);
 };
 export const CompleteOrderDocument = gql`
     mutation completeOrder {

@@ -23,6 +23,7 @@
     "evergreen-ui": "^6.6.3",
     "formik": "^2.2.9",
     "framer-motion": "^4",
+    "fs": "^0.0.1-security",
     "geolib": "^3.3.3",
     "graphql": "^15.8.0",
     "graphql-upload": "^13.0.0",

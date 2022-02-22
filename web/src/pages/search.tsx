@@ -192,6 +192,7 @@ const Search = () => {
           setLat(position.coords.latitude);
           setLng(position.coords.longitude);
           setLocationLoad(true);
+
           findClosestMerchant().then((val) => {
             if (closestMerch && closestDistance) {
               toast({

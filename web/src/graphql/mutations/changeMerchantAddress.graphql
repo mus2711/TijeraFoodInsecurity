@@ -1,0 +1,22 @@
+mutation changeMerchantAddress(
+  $country: String!
+  $address1: String!
+  $address2: String!
+  $postcode: String!
+  $city: String!
+) {
+  changeMerchantAddress(
+    country: $country
+    address1: $address1
+    address2: $address2
+    city: $city
+    postcode: $postcode
+  ) {
+    address1
+    address2
+    city
+    country
+    postcode
+    cpname
+  }
+}

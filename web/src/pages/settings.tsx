@@ -21,7 +21,6 @@ import { ArrowRightIcon } from "@chakra-ui/icons";
 import { HiLocationMarker, HiUser } from "react-icons/hi";
 import Nextlink from "next/link";
 import {
-  useAddLocationMutation,
   useChangeFirstnameMutation,
   useChangeLastNameMutation,
   useMeQuery,
@@ -38,7 +37,7 @@ const Settings = () => {
   const [{ data, fetching }] = useMeQuery({
     pause: isServer(),
   });
-  const [, addLocation] = useAddLocationMutation();
+
   const [, registerm] = useRegistermMutation();
   const [, changeFirstname] = useChangeFirstnameMutation();
   const [, changeLastName] = useChangeLastNameMutation();
@@ -46,7 +45,7 @@ const Settings = () => {
   const toast = useToast();
 
   const initialInputs = {
-    location: "",
+    city: "",
   };
   const initialInputscpname = {
     cpname: "",
@@ -64,9 +63,9 @@ const Settings = () => {
 
   const formikInputs = [
     {
-      name: "location",
-      placeholder: `${data?.me?.merchant?.location}`,
-      label: "Location",
+      name: "city",
+      placeholder: `${data?.me?.merchant?.city}`,
+      label: "City",
     },
   ];
   const formikInputsfirstname = [
@@ -117,7 +116,7 @@ const Settings = () => {
           >
             <Box>
               <Text fontSize={"md"} paddingLeft={"10px"}>
-                {data.me.merchant.location}
+                {data.me.merchant.city}
               </Text>
             </Box>
             <Spacer />
@@ -138,21 +137,21 @@ const Settings = () => {
                       initialValues={initialInputs}
                       onSubmit={async (values, { setErrors }) => {
                         console.log(values);
-                        if (values.location !== "") {
-                          const response = await addLocation(values);
+                        // if (values.location !== "") {
+                        //   const response = await addLocation(values);
 
-                          console.log(response);
-                          // if (response.data?.registerm.errors) {
-                          //   setErrors(toMerchErrorMap(response.data.registerm.errors));
-                          // } else if (response.data?.registerm.merchant) {
-                          //   router.push("/");
-                          // }
-                          if (response.data?.addLocation.id) {
-                            () => {
-                              // setbuttonL((buttonL = "Done!"));
-                            };
-                          }
-                        }
+                        //   console.log(response);
+                        //   // if (response.data?.registerm.errors) {
+                        //   //   setErrors(toMerchErrorMap(response.data.registerm.errors));
+                        //   // } else if (response.data?.registerm.merchant) {
+                        //   //   router.push("/");
+                        //   // }
+                        //   if (response.data?.addLocation.id) {
+                        //     () => {
+                        //       // setbuttonL((buttonL = "Done!"));
+                        //     };
+                        //   }
+                        // }
                       }}
                     >
                       {({ isSubmitting }) => (

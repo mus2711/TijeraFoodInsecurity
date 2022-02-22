@@ -4,6 +4,7 @@ import {
   TagsandMeQuery,
   useAddMerchantLogoMutation,
   useAddMerchantTagMutation,
+  useChangeMerchantAddressMutation,
   useTagsandMeQuery,
 } from "../generated/graphql";
 import React, { useCallback, useState } from "react";
@@ -14,6 +15,7 @@ import {
   Heading,
   HStack,
   Input,
+  InputGroup,
   Tag,
   TagLabel,
   TagLeftIcon,
@@ -24,18 +26,20 @@ import { Formik, Form } from "formik";
 import { AddIcon } from "@chakra-ui/icons";
 import { DblStandardButton } from "../components/DblStandardButton";
 import { Inputfield } from "../components/inputfield";
-import { RemoveIcon } from "evergreen-ui";
+import { RemoveIcon, Select } from "evergreen-ui";
 import { useRouter } from "next/router";
 import { Layout } from "../components/layout";
 import { findMerchantId } from "../functions/findMerchantId";
 import { MenuSlide } from "../components/menuslide";
 import { useDropzone } from "react-dropzone";
+import { typeOf } from "react-is";
 
 const merchant_3 = () => {
   const [{ data, fetching }] = useTagsandMeQuery({
     variables: { merchantId: findMerchantId() },
   });
-
+  const [, changeMerchantAddress] = useChangeMerchantAddressMutation();
+  const [country, setCountry] = useState("");
   let [tags, setTags] = useState([] as string[]);
   const router = useRouter();
 
@@ -48,11 +52,13 @@ const merchant_3 = () => {
     address2: "",
     city: "",
     postcode: "",
+    country: country,
   };
   //// /////
 
   // const [upload] = useMutation(uploadFileMutation);
   const [, addMerchantLogo] = useAddMerchantLogoMutation();
+
   let [fileToUpload, setFileToUpload] = useState<File>();
   let [imageSrc, setImageSrc] = useState("");
 
@@ -70,13 +76,11 @@ const merchant_3 = () => {
       console.log("single file", file);
       console.log("file 0:", file[0]);
       let imageDataUrl: any = await readFile(file);
-      // console.log(imageDataUrl);
+
       setImageSrc((imageSrc = imageDataUrl));
       console.log("img_data: ", imageSrc);
       setFileToUpload((fileToUpload = file));
-      console.log("readStream: ", file);
-      // console.log("file to upload: ", fileToUpload.encoding);
-      // setFileToUpload((fileToUpload.encoding))
+
       addMerchantLogo({
         image: fileToUpload,
       }).then((response) => console.log(response));
@@ -136,7 +140,7 @@ const merchant_3 = () => {
     {
       name: "address2",
       placeholder: "Marylebone",
-      label: "Address w",
+      label: "Address 2",
     },
     {
       name: "city",
@@ -225,18 +229,37 @@ const merchant_3 = () => {
           <Formik
             initialValues={initialInputs}
             onSubmit={async (values, { setErrors }) => {
-              console.log(values);
-              // const response = await addLocation(values);
-              // console.log(response);
-
-              // if (response.data?.addLocation.id) {
-              //   router.push("/");
-              // }
+              values["country"] = country;
+              const response = await changeMerchantAddress(values);
+              console.log(response);
+              if (response.data?.changeMerchantAddress.city) {
+                router.push("/search");
+              }
             }}
           >
             {({ isSubmitting }) => (
               <Form>
                 <VStack spacing={4}>
+                  <InputGroup>
+                    <Select
+                      placeholder="country"
+                      value={country}
+                      // iconColor={bl}
+                      color="gray.300"
+                      // colorScheme={"cyan"}
+                      size={"medium"}
+                      onChange={(val) => {
+                        setCountry(val.target.selectedOptions[0].value);
+                      }}
+                      // variant="filled"
+                    >
+                      <option value="UK">United Kingdom</option>
+                      <option value="USA">United States</option>
+                      <option value="FR">France</option>
+                      <option value="COL">Columbia</option>
+                      <option value="BRB">Barbados</option>
+                    </Select>
+                  </InputGroup>
                   {formikInputs.map((p, val) => (
                     <Inputfield
                       name={p.name}

@@ -168,9 +168,7 @@ const MerchAccount = () => {
         imageUrl={banner}
         cuisine={merchantTagSet}
         location={
-          data?.me?.merchant?.location
-            ? data?.me?.merchant?.location
-            : undefined
+          data?.me?.merchant?.city ? data?.me?.merchant?.city : undefined
         }
         reviewCount={data?.me?.merchant?.reviewCount}
         rating={
@@ -217,8 +215,8 @@ const MerchAccount = () => {
                       maxHeight={"100px"}
                       width={"20vw"}
                       fit={"cover"}
-                      src={p.imageUrl}
-                      alt={p.imageAlt}
+                      // src={p.imageUrl}
+                      // alt={p.imageAlt}
                     ></Image>
                   </Box>
                 </Td>
