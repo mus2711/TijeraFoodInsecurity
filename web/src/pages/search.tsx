@@ -345,6 +345,9 @@ const Search = () => {
                     rating={p.averageRating ? p.averageRating : undefined}
                     cuisine={merchantTags}
                     location={p.city ? p.city : undefined}
+                    avatarlogo={p.cplogo ? p.cplogo : undefined}
+                    imageUrl={p.imageUrl ? p.imageUrl : undefined}
+                    imageAlt={p.imageAlt ? p.imageAlt : undefined}
                     key={p.id}
                     id={p.id}
                     lat={p.latitude}
@@ -368,6 +371,9 @@ const Search = () => {
                     lat={p.latitude}
                     lng={p.longitude}
                     inputdist={{ latitude: lat, longitude: lng }}
+                    avatarlogo={p.cplogo ? p.cplogo : undefined}
+                    imageUrl={p.imageUrl ? p.imageUrl : undefined}
+                    imageAlt={p.imageAlt ? p.imageAlt : undefined}
                   />
                   <Divider />
                 </>

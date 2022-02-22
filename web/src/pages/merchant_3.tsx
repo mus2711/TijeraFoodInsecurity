@@ -2,6 +2,7 @@ import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import {
   TagsandMeQuery,
+  useAddMerchantImageMutation,
   useAddMerchantLogoMutation,
   useAddMerchantTagMutation,
   useChangeMerchantAddressMutation,
@@ -31,8 +32,7 @@ import { useRouter } from "next/router";
 import { Layout } from "../components/layout";
 import { findMerchantId } from "../functions/findMerchantId";
 import { MenuSlide } from "../components/menuslide";
-import { useDropzone } from "react-dropzone";
-import { typeOf } from "react-is";
+import Dropzone, { useDropzone } from "react-dropzone";
 
 const merchant_3 = () => {
   const [{ data, fetching }] = useTagsandMeQuery({
@@ -44,8 +44,6 @@ const merchant_3 = () => {
   const router = useRouter();
 
   const [, addMerchantTag] = useAddMerchantTagMutation();
-  let [image, setImage] = React.useState("");
-  let [banner, setBanner] = React.useState<string | undefined>(undefined);
 
   const initialInputs = {
     address1: "",
@@ -58,9 +56,12 @@ const merchant_3 = () => {
 
   // const [upload] = useMutation(uploadFileMutation);
   const [, addMerchantLogo] = useAddMerchantLogoMutation();
+  const [, addMerchantImage] = useAddMerchantImageMutation();
 
   let [fileToUpload, setFileToUpload] = useState<File>();
   let [imageSrc, setImageSrc] = useState("");
+  let [logoToUpload, setlogoToUpload] = useState<File>();
+  let [logoSrc, setLogoSrc] = useState("");
 
   const readFile = (file: File) => {
     return new Promise((resolve) => {
@@ -68,50 +69,6 @@ const merchant_3 = () => {
       reader.addEventListener("load", () => resolve(reader.result), false);
       reader.readAsDataURL(file);
     });
-  };
-
-  const onDrop = useCallback(
-    async ([file]) => {
-      console.log("arr file: ", [file]);
-      console.log("single file", file);
-      console.log("file 0:", file[0]);
-      let imageDataUrl: any = await readFile(file);
-
-      setImageSrc((imageSrc = imageDataUrl));
-      console.log("img_data: ", imageSrc);
-      setFileToUpload((fileToUpload = file));
-
-      addMerchantLogo({
-        image: fileToUpload,
-      }).then((response) => console.log(response));
-    },
-    [addMerchantLogo]
-  );
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
-
-  const InputDrop = () => {
-    if (fileToUpload) {
-      return <Text>📷 ✅</Text>;
-    } else if (isDragActive) {
-      return <Text>Drop thed image here</Text>;
-    } else {
-      return (
-        <Text>
-          Drag 'n' drop your image here, or just click to select an image🍎
-        </Text>
-      );
-    }
-  };
-  // ///////
-
-  const onImageChange = async (e: any) => {
-    console.log(e.target.files[0]);
-    setImage((image = URL.createObjectURL(e.target.files[0])));
-  };
-
-  const onBannerChange = (e: any) => {
-    console.log(e.target.files[0]);
-    setBanner((image = URL.createObjectURL(e.target.files[0])));
   };
 
   let mapTags: Map<string, number> = new Map();
@@ -167,62 +124,61 @@ const merchant_3 = () => {
     <Layout title="SIGN UP">
       <Flex direction="column" justifyContent="center" alignItems="center">
         <Heading>Step 3/3</Heading>
+
         <Text textAlign={"center"} width={"75vw"} maxWidth={"350px"}>
           Here we set your menu and your merchant account.
         </Text>
         <VStack paddingTop={"20px"}>
           <MenuSlide
             modal={false}
-            avatarlogo={imageSrc}
+            avatarlogo={logoSrc}
             imageUrl={imageSrc}
             cuisine={tags}
             badge="Top"
             name={data?.me.merchant ? data?.me.merchant.cpname : undefined}
             id={Number(data?.me.merchant?.id)}
           ></MenuSlide>
-          <HStack paddingTop={"20px"}>
-            <VStack>
-              <Button size="md" colorScheme={"cyan"} position={"absolute"}>
-                Pick Logo
-              </Button>
-              <Input
-                // size={"md"}
-                type={"file"}
-                accept="image/*"
-                onClick={() => console.log("yes")}
-                className="inputPhoto"
-                onChange={onImageChange}
-                placeholder="Pick an Image"
-                borderWidth={"0px"}
-                opacity={0}
-                width="120px"
-                // height={"100px"}
-              />
-            </VStack>
 
-            {/* <Button colorScheme={"red"}>Pick Backdrop</Button> */}
-            <VStack>
-              <Button size="md" colorScheme={"red"} position={"absolute"}>
-                Pick Backdrop
-              </Button>
-              <Input
-                // size={"md"}
-                type={"file"}
-                accept="image/*"
-                onClick={() => console.log("yes")}
-                className="inputPhoto"
-                onChange={onBannerChange}
-                placeholder="Pick an Image"
-                borderWidth={"0px"}
-                opacity={0}
-                width="120px"
-                // height={"100px"}
-              />
-            </VStack>
-            <div {...getRootProps()}>
-              <input accept="image/*" {...getInputProps()} />
-              <InputDrop></InputDrop>
-            </div>
+          <HStack paddingTop={"20px"}>
+            <Dropzone
+              onDrop={async ([file]) => {
+                let imageDataUrl: any = await readFile(file);
+
+                setLogoSrc((logoSrc = imageDataUrl));
+
+                addMerchantLogo({
+                  image: logoSrc,
+                }).then((response) => console.log(response));
+              }}
+              multiple={false}
+            >
+              {({ getRootProps, getInputProps }) => (
+                <div {...getRootProps({ className: "dropzone" })}>
+                  <input {...getInputProps()} />
+                  <Button colorScheme={"blue"}>Select a Logo</Button>
+                </div>
+              )}
+            </Dropzone>
+
+            <Dropzone
+              onDrop={async ([file]) => {
+                let imageDataUrl: any = await readFile(file);
+
+                setImageSrc((imageSrc = imageDataUrl));
+
+                addMerchantImage({ image: imageSrc }).then((response) =>
+                  console.log(response)
+                );
+              }}
+              multiple={false}
+            >
+              {({ getRootProps, getInputProps }) => (
+                <div {...getRootProps({ className: "dropzone" })}>
+                  <input {...getInputProps()} />
+                  <Button colorScheme={"green"}>Select a Image</Button>
+                </div>
+              )}
+            </Dropzone>
           </HStack>
         </VStack>
         <Box paddingTop={"15px"}>

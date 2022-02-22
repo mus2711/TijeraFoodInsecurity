@@ -1,0 +1,3 @@
+mutation addFoodImage($image: String!, $foodItemId: Int!) {
+  addFoodImage(image: $image, foodItemId: $foodItemId)
+}

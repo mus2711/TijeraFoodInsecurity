@@ -25,30 +25,27 @@ import {
   Tr,
   useDisclosure,
   VStack,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  useNumberInput,
 } from "@chakra-ui/react";
 import { MdPlusOne } from "react-icons/md";
 import { MenuSlide } from "../components/menuslide";
-import { Foodslide } from "../components/foodslide";
 import { Formik, Form } from "formik";
 import { useRouter } from "next/router";
 import { Inputfield } from "../components/inputfield";
 import {
+  useAddFoodImageMutation,
+  useAddMerchantImageMutation,
+  useAddMerchantLogoMutation,
   useChangeFoodStockMutation,
   useCreateFoodItemMutation,
   useDeleteFoodItemMutation,
-  useMerchantPersonalMenuQuery,
   useTagsandMeQuery,
 } from "../generated/graphql";
 import { useIsAuthMerchant } from "../../utils/useIsAuthMerchant";
 import { Layout } from "../components/layout";
 import { findMerchantId } from "../functions/findMerchantId";
-import { HiMinus, HiPlay, HiPlus } from "react-icons/hi";
+import { HiMinus } from "react-icons/hi";
+
+import Dropzone from "react-dropzone";
 
 const datalist = [
   {
@@ -107,18 +104,27 @@ const MerchAccount = () => {
   const [, deleteFoodItem] = useDeleteFoodItemMutation();
   const [, changeFoodStock] = useChangeFoodStockMutation();
 
-  const onImageChange = (e: any) => {
-    console.log(e.target.files[0]);
-    setImage((image = URL.createObjectURL(e.target.files[0])));
-  };
+  const [, addMerchantLogo] = useAddMerchantLogoMutation();
+  const [, addMerchantImage] = useAddMerchantImageMutation();
+  const [, addItemImage] = useAddFoodImageMutation();
 
-  const onBannerChange = (e: any) => {
-    console.log(e.target.files[0]);
-    setBanner((image = URL.createObjectURL(e.target.files[0])));
-  };
+  let [fileToUpload, setFileToUpload] = useState<File>();
+  let [imageSrc, setImageSrc] = useState("");
+  let [logoToUpload, setlogoToUpload] = useState<File>();
+  let [logoSrc, setLogoSrc] = useState("");
+  let [itemSRC, setItemSRC] = useState("");
+
   const onMenuPhotoChange = (e: any) => {
     console.log(e.target.files[0]);
     setMenuPhoto((image = URL.createObjectURL(e.target.files[0])));
+  };
+
+  const readFile = (file: File) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => resolve(reader.result), false);
+      reader.readAsDataURL(file);
+    });
   };
 
   const initialInputs = {
@@ -126,8 +132,6 @@ const MerchAccount = () => {
     description: "",
     stock: 0,
     cost: 0,
-    imageAlt: "",
-    imageURL: "",
     idMerchant: data?.me.merchant?.id ?? 0,
   };
   const formikInputs = [
@@ -151,11 +155,6 @@ const MerchAccount = () => {
       placeholder: "10.00",
       label: "Price",
     },
-    {
-      name: "imageAlt",
-      placeholder: "Photo of Prawn Curry...",
-      label: "Image Description",
-    },
   ];
 
   let merchantTagSet: string[] = [];
@@ -165,7 +164,9 @@ const MerchAccount = () => {
     <VStack spacing={6}>
       (
       <MenuSlide
-        imageUrl={banner}
+        imageUrl={
+          data?.me.merchant?.imageUrl ? data?.me.merchant?.imageUrl : undefined
+        }
         cuisine={merchantTagSet}
         location={
           data?.me?.merchant?.city ? data?.me?.merchant?.city : undefined
@@ -176,7 +177,9 @@ const MerchAccount = () => {
             ? data?.me?.merchant?.averageRating
             : undefined
         }
-        avatarlogo={"../../../server/media/merchant_logos/6.jpg"}
+        avatarlogo={
+          data?.me.merchant?.cplogo ? data?.me.merchant?.cplogo : undefined
+        }
         merchantID={data?.me?.merchant?.id ? data?.me?.merchant?.id : undefined}
         name={data?.me?.merchant?.cpname}
         id={data?.me?.merchant?.id ? data?.me?.merchant?.id : 0}
@@ -189,7 +192,7 @@ const MerchAccount = () => {
       <Table size="sm" width={"200px"}>
         <Thead>
           <Tr>
-            <Th display={["none", "revert"]}>Image</Th>
+            {/* <Th display={["none", "revert"]}>Image</Th> */}
             <Th>Item Name</Th>
             <Th display={["none", "revert"]}>Description</Th>
             <Th textAlign={"center"}>Stock</Th>
@@ -201,7 +204,7 @@ const MerchAccount = () => {
           {data?.getMenu.map((p, value) => (
             <>
               <Tr key={value}>
-                <Td display={["none", "inline-grid"]}>
+                {/* <Td display={["none", "inline-grid"]}>
                   <Box
                     maxW="75px"
                     maxH="75px"
@@ -215,12 +218,12 @@ const MerchAccount = () => {
                       maxHeight={"100px"}
                       width={"20vw"}
                       fit={"cover"}
-                      // src={p.imageUrl}
-                      // alt={p.imageAlt}
+                      src={p.imageUrl ? p.imageUrl : undefined}
+                      alt={p.imageAlt ? p.imageAlt : undefined}
                     ></Image>
                   </Box>
-                </Td>
-                <Td>{p.itemName}</Td>
+                </Td> */}
+                <Td>{p.itemName} </Td>
                 <Td display={["none", "revert"]}>{p.description}</Td>
                 <Td textAlign={"center"}>
                   {p.stock}
@@ -267,44 +270,44 @@ const MerchAccount = () => {
         <Box spacing={8} marginTop={"25px"} gridColumn={"auto"} p="20px">
           {body}
         </Box>
-        <HStack paddingTop={"0px"}>
-          <VStack>
-            <Button size="md" colorScheme={"cyan"} position={"absolute"}>
-              Pick Logo
-            </Button>
-            <Input
-              // size={"md"}
-              type={"file"}
-              accept="image/*"
-              onClick={() => console.log("yes")}
-              className="inputPhoto"
-              onChange={onImageChange}
-              placeholder="Pick an Image"
-              borderWidth={"0px"}
-              opacity={0}
-              width="120px"
-              // height={"100px"}
-            />
-          </VStack>
+        <HStack>
+          <Dropzone
+            onDrop={async ([file]) => {
+              let imageDataUrl: any = await readFile(file);
 
-          <VStack>
-            <Button size="md" colorScheme={"red"} position={"absolute"}>
-              Pick Backdrop
-            </Button>
-            <Input
-              // size={"md"}
-              type={"file"}
-              accept="image/*"
-              onClick={() => console.log("yes")}
-              className="inputPhoto"
-              onChange={onBannerChange}
-              placeholder="Pick an Image"
-              borderWidth={"0px"}
-              opacity={0}
-              width="120px"
-              // height={"100px"}
-            />
-          </VStack>
+              setLogoSrc((logoSrc = imageDataUrl));
+
+              addMerchantLogo({
+                image: logoSrc,
+              }).then((response) => console.log(response));
+            }}
+            multiple={false}
+          >
+            {({ getRootProps, getInputProps }) => (
+              <div {...getRootProps({ className: "dropzone" })}>
+                <input {...getInputProps()} />
+                <Button colorScheme={"blue"}>Select a Logo</Button>
+              </div>
+            )}
+          </Dropzone>
+
+          <Dropzone
+            onDrop={async ([file]) => {
+              let imageDataUrl: any = await readFile(file);
+              setImageSrc((imageSrc = imageDataUrl));
+              addMerchantImage({ image: imageSrc }).then((response) =>
+                console.log(response)
+              );
+            }}
+            multiple={false}
+          >
+            {({ getRootProps, getInputProps }) => (
+              <div {...getRootProps({ className: "dropzone" })}>
+                <input {...getInputProps()} />
+                <Button colorScheme={"green"}>Select a Image</Button>
+              </div>
+            )}
+          </Dropzone>
         </HStack>
         <Heading>Your Items</Heading>
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -332,7 +335,15 @@ const MerchAccount = () => {
                   values.stock = Number(values.stock);
 
                   const response = await createFoodItem(values);
-                  console.log(response);
+                  const ItemId =
+                    response.data?.createFoodItem[
+                      response.data?.createFoodItem.length - 1
+                    ].id;
+                  if (ItemId) {
+                    addItemImage({ image: itemSRC, foodItemId: ItemId }).then(
+                      (response) => console.log(response)
+                    );
+                  }
                 }}
               >
                 {({ isSubmitting }) => (
@@ -346,27 +357,23 @@ const MerchAccount = () => {
                         />
                       ))}
                       <HStack>
-                        <Avatar src={menuPhoto} />
-                        <VStack>
-                          <Button
-                            size="md"
-                            colorScheme={"cyan"}
-                            position={"absolute"}
-                          >
-                            Pick Photo
-                          </Button>
-                          <Input
-                            type={"file"}
-                            accept="image/*"
-                            onClick={() => console.log("yes")}
-                            className="inputPhoto"
-                            onChange={onMenuPhotoChange}
-                            placeholder="Pick an Image"
-                            borderWidth={"0px"}
-                            opacity={0}
-                            width="120px"
-                          />
-                        </VStack>
+                        <Avatar size={"lg"} src={itemSRC} />
+                        <Dropzone
+                          onDrop={async ([file]) => {
+                            let imageDataUrl: any = await readFile(file);
+                            setItemSRC((itemSRC = imageDataUrl));
+                          }}
+                          multiple={false}
+                        >
+                          {({ getRootProps, getInputProps }) => (
+                            <div {...getRootProps({ className: "dropzone" })}>
+                              <input {...getInputProps()} />
+                              <Button colorScheme={"yellow"}>
+                                Select an Image
+                              </Button>
+                            </div>
+                          )}
+                        </Dropzone>
                       </HStack>
                     </VStack>
                     <ModalFooter>

@@ -14,8 +14,6 @@ export type Scalars = {
   Float: number;
   /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
   DateTime: any;
-  /** The `Upload` scalar type represents a file upload. */
-  Upload: any;
 };
 
 
@@ -110,6 +108,7 @@ export type Mutation = {
   addTokens: User;
   addUserCoordinates: User;
   addUserImage: Scalars['Boolean'];
+  addVideo: Video;
   changeCountry: User;
   changeCpname: Merchant;
   changeDOB: User;
@@ -142,12 +141,14 @@ export type Mutation = {
   removeFromOrder: Scalars['Boolean'];
   removeMerchantTag: Scalars['Boolean'];
   removeTokens: User;
+  removeVideo: Scalars['Boolean'];
+  watchVideo: UserVideo;
 };
 
 
 export type MutationAddFoodImageArgs = {
   foodItemId: Scalars['Int'];
-  image: Scalars['Upload'];
+  image: Scalars['String'];
 };
 
 
@@ -158,12 +159,12 @@ export type MutationAddMerchantCoordinatesArgs = {
 
 
 export type MutationAddMerchantImageArgs = {
-  image: Scalars['Upload'];
+  image: Scalars['String'];
 };
 
 
 export type MutationAddMerchantLogoArgs = {
-  image: Scalars['Upload'];
+  image: Scalars['String'];
 };
 
 
@@ -197,6 +198,13 @@ export type MutationAddUserCoordinatesArgs = {
 
 export type MutationAddUserImageArgs = {
   image: Scalars['String'];
+};
+
+
+export type MutationAddVideoArgs = {
+  title: Scalars['String'];
+  tokens: Scalars['Int'];
+  videoUrl: Scalars['String'];
 };
 
 
@@ -350,6 +358,16 @@ export type MutationRemoveTokensArgs = {
   tokens: Scalars['Int'];
 };
 
+
+export type MutationRemoveVideoArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationWatchVideoArgs = {
+  videoId: Scalars['Int'];
+};
+
 export type Order = {
   __typename?: 'Order';
   cost?: Maybe<Scalars['Float']>;
@@ -399,7 +417,11 @@ export type Query = {
   user?: Maybe<User>;
   userCurrentOrder: OrderResponse;
   userOrders: Array<OrderResponse>;
+  userUnwatchedVideos: Array<Video>;
+  userWatchedVideos: Array<Video>;
   users: Array<User>;
+  videoViewers: Array<User>;
+  videos: Array<Video>;
 };
 
 
@@ -442,6 +464,11 @@ export type QueryUserOrdersArgs = {
   userId: Scalars['Int'];
 };
 
+
+export type QueryVideoViewersArgs = {
+  videoId: Scalars['Int'];
+};
+
 export type RegisterInput = {
   email: Scalars['String'];
   firstname: Scalars['String'];
@@ -475,7 +502,6 @@ export type Tag = {
   updatedAt: Scalars['String'];
 };
 
-
 export type User = {
   __typename?: 'User';
   country?: Maybe<Scalars['String']>;
@@ -505,6 +531,20 @@ export type UserResponse = {
   user?: Maybe<User>;
 };
 
+export type UserVideo = {
+  __typename?: 'UserVideo';
+  userId: Scalars['Int'];
+  videoId: Scalars['Int'];
+};
+
+export type Video = {
+  __typename?: 'Video';
+  id: Scalars['Int'];
+  title: Scalars['String'];
+  tokens: Scalars['Float'];
+  videoUrl: Scalars['String'];
+};
+
 export type RegularErrorFragment = { __typename?: 'FieldError', field: string, message: string };
 
 export type RegularMerchantFragment = { __typename?: 'Merchant', id: number, cpname: string, imageUrl?: Maybe<string>, imageAlt?: Maybe<string>, cplogo?: Maybe<string>, username: string, city?: Maybe<string>, address1?: Maybe<string>, address2?: Maybe<string>, postcode?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number> };
@@ -517,8 +557,23 @@ export type RegularUserFragment = { __typename?: 'User', id: number, username: s
 
 export type RegularUserResponseFragment = { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: number, username: string, firstname: string, lastname: string, email: string }> };
 
+export type AddFoodImageMutationVariables = Exact<{
+  image: Scalars['String'];
+  foodItemId: Scalars['Int'];
+}>;
+
+
+export type AddFoodImageMutation = { __typename?: 'Mutation', addFoodImage: boolean };
+
+export type AddMerchantImageMutationVariables = Exact<{
+  image: Scalars['String'];
+}>;
+
+
+export type AddMerchantImageMutation = { __typename?: 'Mutation', addMerchantImage: boolean };
+
 export type AddMerchantLogoMutationVariables = Exact<{
-  image: Scalars['Upload'];
+  image: Scalars['String'];
 }>;
 
 
@@ -704,7 +759,7 @@ export type TagsandMeQueryVariables = Exact<{
 }>;
 
 
-export type TagsandMeQuery = { __typename?: 'Query', tags: Array<{ __typename?: 'Tag', tagName: string, id: number }>, me: { __typename?: 'MeResponse', merchant?: Maybe<{ __typename?: 'Merchant', id: number, cpname: string, cplogo?: Maybe<string>, imageUrl?: Maybe<string>, city?: Maybe<string>, address1?: Maybe<string>, address2?: Maybe<string>, postcode?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number>, username: string }>, user?: Maybe<{ __typename?: 'User', id: number, firstname: string, lastname: string, username: string, email: string }> }, getMenu: Array<{ __typename?: 'FoodItem', itemName: string, id: number, cost: number, description: string, stock: number, imageUrl?: Maybe<string>, imageAlt?: Maybe<string> }>, merchantTags: Array<{ __typename?: 'Tag', tagName: string, id: number }>, merchant?: Maybe<{ __typename?: 'Merchant', cpname: string, city?: Maybe<string>, address1?: Maybe<string>, address2?: Maybe<string>, postcode?: Maybe<string> }> };
+export type TagsandMeQuery = { __typename?: 'Query', tags: Array<{ __typename?: 'Tag', tagName: string, id: number }>, me: { __typename?: 'MeResponse', merchant?: Maybe<{ __typename?: 'Merchant', id: number, cpname: string, cplogo?: Maybe<string>, imageUrl?: Maybe<string>, imageAlt?: Maybe<string>, city?: Maybe<string>, address1?: Maybe<string>, address2?: Maybe<string>, postcode?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number>, username: string }>, user?: Maybe<{ __typename?: 'User', id: number, firstname: string, lastname: string, username: string, email: string }> }, getMenu: Array<{ __typename?: 'FoodItem', itemName: string, id: number, cost: number, description: string, stock: number, imageUrl?: Maybe<string>, imageAlt?: Maybe<string> }>, merchantTags: Array<{ __typename?: 'Tag', tagName: string, id: number }>, merchant?: Maybe<{ __typename?: 'Merchant', cpname: string, city?: Maybe<string>, address1?: Maybe<string>, address2?: Maybe<string>, postcode?: Maybe<string> }> };
 
 export type GetMenuQueryVariables = Exact<{
   merchantId: Scalars['Int'];
@@ -845,8 +900,26 @@ export const RegularUserResponseFragmentDoc = gql`
 }
     ${RegularErrorFragmentDoc}
 ${RegularUserFragmentDoc}`;
+export const AddFoodImageDocument = gql`
+    mutation addFoodImage($image: String!, $foodItemId: Int!) {
+  addFoodImage(image: $image, foodItemId: $foodItemId)
+}
+    `;
+
+export function useAddFoodImageMutation() {
+  return Urql.useMutation<AddFoodImageMutation, AddFoodImageMutationVariables>(AddFoodImageDocument);
+};
+export const AddMerchantImageDocument = gql`
+    mutation AddMerchantImage($image: String!) {
+  addMerchantImage(image: $image)
+}
+    `;
+
+export function useAddMerchantImageMutation() {
+  return Urql.useMutation<AddMerchantImageMutation, AddMerchantImageMutationVariables>(AddMerchantImageDocument);
+};
 export const AddMerchantLogoDocument = gql`
-    mutation AddMerchantLogo($image: Upload!) {
+    mutation AddMerchantLogo($image: String!) {
   addMerchantLogo(image: $image)
 }
     `;
@@ -1180,7 +1253,7 @@ export const TagsandMeDocument = gql`
       cpname
       cplogo
       imageUrl
-      imageUrl
+      imageAlt
       city
       address1
       address2

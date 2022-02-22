@@ -30,7 +30,7 @@ import { MdDateRange, MdLocationOn, MdPhone } from "react-icons/md";
 import { useRouter } from "next/router";
 import { DblStandardButton } from "../components/DblStandardButton";
 import { SliderInput } from "../components/SliderInput";
-import { useDropzone } from "react-dropzone";
+import Dropzone, { useDropzone } from "react-dropzone";
 
 const bl = "#5998A0";
 
@@ -60,40 +60,6 @@ const Register_3 = () => {
       reader.readAsDataURL(file);
     });
   };
-
-  const onDrop = useCallback(
-    async ([file]) => {
-      console.log("arr file: ", [file]);
-      console.log("single file", file);
-      console.log("file 0:", file[0]);
-      let imageDataUrl: any = await readFile(file);
-
-      setImageSrc((imageSrc = imageDataUrl));
-      console.log("img_data: ", imageSrc);
-      setFileToUpload((fileToUpload = file));
-
-      addUserImage({
-        image: imageSrc.substring(0, 10),
-      }).then((response) => console.log(response));
-    },
-    [addUserImage]
-  );
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
-
-  const InputDrop = () => {
-    if (fileToUpload) {
-      return <Text>📷 ✅</Text>;
-    } else if (isDragActive) {
-      return <Text>Drop thed image here</Text>;
-    } else {
-      return (
-        <Text>
-          Drag 'n' drop your image here, or just click to select an image🍎
-        </Text>
-      );
-    }
-  };
-  // ///////
 
   const [locationLoad, setLocationLoad] = useState(false);
 
@@ -155,20 +121,38 @@ const Register_3 = () => {
     <Layout title="SIGN UP">
       <Flex direction="column" justifyContent="center" alignItems="center">
         <Heading>Step 3/3</Heading>
+        <VStack bgSize={"md"} p={10} mb={20}>
+          <Dropzone
+            onDrop={async ([file]) => {
+              let imageDataUrl: any = await readFile(file);
+              setImageSrc((imageSrc = imageDataUrl));
+              addUserImage({ image: imageSrc }).then((response) =>
+                console.log(response)
+              );
+            }}
+            multiple={false}
+          >
+            {({ getRootProps, getInputProps }) => (
+              <div {...getRootProps({ className: "dropzone" })}>
+                <input {...getInputProps()} />
+                <VStack>
+                  <Avatar
+                    src={imageSrc}
+                    boxSize={"100px"}
+                    position={"absolute"}
+                  ></Avatar>
+                </VStack>
+              </div>
+            )}
+          </Dropzone>
 
-        <Box padding={"25px"} paddingTop={"30px"}>
-          <Avatar
+          {/* <Avatar
             src={image}
             onClick={() => {}}
             boxSize={"100px"}
             position={"absolute"}
-          >
-            {/* <AvatarBadge boxSize="1.25em" bg="green.500" /> */}
-          </Avatar>
-          <div {...getRootProps()}>
-            <input accept="image/*" {...getInputProps()} />
-            <InputDrop></InputDrop>
-          </div>
+          ></Avatar>
+
           <Input
             type={"file"}
             accept="image/*"
@@ -180,9 +164,8 @@ const Register_3 = () => {
             opacity={0}
             width="100px"
             height={"100px"}
-          />
-        </Box>
-
+          /> */}
+        </VStack>
         <Stack spacing={4}>
           <InputGroup>
             <Select

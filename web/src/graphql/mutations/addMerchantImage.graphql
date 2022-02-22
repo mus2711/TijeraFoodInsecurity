@@ -1,0 +1,3 @@
+mutation AddMerchantImage($image: String!) {
+  addMerchantImage(image: $image)
+}

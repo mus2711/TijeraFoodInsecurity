@@ -9,7 +9,7 @@ query TagsandMe($merchantId: Int!) {
       cpname
       cplogo
       imageUrl
-      imageUrl
+      imageAlt
       city
       address1
       address2
