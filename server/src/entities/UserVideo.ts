@@ -3,10 +3,12 @@
 import { Field, Int, ObjectType } from "type-graphql";
 import {
   BaseEntity,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { User } from "./User";
 import { Video } from "./Video";
@@ -33,4 +35,12 @@ export class UserVideo extends BaseEntity {
   })
   @JoinColumn({ name: "videoId" })
   video!: Promise<Video>;
+
+  @CreateDateColumn()
+  @Field(() => String)
+  createdAt!: Date;
+
+  @UpdateDateColumn()
+  @Field(() => String)
+  updatedAt!: Date;
 }

@@ -2,9 +2,11 @@ import { Field, Int, ObjectType } from "type-graphql";
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { UserVideo } from "./UserVideo";
 
@@ -29,4 +31,12 @@ export class Video extends BaseEntity {
 
   @OneToMany(() => UserVideo, (uv) => uv.video)
   videoConnection!: Promise<UserVideo[]>;
+
+  @CreateDateColumn()
+  @Field(() => String)
+  createdAt!: Date;
+
+  @UpdateDateColumn()
+  @Field(() => String)
+  updatedAt!: Date;
 }
