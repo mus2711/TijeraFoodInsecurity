@@ -10,6 +10,7 @@ import {
 } from "typeorm";
 import { Order } from "./Order";
 import { Review } from "./Review";
+import { UserVideo } from "./UserVideo";
 
 @Entity()
 @ObjectType()
@@ -90,6 +91,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Order, (order) => order.user)
   orders!: Order[];
+
+  @OneToMany(() => UserVideo, (uv) => uv.user)
+  userConnection!: Promise<UserVideo[]>;
 
   @CreateDateColumn()
   @Field(() => String)

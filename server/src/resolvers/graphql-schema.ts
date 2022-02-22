@@ -6,6 +6,7 @@ import TagResolver from "./tag";
 import OrderResolver from "./order";
 import FoodItemResolver from "./fooditem";
 import OrderItemResolver from "./orderItem";
+import VideoResolver from "./video";
 
 export const createSchema = () =>
   buildSchema({
@@ -17,6 +18,7 @@ export const createSchema = () =>
       OrderResolver,
       FoodItemResolver,
       OrderItemResolver,
+      VideoResolver,
     ],
     validate: false,
   });

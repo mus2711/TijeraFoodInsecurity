@@ -18,17 +18,17 @@ import {
 import {
   COOKIE_NAME,
   EMAIL_REGEX,
-  MERCHANT_IMAGES_PATH,
-  MERCHANT_LOGOS_PATH,
+  // MERCHANT_IMAGES_PATH,
+  // MERCHANT_LOGOS_PATH,
   USERNAME_REGEX,
 } from "../constants";
 import { Merchant } from "../entities/Merchant";
 import { MyContext } from "../types";
 import { Tag } from "../entities/Tag";
 import { MerchantTag } from "../entities/MerchantTag";
-import { FileUpload, GraphQLUpload } from "graphql-upload";
-import { createWriteStream } from "fs";
-import path from "path";
+// import { FileUpload, GraphQLUpload } from "graphql-upload";
+// import { createWriteStream } from "fs";
+// import path from "path";
 
 @InputType()
 class RegisterMerchantInput {

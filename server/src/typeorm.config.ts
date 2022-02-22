@@ -8,6 +8,8 @@ import { MerchantTag } from "./entities/MerchantTag";
 import { Order } from "./entities/Order";
 import { OrderItem } from "./entities/OrderItem";
 import { FoodItem } from "./entities/FoodItem";
+import { Video } from "./entities/Video";
+import { UserVideo } from "./entities/UserVideo";
 
 export const typeormConfig = (
   dbName: string,
@@ -29,6 +31,8 @@ export const typeormConfig = (
     Order,
     OrderItem,
     FoodItem,
+    Video,
+    UserVideo,
   ],
   logging: !__prod__,
 });
