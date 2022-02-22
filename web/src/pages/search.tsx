@@ -128,8 +128,59 @@ const Search = () => {
   const [locationLoad, setLocationLoad] = useState(false);
   const [, addUserCoordinates] = useAddUserCoordinatesMutation();
   const [status, setStatus] = useState("");
+  const [closestMerch, setClosestMerch] = useState<string | undefined>(
+    undefined
+  );
+  const [closestDistance, setClosestDistance] = useState<string | undefined>(
+    undefined
+  );
   const toast = useToast();
 
+  let merchantDistance: number[][] = [];
+  const merchToCoord: any[] = [];
+  const coordToDist = new Map();
+
+  const findClosestMerchant = async () => {
+    if (lat !== 0 && lng !== 0) {
+      data?.merchants.forEach((merchant, value) => {
+        if (merchant.latitude && merchant.longitude) {
+          let location = [merchant.latitude, merchant.longitude];
+          merchantDistance = [...merchantDistance, location];
+
+          merchToCoord.push({
+            key: merchant.latitude + merchant.longitude,
+            value: merchant.cpname,
+          });
+
+          coordToDist.set(
+            getDistance(
+              { latitude: lat, longitude: lng },
+              { latitude: merchant.latitude, longitude: merchant.longitude },
+              100
+            ),
+            [merchant.latitude, merchant.longitude]
+          );
+
+          let distances = merchantDistance.map((val) =>
+            getDistance(
+              { latitude: lat, longitude: lng },
+              { latitude: val[0], longitude: val[1] },
+              100
+            )
+          );
+          const minDist = Math.min(...distances);
+          const minCoord = coordToDist.get(minDist);
+          for (const [coord, merchant] of Object.entries(merchToCoord)) {
+            if (merchant.key === minCoord[0] + minCoord[1]) {
+              setClosestMerch(merchant.value);
+            }
+          }
+
+          setClosestDistance((minDist * 0.001).toPrecision(4));
+        }
+      });
+    }
+  };
   const getLocation = () => {
     if (!navigator.geolocation) {
       setStatus("Geolocation is not supported by your browser");
@@ -141,13 +192,17 @@ const Search = () => {
           setLat(position.coords.latitude);
           setLng(position.coords.longitude);
           setLocationLoad(true);
-          // toast({
-          //   title: "We found somewhere close!",
-          //   description: "{} is {} km from you.",
-          //   status: "info",
-          //   duration: 9000,
-          //   isClosable: true,
-          // });
+          findClosestMerchant().then((val) => {
+            if (closestMerch && closestDistance) {
+              toast({
+                title: "We found somewhere close!",
+                description: `${closestMerch} is ${closestDistance} km from you.`,
+                status: "info",
+                duration: 9000,
+                isClosable: true,
+              });
+            }
+          });
         },
         () => {
           setStatus("Unable to retrieve your location");
@@ -156,12 +211,6 @@ const Search = () => {
     }
   };
 
-  const currDist = getDistance(
-    { latitude: lat, longitude: lng },
-    { latitude: 51.5103, longitude: 7.49347 },
-    100
-  );
-  console.log(currDist * 0.000621371);
   // map of tags to their index
   let mapTags: Map<number, string> = new Map();
   let tagArr: string[] = [];
