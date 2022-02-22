@@ -40,8 +40,8 @@ const Register_3 = () => {
   const [lng, setLng] = useState<number>(0);
   const [status, setStatus] = useState("");
   let [image, setImage] = React.useState("");
-  const [initialValue, setInitialValue] = useState(10000);
-  const [dependents, setDependents] = useState(5);
+  const [initialValue, setInitialValue] = useState(5000);
+  const [dependents, setDependents] = useState(2);
   const [country, setCountry] = useState("");
   const [DOB, setDOB] = useState("00/00/00");
   const [phone, setPhone] = useState("+0");
@@ -242,8 +242,8 @@ const Register_3 = () => {
             title="How much are you making a year?"
             onChange={(val) => setInitialValue(val)}
             testId="initialValueInput"
-            targets={[0, 20000]}
-            max={20000}
+            targets={[0, 10000]}
+            max={10000}
             min={0}
             unitL="$"
             unitR=""
@@ -255,8 +255,8 @@ const Register_3 = () => {
             title="How many people depend on you to provide?"
             onChange={(val) => setDependents(val)}
             testId="dependentsInput"
-            targets={[0, 10]}
-            max={10}
+            targets={[0, 4]}
+            max={4}
             min={0}
             unitL=""
             unitR=""
