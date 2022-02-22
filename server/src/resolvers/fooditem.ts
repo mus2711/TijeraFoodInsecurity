@@ -16,10 +16,10 @@ import { MyContext } from "../types";
 import { Order } from "../entities/Order";
 import { TOKEN_CONVERSION_RATE } from "../constants";
 import { User } from "../entities/User";
-import { FileUpload, GraphQLUpload } from "graphql-upload";
-import { FOODITEM_IMAGES_PATH } from "../constants";
-import path from "path";
-import { createWriteStream } from "fs";
+// import { FileUpload, GraphQLUpload } from "graphql-upload";
+// import { FOODITEM_IMAGES_PATH } from "../constants";
+// import path from "path";
+// import { createWriteStream } from "fs";
 
 @Resolver(FoodItem)
 export default class FoodItemResolver {
