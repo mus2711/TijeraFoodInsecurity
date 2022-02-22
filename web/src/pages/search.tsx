@@ -124,7 +124,15 @@ const datalist = [
 
 const Search = () => {
   const [{ data, error }] = useMerchantsQuery();
-
+  // if (data?.me == null) {
+  //   throw new Error("User not logged in");
+  //   // try {
+  //   //   console.log("User not logged in")
+  //   // }
+  //   // catch (e) {
+  //   //   console.log(e)
+  //   // }
+  // }
   const [lat, setLat] = useState<number>(0);
   const [lng, setLng] = useState<number>(0);
   const [, addTokens] = useAddTokensMutation();

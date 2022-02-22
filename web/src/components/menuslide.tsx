@@ -101,7 +101,11 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
   const [{ data, fetching }] = useTagsandMeQuery({
     variables: { merchantId: id },
   });
+  // if (data?.me == null) {
 
+  //   throw new Error("User not logged in");
+
+  // }
   const addToBasket = (item: {
     merchantId: number;
     imageUrl: string;
@@ -118,7 +122,6 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
   };
 
   const pushToReview = () => {
-    console.log(merchantID);
     setGlobalState("reviewRes", {
       imageUrl: imageUrl,
       imageAlt: imageAlt,

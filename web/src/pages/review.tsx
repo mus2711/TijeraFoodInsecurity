@@ -53,14 +53,18 @@ const review = ({}) => {
     }
   }
 
-  if (data?.reviews && !bought) {
-    for (let i = 0; i < data?.reviews.length; i++) {
+  if (data?.userOrders && !bought) {
+    console.log(menuProps.name);
+    console.log(data.reviews);
+    for (let i = 0; i < data?.userOrders.length; i++) {
       if (menuProps.name === data.userOrders[i].order?.merchant.cpname) {
         setBought((bought = true));
         console.log("bought");
       }
     }
   }
+  console.log(reviewed);
+
   const initialInputs = {
     comment: "",
   };
@@ -71,7 +75,7 @@ const review = ({}) => {
       label: "Comment",
     },
   ];
-  console.log(menuProps);
+
   return (
     <Layout title="Leave a Review">
       <VStack spacing={12} paddingBottom={"40px"}>
