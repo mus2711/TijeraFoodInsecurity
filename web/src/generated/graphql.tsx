@@ -785,6 +785,11 @@ export type GetMenuQueryVariables = Exact<{
 
 export type GetMenuQuery = { __typename?: 'Query', getMenu: Array<{ __typename?: 'FoodItem', itemName: string, id: number, cost: number, description: string, stock: number, imageUrl?: Maybe<string>, imageAlt?: Maybe<string> }> };
 
+export type IndividiualMerchantsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type IndividiualMerchantsQuery = { __typename?: 'Query', merchants: Array<{ __typename?: 'Merchant', id: number, cpname: string, imageUrl?: Maybe<string>, imageAlt?: Maybe<string>, cplogo?: Maybe<string>, city?: Maybe<string>, address1?: Maybe<string>, address2?: Maybe<string>, postcode?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number>, latitude?: Maybe<number>, longitude?: Maybe<number> }>, allMerchantTags: Array<{ __typename?: 'MerchantTag', merchantId: number, tagId: number }>, tags: Array<{ __typename?: 'Tag', tagName: string, id: number }>, videos: Array<{ __typename?: 'Video', id: number, title: string, tokens: number, videoUrl: string }> };
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -822,7 +827,7 @@ export type MerchantTagsQuery = { __typename?: 'Query', merchantTags: Array<{ __
 export type MerchantsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MerchantsQuery = { __typename?: 'Query', merchants: Array<{ __typename?: 'Merchant', id: number, cpname: string, imageUrl?: Maybe<string>, imageAlt?: Maybe<string>, cplogo?: Maybe<string>, city?: Maybe<string>, address1?: Maybe<string>, address2?: Maybe<string>, postcode?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number>, latitude?: Maybe<number>, longitude?: Maybe<number> }>, allMerchantTags: Array<{ __typename?: 'MerchantTag', merchantId: number, tagId: number }>, tags: Array<{ __typename?: 'Tag', tagName: string, id: number }>, me: { __typename?: 'MeResponse', merchant?: Maybe<{ __typename?: 'Merchant', id: number, cpname: string, cplogo?: Maybe<string>, imageUrl?: Maybe<string>, city?: Maybe<string>, address1?: Maybe<string>, address2?: Maybe<string>, postcode?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number>, username: string, latitude?: Maybe<number>, longitude?: Maybe<number> }> }, videos: Array<{ __typename?: 'Video', id: number, title: string, tokens: number, videoUrl: string }>, userWatchedVideos: Array<{ __typename?: 'Video', id: number }> };
+export type MerchantsQuery = { __typename?: 'Query', merchants: Array<{ __typename?: 'Merchant', id: number, cpname: string, imageUrl?: Maybe<string>, imageAlt?: Maybe<string>, cplogo?: Maybe<string>, city?: Maybe<string>, address1?: Maybe<string>, address2?: Maybe<string>, postcode?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number>, latitude?: Maybe<number>, longitude?: Maybe<number> }>, allMerchantTags: Array<{ __typename?: 'MerchantTag', merchantId: number, tagId: number }>, tags: Array<{ __typename?: 'Tag', tagName: string, id: number }>, me: { __typename?: 'MeResponse', merchant?: Maybe<{ __typename?: 'Merchant', id: number, cpname: string, cplogo?: Maybe<string>, imageUrl?: Maybe<string>, city?: Maybe<string>, address1?: Maybe<string>, address2?: Maybe<string>, postcode?: Maybe<string>, reviewCount: number, averageRating?: Maybe<number>, username: string, latitude?: Maybe<number>, longitude?: Maybe<number> }>, user?: Maybe<{ __typename?: 'User', username: string }> }, videos: Array<{ __typename?: 'Video', id: number, title: string, tokens: number, videoUrl: string }>, userWatchedVideos: Array<{ __typename?: 'Video', id: number }> };
 
 export type ReviewsQueryVariables = Exact<{
   merchantId: Scalars['Int'];
@@ -1372,6 +1377,43 @@ export const GetMenuDocument = gql`
 export function useGetMenuQuery(options: Omit<Urql.UseQueryArgs<GetMenuQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<GetMenuQuery>({ query: GetMenuDocument, ...options });
 };
+export const IndividiualMerchantsDocument = gql`
+    query IndividiualMerchants {
+  merchants {
+    id
+    cpname
+    imageUrl
+    imageAlt
+    cplogo
+    city
+    address1
+    address2
+    postcode
+    reviewCount
+    averageRating
+    latitude
+    longitude
+  }
+  allMerchantTags {
+    merchantId
+    tagId
+  }
+  tags {
+    tagName
+    id
+  }
+  videos {
+    id
+    title
+    tokens
+    videoUrl
+  }
+}
+    `;
+
+export function useIndividiualMerchantsQuery(options: Omit<Urql.UseQueryArgs<IndividiualMerchantsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<IndividiualMerchantsQuery>({ query: IndividiualMerchantsDocument, ...options });
+};
 export const MeDocument = gql`
     query Me {
   me {
@@ -1555,6 +1597,9 @@ export const MerchantsDocument = gql`
       username
       latitude
       longitude
+    }
+    user {
+      username
     }
   }
   videos {

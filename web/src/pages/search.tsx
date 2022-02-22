@@ -32,10 +32,11 @@ import {
   useAddTokensMutation,
   useAddUserCoordinatesMutation,
   useMerchantsQuery,
+  useUserWatchedVideosQuery,
 } from "../generated/graphql";
 import { AddIcon } from "@chakra-ui/icons";
 import ReactPlayer from "react-player/lazy";
-import { getDistance, orderByDistance } from "geolib";
+import { getDistance } from "geolib";
 
 const datalist = [
   {
@@ -122,7 +123,7 @@ const datalist = [
 ];
 
 const Search = () => {
-  const [{ data }] = useMerchantsQuery();
+  const [{ data, error }] = useMerchantsQuery();
 
   const [lat, setLat] = useState<number>(0);
   const [lng, setLng] = useState<number>(0);
@@ -251,7 +252,6 @@ const Search = () => {
   };
 
   populateMerchantTagsIDs(merchantTagIDs, data);
-  // console.log(merchantTagIDs);
 
   let [menu, setMenu] = useState(true);
   let [videos, setVideos] = useState(false);
@@ -418,27 +418,29 @@ const Search = () => {
                       },
                     }}
                     onEnded={() => {
-                      if (!watchedVid?.includes(p.id)) {
-                        addTokenandWatchVideo({
-                          tokens: p.tokens,
-                          videoId: p.id,
-                        });
-                        toast({
-                          title: "Tokens Claimed.",
-                          description:
-                            "Congrats! You should now have more tokens.",
-                          status: "success",
-                          duration: 9000,
-                          isClosable: true,
-                        });
-                      } else {
-                        toast({
-                          title: "Tokens not claimed",
-                          description: "You've already watched this video.",
-                          status: "info",
-                          duration: 9000,
-                          isClosable: true,
-                        });
+                      if (data.me.user) {
+                        if (!watchedVid?.includes(p.id)) {
+                          addTokenandWatchVideo({
+                            tokens: p.tokens,
+                            videoId: p.id,
+                          });
+                          toast({
+                            title: "Tokens Claimed.",
+                            description:
+                              "Congrats! You should now have more tokens.",
+                            status: "success",
+                            duration: 9000,
+                            isClosable: true,
+                          });
+                        } else {
+                          toast({
+                            title: "Tokens not claimed",
+                            description: "You've already watched this video.",
+                            status: "info",
+                            duration: 9000,
+                            isClosable: true,
+                          });
+                        }
                       }
                     }}
                   />

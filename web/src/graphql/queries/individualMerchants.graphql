@@ -1,4 +1,4 @@
-query Merchants {
+query IndividiualMerchants {
   merchants {
     id
     cpname
@@ -14,7 +14,6 @@ query Merchants {
     latitude
     longitude
   }
-
   allMerchantTags {
     merchantId
     tagId
@@ -22,27 +21,6 @@ query Merchants {
   tags {
     tagName
     id
-  }
-  me {
-    merchant {
-      id
-      cpname
-      cplogo
-      imageUrl
-      imageUrl
-      city
-      address1
-      address2
-      postcode
-      reviewCount
-      averageRating
-      username
-      latitude
-      longitude
-    }
-    user {
-      username
-    }
   }
 
   videos {
@@ -52,7 +30,7 @@ query Merchants {
     videoUrl
   }
 
-  userWatchedVideos {
-    id
-  }
+  #   userWatchedVideos {
+  #     id
+  #   }
 }

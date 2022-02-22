@@ -29,10 +29,17 @@ export default class VideoResolver {
     @Ctx() { req }: MyContext
   ): Promise<Promise<Video>[]> {
     const userId = req.session.userId;
-    if (!userId) throw new Error("User not logged in");
-    const user = await User.findOne(userId);
-    if (!user) throw new Error("User not found");
+    if (!userId) {
+      return [];
+      // throw new Error("User not logged in");
+      // return [];
+    }
 
+    const user = await User.findOne(userId);
+    if (!user) {
+      return [];
+      // throw new Error("User not found");
+    }
     const userVideos = await UserVideo.find({ userId: parseInt(userId) });
     return userVideos.map((uv) => uv.video);
   }
