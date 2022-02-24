@@ -102,16 +102,16 @@ export class initial1645554639886 implements MigrationInterface {
             values ('Thai Green Curry', '${FOOD_IMAGE5}', 'Thai Green Curry', 9, 'Our signature Green Curry.', 100, 2);
             
             insert into "food_item" ("itemName", "imageUrl", "imageAlt", cost, description, stock, "merchantId")
-            values ('Pad Thai', '${FOOD_IMAGE6}', 'Pad Thai', 10, 'Stir-fried noodles with scrambled eggs and vegetables.', 100, 2);
+            values ('Pad Thai', '${FOOD_IMAGE6}', 'Pad Thai', 10, 'Stir-fried noodles.', 100, 2);
 
             insert into "food_item" ("itemName", "imageUrl", "imageAlt", cost, description, stock, "merchantId")
             values ('Chocolate Cake', '${FOOD_IMAGE7}', 'Chocolate Cake', 5, 'Homemade chocolate cake.', 100, 3);
 
             insert into "food_item" ("itemName", "imageUrl", "imageAlt", cost, description, stock, "merchantId")
-            values ('Waffles', '${FOOD_IMAGE8}', 'Waffles', 4, 'Waffles served with butter and chocolate syrup.', 100, 3);
+            values ('Waffles', '${FOOD_IMAGE8}', 'Waffles', 4, 'Waffles served with strawberries.', 100, 3);
         
             insert into "food_item" ("itemName", "imageUrl", "imageAlt", cost, description, stock, "merchantId")
-            values ('Strawberry Milkshake', '${FOOD_IMAGE9}', 'Strawberry Milkshake', 3, 'Large strawberry milkshake.', 100, 3);
+            values ('Chocolate Milkshake', '${FOOD_IMAGE9}', 'Chocolate Milkshake', 3, 'Large chocolate milkshake.', 100, 3);
         
             insert into "food_item" ("itemName", "imageUrl", "imageAlt", cost, description, stock, "merchantId")
             values ('Poppadoms', '${FOOD_IMAGE10}', 'Poppadoms', 2, 'Poppadoms served with mango chutney.', 100, 4);
@@ -123,7 +123,7 @@ export class initial1645554639886 implements MigrationInterface {
             values ('Butter Naan', '${FOOD_IMAGE12}', 'Butter Naan', 3, 'Naan bread with butter.', 100, 4);
         
             insert into "food_item" ("itemName", "imageUrl", "imageAlt", cost, description, stock, "merchantId")
-            values ('Nachos', '${FOOD_IMAGE13}', 'Nachos', 6, 'Nachos loaded with cheese.', 100, 5);
+            values ('Nachos', '${FOOD_IMAGE13}', 'Nachos', 6, 'Nachos loaded with cheese and vegetables.', 100, 5);
         
             insert into "food_item" ("itemName", "imageUrl", "imageAlt", cost, description, stock, "merchantId")
             values ('Chicken Quesadilla', '${FOOD_IMAGE14}', 'Chicken Quesadilla', 5, 'Grilled chicken and cheese wrapped in a tortilla.', 100, 5);
