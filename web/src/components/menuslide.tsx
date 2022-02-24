@@ -284,7 +284,7 @@ export const MenuSlide: React.FC<MenuSlideProps> = ({
           <ModalHeader>
             {data?.merchant?.cpname}'s Food Menu{" "}
             <Text fontWeight={300} fontSize={"13px"}>
-              {data?.merchant?.city}
+              {data?.merchant?.address1}, {data?.merchant?.city}
             </Text>
           </ModalHeader>
           <ModalCloseButton />
