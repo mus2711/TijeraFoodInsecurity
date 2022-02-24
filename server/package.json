@@ -13,7 +13,9 @@
     "pretest": "yarn test:cleanup",
     "test": "jest",
     "test:frontend": "yarn pretest && cross-env TESTING=true yarn start",
-    "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js"
+    "typeorm": "ts-node ./node_modules/typeorm/cli -f ./ormconfig.json",
+    "createm": "typeorm migration:create -n initial",
+    "migrate": "typeorm migration:run"
   },
   "author": "",
   "license": "ISC",

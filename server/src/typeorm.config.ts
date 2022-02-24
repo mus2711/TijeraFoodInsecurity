@@ -19,8 +19,7 @@ export const typeormConfig = (
   database: dbName,
   username: "postgres",
   password: "postgres",
-  // synchronize: !__prod__,
-  synchronize: true,
+  synchronize: false,
   dropSchema: reset,
   entities: [
     User,

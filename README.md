@@ -1,6 +1,6 @@
 # Tijera MVP
 
-Developed by `Mustafa Al Quraishi` and `Arun Suhas`, managed by `Oliwia Orgodniczek` under Imperial Junior Solutions for Tijera Consultantcy.
+Developed by `Mustafa Al Quraishi` and `Suhas Arun`, managed by `Oliwia Orgodniczek` under Imperial Junior Solutions for Tijera Consulting.
 
 <div or>
 <p align="center">
@@ -76,6 +76,7 @@ Edit the above, and then run
 corepack-enable
 yarn
 yarn build
+yarn migrate
 yarn watch
 yarn redis
 yarn dev
