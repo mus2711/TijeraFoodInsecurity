@@ -379,11 +379,7 @@ const Search = () => {
                     reviewCount={p.reviewCount}
                     rating={p.averageRating ? p.averageRating : undefined}
                     cuisine={merchantTags}
-                    location={
-                      p.city && p.address1 && p.address2
-                        ? p.address2 + ", " + p.city
-                        : undefined
-                    }
+                    location={p.city ? p.address1 + ", " + p.city : undefined}
                     key={p.id}
                     id={p.id}
                     lat={p.latitude}
