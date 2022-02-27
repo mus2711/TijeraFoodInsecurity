@@ -99,9 +99,14 @@ yarn dev
 
 You will now find the website running at `http://localhost:3000`
 
+### Querying the database
+
+You can [add, read and remove data][7] from the playground website running at `http://localhost:4000/graphql`
+
 [1]: https://nodejs.org/en/
 [2]: https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable
 [3]: https://code.visualstudio.com
 [4]: https://www.postgresql.org/download/
 [5]: https://redis.io
 [6]: https://www.pgadmin.org
+[7]: https://www.youtube.com/watch?v=CHNAnGSmQeA
